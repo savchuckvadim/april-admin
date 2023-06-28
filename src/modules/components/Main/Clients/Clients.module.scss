@@ -1,0 +1,24 @@
+@import '../../../styles/variables';
+// .clients {
+//     width: 991px;
+// }
+
+.secret__wrapper,
+.secret__wrapperError {
+    width: 100%;
+    background-color: white;
+    outline-offset: -1px;
+    border-radius: $border-base;
+}
+
+.secret__wrapper {
+
+    outline: 1px solid $blue-color;
+
+}
+
+.secret__wrapperError {
+
+    outline: 1px solid $red-color;
+
+}

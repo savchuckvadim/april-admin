@@ -1,0 +1,11 @@
+@import '../../../../styles/variables';
+
+.table{
+    margin-top: 10px;
+    background-color: $white-color;
+
+}
+
+.table::-webkit-scrollbar {
+    display: none;
+  }

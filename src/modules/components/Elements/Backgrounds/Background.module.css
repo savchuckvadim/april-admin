@@ -1,0 +1,58 @@
+.cover{
+
+    opacity: 7%;
+ 
+    position: absolute;
+    left: 29.79%;
+    right: 29.86%;
+    top: 10%;
+    bottom: 10%;
+    /* background-image: url('../../../../assets/imgs/grey-logo.svg'); */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    max-width: 581px;
+    max-height: 720px;
+}
+
+@media screen and (max-width: 991px) {
+    .cover{
+        top: 100px;
+        width: 600px;
+        height: calc(100vh - 90px);
+       
+    }
+}
+@media screen and (max-width: 600px) {
+    .cover{
+        top: 150px;   
+        width: 550px;
+        height: calc(100vh - 150px);
+
+
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .cover{
+        top: 150px;    
+        width: 450px;
+        height: calc(100vh - 180px);
+
+
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .cover{
+        top: 33vh;      
+        width: 300px;
+        height: calc(67vh);
+       
+    }
+}
+@media screen and (max-width: 300px) {
+    .cover{
+       display: none;
+    }
+}

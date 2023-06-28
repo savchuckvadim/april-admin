@@ -1,0 +1,29 @@
+@import '../../../styles/variables';
+
+.frame {
+    margin-top: 5px;
+    width: 100%;
+    height: 40px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: $border-base;
+    // box-shadow:  $shadow-base;
+}
+
+.functions, .functionslong {
+    margin-right: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.functionslong {
+    width: 90%;
+}
+
+.functions {
+    width: 50%;
+}

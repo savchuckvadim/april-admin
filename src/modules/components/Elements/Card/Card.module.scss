@@ -1,0 +1,47 @@
+@import '../../../styles/variables';
+
+
+
+.card {
+    width: 100%;
+    // height: 650px;
+    min-height: 100%;
+    
+    background-color: $white-color;
+    border-radius: $border-base;
+    background-position: center;
+}
+
+.card__header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+
+.card__name {}
+
+.menu {
+    min-height: 100%;
+    display: flex;
+    justify-self: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card__footer {
+    height: 70px;
+    padding-right: 2%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+.button{
+    width: 183px;
+    height: 35px;
+}

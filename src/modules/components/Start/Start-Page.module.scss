@@ -1,0 +1,155 @@
+@import '../../styles/variables';
+.start__page,
+.wrapper,
+.logo__wrapper,
+.buttons__wrapper,
+.slogan__title,
+.slogan__text {
+    padding: 0;
+    margin: 0 auto;
+}
+
+.start__page,
+.wrapper,
+.logo__wrapper,
+.redLogo,
+.slogan__wrappe,
+.slogan__title,
+.slogan__text {
+    color: white;
+    z-index: 3000;
+}
+
+.start__page {
+
+
+    width: 100%;
+    height: 100vh;
+    background: $grey-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* z-index: -3000; */
+
+}
+
+
+.wrapper {
+    min-width: 454px;
+    height: 90%;
+    padding-top: 40px;
+    /* z-index: 3000; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.logo__wrapper {
+    width: 100%;
+    /* height: 100%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* z-index: 3000; */
+   
+}
+
+.redLogo {
+    height: 90px;
+    width: auto;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: $border-base;
+}
+
+.brend{
+    color:  $blue-color;
+    font-size: xx-large;
+}
+.slogan__wrapper {
+    margin-bottom: 80px;
+    text-align: center;
+}
+
+.slogan__title {
+    margin-bottom: 10px;
+    /* font-size: xx-large;
+     */
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800 !important;
+    font-size: 43px;
+    line-height: 50px;
+    /* identical to box height, or 116% */
+
+    text-align: center;
+}
+
+.slogan__text {
+    /* font-size: larger; */
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+    /* identical to box height, or 133% */
+
+    text-align: center;
+
+    /* White */
+
+    color: #FFFFFF;
+}
+
+@media screen and (max-width: 450px) {
+    .button__wrapper {
+        width: 100px;
+    }
+
+    .wrapper {
+        min-width: 300px;
+    }
+}
+
+.buttons__wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.button__wrapper {
+    height: 56px;
+    width: 219px;
+    margin: 10px 5px;
+
+}
+
+.button__link {
+    text-decoration: none;
+    /* color: white; */
+}
+
+.greyLogo {
+    position: absolute;
+    top: 10%;
+    left: 33.3%;
+    /* z-index: -100; */
+    opacity: 5%;
+    min-width: 33.3%;
+    height: auto;
+
+
+}
+
+.greyLogo path {
+    stroke: rgb(255, 255, 255);
+
+}
+
+/* p, h1, h2, h3{
+    font-family: 'Inter' ;
+  } */

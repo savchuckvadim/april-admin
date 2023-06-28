@@ -1,0 +1,39 @@
+@import '../../styles/variables';
+
+.header{
+    margin: 0;
+    padding: 0;
+    min-width: 100%;
+    height: 56px;
+    z-index: 5;
+    background-color: $white-color;
+}
+.page__container{
+    /* position: absolute; */
+    min-height: 100vh;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #F4F4F4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1000;
+}
+
+.form__wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.greyLogo {
+    position: absolute;
+    top: 2%;
+    left: 33,3%;
+    z-index: 0;
+    opacity: 5%;
+    min-width: 37%;
+    height: auto;
+
+
+}

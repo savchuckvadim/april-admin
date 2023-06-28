@@ -1,0 +1,88 @@
+.header {
+  padding: 0 0vh;
+  margin: 0 auto;
+  background-color: #ffffff;
+  height: 56px;
+  min-width: 100%;
+  /* font-size: calc(10px + 2vmin); */
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* z-index: 3; */
+}
+
+.container {
+  margin: 0;
+  padding: 0 ;
+  height: 56px;
+  width: 100%;
+   /* 920px; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+   /* z-index: 3; */
+}
+.menu{
+  display: none;
+}
+@media screen and (max-width: 900px) {
+  .container {
+    width: 95%;
+  }
+
+}
+@media screen and (max-width: 500px) {
+  .container {
+    width: 90%;
+  }
+  .name{
+    display: none;
+  }
+  .menu{
+    display: block;
+  }
+}
+
+.brand, .currentUser {
+max-height: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  width: 160px;
+}
+.sociopat{
+  margin: 0 10px;
+}
+
+.avatar{
+  margin: 0;
+  padding: 0;
+  width:  40px;
+  height: 40px;
+
+  
+ 
+}
+/* .currentUser{
+  display: flex;
+    flex-direction: row;
+} */
+
+.name {
+  font-size: small;
+  font-weight: 600;
+  margin: 0 12px;
+  /* font-family: Impac t, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+}
+
+.logo {
+  /* width: 70px; */
+  height: 54px;
+}
+

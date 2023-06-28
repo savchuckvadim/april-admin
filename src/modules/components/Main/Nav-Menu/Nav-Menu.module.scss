@@ -1,0 +1,55 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.menu {
+    min-width: 100%;
+    @include flexbox($direction: column, $align-items: baseline);
+}
+
+.item {
+    @include flexbox($align-items: center);
+    text-decoration: none;
+    color: $black-text;
+    padding: 0 16px;
+    height: 40px;
+    width: 100%;
+    border-radius: $border-base;
+    // box-shadow:$shadow-base;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(252, 250, 250);
+   
+}
+
+.item svg path {
+    stroke: $black-text;
+}
+
+.name {
+    margin: 15px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+
+
+.activeItem {
+    @include flexbox($align-items: center);
+
+    text-decoration: none;
+    color: $blue-color;
+    background-color: $white-color;
+    padding: 0 16px;
+    height: 40px;
+    width: 100%;
+    border-radius: $border-base;
+    // box-shadow:$shadow-base;
+}
+
+.activeItem svg path {
+    stroke: $blue-color;
+    opacity: 100%;
+}

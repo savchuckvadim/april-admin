@@ -1,0 +1,9 @@
+.btn__post {
+    height: 5vh;
+    width: 120px;
+    background-color: rgb(88, 73, 94);
+    color: whitesmoke;
+    cursor: pointer;
+    border-radius: 7%;
+    border-color: rgb(0, 255, 255);
+}

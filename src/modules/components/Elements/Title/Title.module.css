@@ -1,0 +1,12 @@
+.title{
+    text-align: start;
+    margin:  0px 0   16px 16px ;
+}
+
+@media screen and (max-width: 420px) {
+    .title {
+        /* display: none; */
+        margin:  10px 0   16px 16px ;
+    }
+
+  }

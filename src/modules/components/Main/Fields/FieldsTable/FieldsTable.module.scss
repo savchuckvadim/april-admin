@@ -1,0 +1,33 @@
+@import '../../../../styles/variables';
+
+.table{
+    margin-top: 10px;
+    background-color: $white-color;
+    height: 500px !important;
+
+   
+}
+
+
+.table::-webkit-scrollbar {
+    display: none !important;
+  }
+
+
+
+.button__wrapper{
+
+    width: 20%;
+    // margin-top: 10px;
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    cursor: pointer;
+    
+
+}
+
+
+.preloader{
+    height: 2px;
+}

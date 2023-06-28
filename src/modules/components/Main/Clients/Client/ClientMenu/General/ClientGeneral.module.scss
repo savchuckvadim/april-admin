@@ -1,0 +1,78 @@
+@import '../../../../../../styles/variables';
+
+
+
+
+
+.general__wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.general__items {
+    width: 40%;
+    margin-bottom: 20px;
+}
+
+.general__row {
+    // margin-left: 15px;
+    height: 52px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.name__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.general__name {
+    display: inline-block;
+}
+
+.input__wrapper {
+    height: 30px;
+}
+
+.description__wrapper {
+    min-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.description {
+    display: block;
+}
+
+.general__error{
+    margin-left: 20px;
+    color: $red-color;
+}
+
+
+
+
+
+
+
+
+.card__footer {
+    height: 70px;
+    padding-right: 2%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.button {
+    width: 183px;
+    height: 35px;
+}

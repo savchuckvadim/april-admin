@@ -1,0 +1,48 @@
+@import '../../../../styles/variables';
+
+
+// .name__wrapper {
+//     min-width: 70%;
+// }
+
+.secret__input,
+.secret__inputError {
+    min-width: 99%;
+    width: 100%;
+    margin-left: 5px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.secret__input {
+
+    color: $black-text;
+}
+
+.secret__inputError {
+
+    color: $red-color;
+}
+
+
+
+.secret__wrapper,
+.secret__wrapperError {
+    width: 100%;
+    background-color: white;
+    outline-offset: -1px;
+    border-radius: $border-base;
+}
+
+.secret__wrapper {
+
+    outline: 1px solid $blue-color;
+
+}
+
+.secret__wrapperError {
+
+    outline: 1px solid $red-color;
+
+}

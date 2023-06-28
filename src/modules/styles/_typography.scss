@@ -1,0 +1,127 @@
+// Базовые стили текста
+.text {
+    font-family: $font-family-base;
+    font-style: normal;
+    // text-align: center;
+}
+
+.text--base {
+    @extend .text;
+    font-weight: $base-weight; //400
+    font-size: $base-font-size; //14
+    line-height: $base-line; //24
+
+}
+
+.text--base--line {
+    @extend .text; //
+    font-weight: $base-weight; //400
+    font-size: $base-font-size; //14
+    line-height: $small-line; //22
+
+}
+
+.statistics--name {
+    @extend .text;
+    font-weight: $base-weight; //400
+    font-size: $small-font-size; //12
+    line-height: 14px;
+    color: $black-text;
+}
+
+.statistics--quantity {
+    @extend .text;
+    font-weight: $big-weight; //700
+    font-size: $base-font-size; //14
+    line-height: 17px;
+    color: $black-text;
+}
+
+.text--small {
+    @extend .text;
+    font-weight: $small-weight; //500
+    font-size: $small-font-size; //12
+    line-height: $small-line; //22
+}
+
+.text--big {
+    @extend .text;
+    font-weight: $big-weight; //700
+    font-size: $large-font-size; //40px
+    line-height: $big-line;  //32px
+    color: $black-text;
+}
+
+.text--large {
+    @extend .text;
+    font-weight: $large-weight; //800
+    font-size: $large-font-size; //40
+    line-height: $large-line; //56
+    /* Black */
+    color: $black-text;
+}
+
+
+
+
+
+
+///////////12PX////////////////////////////////////////////
+.small {
+    @extend .text--small;
+    color: $grey-color;
+}
+
+
+
+
+
+////////////14PX///////////////////////////////////////////////////////
+.two {
+    @extend .text--base--line;
+    color: $black-text;
+}
+
+.two--grey {
+    @extend .text--base--line;
+    color: $grey-color;
+}
+
+.four {
+    @extend .text--base;
+    color: $grey-color;
+}
+
+.five {
+    @extend .text--base;
+    color: $grey-color;
+}
+
+.button__text {
+    @extend .text;
+    font-weight: $small-weight;
+    font-size: $base-font-size; //14
+    line-height: $base-line; //24
+    color: $white-color;
+}
+
+
+/////////////24PX//////////////////////////////////////
+
+.text--big {
+    @extend .text;
+    font-weight: $big-weight;
+    font-size: $large-font-size;
+    line-height: $big-line;
+    color: $black-text;
+}
+
+///////////56PX////////////////////////////////////////////////
+.grande {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 56px;
+    color: $black-text;
+}

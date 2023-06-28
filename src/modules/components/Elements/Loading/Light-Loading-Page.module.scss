@@ -1,0 +1,66 @@
+@import '../../../styles/mixins';
+@import '../../../styles/variables';
+
+
+.wrapper {
+    padding: 0;
+    margin: 0;
+    // margin-top: 15px;
+    width: 100%;
+    height: 80%;
+   
+    @include flexbox($direction: column,
+        $justify: center,
+        $align-items: center);
+}
+
+.logoWrapper{
+    height: 77px;
+    width: 77px;
+    padding-top: 3px;
+    border-radius: 20%;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+   
+    height: 70px;
+    width: 70px;
+    border-radius:50%;
+
+
+   
+   
+    background-image: url('../../../../assets/imgs/logo/lg_april_tree_blue.png');
+    background-position: cover;
+    background-size:contain;
+    background-repeat: no-repeat;
+    
+}
+
+.logoMini  {
+    margin: 5px;
+    width: 30px;
+    height: auto;
+    animation: rotation 0.2s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.logoMini svg path {
+    stroke: rgb(0, 17, 255);
+}
+.text {
+    margin-top: 5px;
+    color: $grey-color;
+}

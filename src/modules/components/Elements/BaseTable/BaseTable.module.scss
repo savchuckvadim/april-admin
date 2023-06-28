@@ -1,0 +1,13 @@
+@import '../../../styles/variables';
+
+.table{
+    margin-top: 10px;
+    background-color: $white-color;
+    max-height: 600px;
+    min-width: 100%;
+
+}
+
+.table::-webkit-scrollbar {
+    display: none;
+  }

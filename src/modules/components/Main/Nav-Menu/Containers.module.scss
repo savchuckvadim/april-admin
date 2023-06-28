@@ -1,0 +1,16 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.item,
+.itemFocus {
+    @include flexbox($align-items: center);
+    height: 40px;
+    min-width: 90%;
+    border-radius: $border-base;
+    margin: 5px 0px;
+
+}
+
+.item p {
+    font-weight: 600;
+}

@@ -1,0 +1,18 @@
+@mixin flexbox($display: flex,
+    $direction: row,
+    $wrap: nowrap,
+    $justify: flex-start,
+    $align-items: stretch,
+    $align-content: stretch) {
+    display: $display;
+    flex-direction: $direction;
+    flex-wrap: $wrap;
+    justify-content: $justify;
+    align-items: $align-items;
+    align-content: $align-content;
+}
+
+@mixin color__animation(){
+    transition-property: background-color, color;
+    transition-duration: 0.5s;
+}

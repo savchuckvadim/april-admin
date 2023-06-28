@@ -1,0 +1,66 @@
+$black-text:rgb(33, 33, 33);
+$black-color: rgb(50, 50, 50);
+
+$white-color: rgb(255, 255, 255);
+$shadow-color: rgb(247, 247, 247);
+$grey-color: rgb(128, 128, 128);
+$dark-color: rgb(89, 89, 89);
+$blue-color: rgb(83, 125, 240);
+$red-color: rgb(245, 39, 66);
+$background-color: rgb(244, 244, 244);
+
+
+$test-color: rgb(244, 244, 244);
+
+
+
+
+//Размеры шрифтов
+$base-font-size: 14px;
+$small-font-size: 12px;
+$big-font-size: 24px;
+$large-font-size: 40px;
+// $h1-font-size: 56px;
+// $h2-font-size: 32px;
+
+
+// Веса шрифтов///////////////////////////
+
+$base-weight: 400;
+$small-weight: 500;
+$big-weight: 700;
+$large-weight: 800;
+
+
+// Line heights
+$base-line: 24px;
+$small-line: 22px;
+$big-line: 32px;
+$large-line: 56px;
+
+//Отступы границы бордер-радиусы
+$border-base: 8px;
+$shadow-base: 0px 1px 1px 0px rgba(212, 201, 201, 0.75);
+
+// Брейкпоинты для адаптивного дизайна
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1440px;
+
+
+// Размеры шрифта
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-large: 20px;
+$font-size-h1: 32px;
+$font-size-h2: 28px;
+$font-size-h3: 24px;
+$font-size-h4: 20px;
+$font-size-h5: 18px;
+$font-size-h6: 16px;
+
+// Семейства шрифтов
+$font-family-base: 'Inert',
+sans-serif;

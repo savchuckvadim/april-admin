@@ -1,0 +1,15 @@
+.icon, .iconRed {
+    min-width: 24px;
+    min-height: 24px;
+    margin-right: 8px;
+}
+
+.icon {
+    opacity: 50%;
+}
+
+.iconRed path {
+    stroke: rgb(255, 0, 0);
+
+}
+

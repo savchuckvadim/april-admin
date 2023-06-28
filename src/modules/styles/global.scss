@@ -1,0 +1,44 @@
+@import './typography.scss';
+
+
+p,
+h1,
+h2,
+h3,
+textarea,
+a{
+    @extend .text;
+}
+
+h1 {
+    @extend .text--large;
+    color: $black-color;
+}
+
+h2 {
+    @extend .text--big;
+    color: $black-color;
+}
+
+p{
+    @extend .text--base;
+    font-style: normal;
+    
+}
+
+body {
+    @extend .text--base;
+    color: $dark-color;
+    background-color: $background-color;
+}
+
+
+[class*=_container] {
+    max-width: 991px;
+   
+
+}
+
+body::-webkit-scrollbar {
+    display: none;
+  }
