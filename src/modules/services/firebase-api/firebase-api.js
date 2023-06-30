@@ -52,7 +52,7 @@ export const clientAPI = {
     console.log('name', 'email', 'domain')
     console.log(name, email, domain)
     try {
-      const addClient = httpsCallable(functions, 'createClient');
+      const addClient = httpsCallable(functions, 'setNewClient');
       let client = await addClient({ name, email, domain, fields: [], products: [], number: 0 })
       console.log(client.data)
       return client.data
