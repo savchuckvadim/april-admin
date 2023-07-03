@@ -1,6 +1,6 @@
 import { ResultCodesEnum } from './../../../services/api-laravel';
 import { ClientType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
-import { clientAPI, fieldsAPI } from "../../../services/firebase-api/firebase-api"
+import { clientAPI, fieldsAPI, generalAPI } from "../../../services/firebase-api/firebase-api"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
 import { inProgress } from '../preloader/preloader-reducer';
@@ -15,7 +15,7 @@ const initialState = {
     current: null as ClientType | null,
     // created: null as number | null,
     redirect: null as number | null,
-    
+
 
 }
 
@@ -31,7 +31,8 @@ export const clientActions = {
     deleteRedirect: () => ({ type: 'clients/DELETE_REDIRECT' } as const),
     setClients: (clients: Array<ClientType>) => ({ type: 'clients/SET_CLIENTS', clients } as const),
     setClientField: (field: FieldType, clientId: number) => ({ type: 'clients/SET_FIELD', field, clientId } as const),
-    setClientProducts: (products: Array<ProductType>, clientId: number) => ({ type: 'clients/SET_PRODUCTS', products, clientId } as const)
+    setClientProducts: (products: Array<ProductType>, clientId: number) => ({ type: 'clients/SET_PRODUCTS', products, clientId } as const),
+    setRegion: (regions: Array<number>) => ({ type: 'clients/SET_REGION', regions } as const),
 }
 
 
@@ -104,7 +105,6 @@ export const getClient = (clientId: number) => async (dispatch: AppDispatchType,
 
 }
 
-
 export const updateClientField = (fieldNumber: number, value: string, type: 'bitrixId' | 'value') => async (dispatch: AppDispatchType, getState: GetStateType) => {
     dispatch(inProgress(true, 'page'))
 
@@ -162,6 +162,51 @@ export const getProducts = (clientId: number) => async (dispatch: AppDispatchTyp
     dispatch(clientActions.setClientProducts(products, clientId))
 
 }
+
+export const updateClientRegions = (regionId: number, checked: boolean) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+debugger
+    const state = getState()
+    const client = state.client as ClientStateType
+    if (client.current) {
+        let newRegions = [] as Array<number>
+
+        dispatch(inProgress(true, 'component'))
+        let currentRegions = client.current.regions
+
+        if (currentRegions && Array.isArray(currentRegions)) { //если у пользователя есть регоины и это массив
+            if (checked) { //надо деактивировать
+                newRegions = currentRegions.filter(region => region != regionId)
+
+            } else { //надо активировать
+                newRegions = currentRegions.filter(region => region != regionId)
+                newRegions.push(regionId)
+            }
+        } else {
+            if (!checked) { //надо активировать
+                newRegions = [regionId]
+
+            }
+        }
+
+
+
+
+
+
+        dispatch(clientActions.setRegion(newRegions))
+
+        await generalAPI.updateProp('clients', client.current.number, newRegions, 'regions')
+
+        dispatch(inProgress(false, 'component'))
+    }
+
+
+
+
+}
+
+
+
 
 //REDUCER
 const client = (state: ClientStateType = initialState, action: ClientActionsTypes) => {
@@ -247,6 +292,14 @@ const client = (state: ClientStateType = initialState, action: ClientActionsType
                 }
             }
 
+        case 'clients/SET_REGION':
+
+            const current = { ...state.current }
+            current.regions = action.regions
+            return {
+                ...state,
+                current: current
+            }
 
         default:
             return state;

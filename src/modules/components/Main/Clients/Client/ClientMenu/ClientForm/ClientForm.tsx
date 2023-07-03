@@ -39,6 +39,7 @@ type ClientFormPropsType = {
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
+
 }
 
 

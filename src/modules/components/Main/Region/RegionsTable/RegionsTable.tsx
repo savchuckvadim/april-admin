@@ -3,13 +3,16 @@ import * as React from 'react';
 import { RegionType, TableTypes } from '../../../../types/types';
 import BaseTable, { RegionValueType } from '../../../Elements/BaseTable/BaseTable';
 
-type ComplectsTablePropsType = {
+type RegionTablePropsType = {
+    isClient: boolean
+    clientRegions?: Array<number>
     regions: Array<RegionType>
     type: TableTypes
+    updateClientRegions: (regionId: number, checked: boolean) => void
 }
 
 
-const RegionsTable: React.FC<ComplectsTablePropsType> = ({ regions, type, }) => {
+const RegionsTable: React.FC<RegionTablePropsType> = ({ isClient, regions, type, clientRegions, updateClientRegions }) => {
 
     let resultRegions = regions.map(c => ({ number: c.number, title: c.title, abs: c.abs, infoblock: c.infoblock } as RegionValueType))
     let categories = [] as Array<string>
@@ -19,7 +22,15 @@ const RegionsTable: React.FC<ComplectsTablePropsType> = ({ regions, type, }) => 
     }
 
 
-    return resultRegions.length > 0 ? <BaseTable categories={categories} values={resultRegions} type={'regions'} withLinks={true} />
+    return resultRegions.length > 0 ? <BaseTable
+        categories={categories}
+        values={resultRegions}
+        type={'regions'}
+        withLinks={true}
+        clientRegions={clientRegions}
+        isClient={isClient}
+        updateClientRegions={updateClientRegions}
+    />
         : <div>{`no ${type}`}</div>
 }
 

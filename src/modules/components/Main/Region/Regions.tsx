@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ComplectType, RegionType, TableTypes } from '../../../types/types';
+import { RegionType, TableTypes } from '../../../types/types';
 import RegionsTable from './RegionsTable/RegionsTable';
 import UploadData from '../../Elements/Actions/Upload/UploadData';
 import Filter from '../../Elements/Filter/Filter';
@@ -13,13 +13,14 @@ import FilterButtons from '../../Elements/Filter/Filter-Buttons/Filter-Buttons';
 
 
 type ComplectsTablePropsType = {
-  isClient: boolean
+  isClient: boolean,
+  clientRegions: Array<number>
   regions: Array<RegionType>
   filters: Array<string>
   filterCurrent: number
   updateRegions: (token: string) => void
   getFilter: (filterIndex: number) => void
-
+  updateClientRegions: (regionId: number, checked: boolean) => void
 }
 
 
@@ -27,11 +28,14 @@ type ComplectsTablePropsType = {
 
 const Regions: React.FC<ComplectsTablePropsType> = ({
   isClient,
+  clientRegions,
   regions,
   filters,
   filterCurrent,
   updateRegions,
-  getFilter }) => {
+  getFilter,
+  updateClientRegions
+ }) => {
 
 
 
@@ -41,7 +45,13 @@ const Regions: React.FC<ComplectsTablePropsType> = ({
         <FilterButtons actions={filters} filter={(index: number) => getFilter(index)} initialIndex={filterCurrent} />
       </Filter>
       {!isClient && <UploadData upload={updateRegions} />}
-      <RegionsTable regions={regions} type={TableTypes.regions} />
+      <RegionsTable
+        regions={regions}
+        type={TableTypes.regions}
+        isClient={isClient}
+        clientRegions={clientRegions}
+        updateClientRegions={updateClientRegions}
+      />
     </>
 
   );

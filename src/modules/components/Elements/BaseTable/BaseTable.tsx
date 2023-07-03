@@ -1,11 +1,12 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox } from "@mui/material"
 import { NavLink } from "react-router-dom"
 import style from './BaseTable.module.scss'
 import { NumberLiteralType } from "typescript/lib/tsserverlibrary"
 import { ComplectTypesEnum, ConsaltingType, SupplyTypesEnum } from "../../../types/types"
+import { updateClientRegions } from "../../../redux/reducers/client/client-reducer"
 
 
-type TableValueType = ClientValueType| SupplyValueType | ComplectValueType | ContractValueType |
+type TableValueType = ClientValueType | SupplyValueType | ComplectValueType | ContractValueType |
     RegionValueType | ConsaltingValueType | LegalTechValueType
 
 
@@ -14,6 +15,9 @@ type BaseTablePropsType = {
     values: Array<TableValueType>
     type: 'complects' | 'products' | 'fields' | 'clients' | 'regions' | 'contracts' | 'consalting' | 'legalTech'
     withLinks: boolean
+    clientRegions?: Array<number>
+    isClient?: boolean
+    updateClientRegions?: (regionId: number, checked: boolean) => void
 
 }
 
@@ -39,8 +43,8 @@ export type ComplectValueType = {
 }
 
 export type RegionValueType = {
-    number:number
-    name:string
+    number: number
+    name: string
     title: string
     abs: number
     infoblock: string
@@ -75,21 +79,24 @@ export type LegalTechValueType = {
     msk?: number | null
     regions?: number | null
     type: 'package' | 'lt'
+
     // weight: number,
 
 }
 
-const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, withLinks }) => {
+const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, withLinks, clientRegions, updateClientRegions }) => {
 
-
+    console.log('clientRegions?.includes(row.number)')
+    console.log(clientRegions)
     return (
         <TableContainer sx={{ borderRadius: 2, boxShadow: 'none' }} component={Paper} className={style.table}>
-            <Table sx={{  }} aria-label="simple table">
+            <Table sx={{}} aria-label="simple table">
                 <TableHead>
                     <TableRow >
+                        {type === 'regions' && <TableCell align="right">{'check'}</TableCell>}
                         {categories.map(c => {
-                            if (c === 'email' ||  c === 'domain' || c === 'infoblock' || c === 'type') {
-                                return <TableCell  align="right">{c}</TableCell>
+                            if (c === 'email' || c === 'domain' || c === 'infoblock' || c === 'type') {
+                                return <TableCell align="right">{c}</TableCell>
                             } else {
                                 return <TableCell align="left" >{c}</TableCell>
                             }
@@ -105,7 +112,7 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
 
                             //@ts-ignore
                             if (key === 'name' && type !== "regions") {
-                                
+
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} component="th" scope="row">
                                     {withLinks
                                         ? <NavLink key={`base-table-link-${key}-${row[key]}-${i}`} to={`../${type}/${row.number}`}>
@@ -116,28 +123,33 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                                 </TableCell>)
                             }
                             else if (key === 'title' && type === "regions") {
-                                
-                                generalCells.push(<TableCell key={`base-table-${key}-regions-${i}`} component="th" scope="row">
+                                const checked = clientRegions?.includes(row.number) || false
+                               debugger
+                               generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
+                                    <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked)}} />
+                                </TableCell>)
+
+                                generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
                                     {withLinks
                                         ? <NavLink key={`base-table-link-${key}-regions-${i}`} to={`../${type}/${row.number}`}>
                                             {//@ts-ignore
-                                            row.title && row.title}
+                                                row.title && row.title}
                                         </NavLink>
                                         //@ts-ignore
                                         : row.title
                                     }
                                 </TableCell>)
                             }
-                            
+
                             //@ts-ignore
                             else if (key !== 'name' && key !== 'type' && key !== 'number') {
-                                
+
                                 //@ts-ignore
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} align="right">{row[key]}</TableCell>)
                             }
                             // @ts-ignore
                             else if (key === 'type') {
-                                
+
                                 //@ts-ignore
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} align="right">{row[key]}</TableCell>)
                             }

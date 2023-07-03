@@ -203,21 +203,6 @@ export const clientAPI = {
       return result
 
     }
-
-    // let docRef = doc(db, "clients", `${clientId}`)
-    // await setDoc(docRef, { fields }, { merge: true });
-
-    // let result = []
-    // let updatedClient = await getDoc(docRef)
-
-    // if (updatedClient.exists()) {
-    //   console.log(updatedClient.data())
-    //   let data = updatedClient.data()
-    //   result = data.fields
-    //   console.log("updated clients fields:", result);
-
-    // }
-    // return result
   },
 
   updateClientsProducts: async (newProductData) => {
@@ -295,6 +280,28 @@ export const clientAPI = {
     }
 
     return products
+  },
+
+  setRegions: async (regions, clientId) => {
+    let result = undefined
+    try {
+
+      const queryGet = query(collection(db, "clients"), where("number", "==", clientId));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      querySnapshot.forEach((doc) => {
+        if (doc.data().number === clientId) {
+          result = doc.data()
+        }
+      });
+      return result
+    } catch (error) {
+      console.log(error)
+      return result
+
+    }
+
   }
 }
 
@@ -765,6 +772,51 @@ export const generalAPI = {
       console.error(error)
     }
   },
+
+  updateProp: async (collectionName, docId, newProp, propName) => {
+
+
+
+    let result
+    try {
+
+      const queryGet = query(collection(db, collectionName), where("number", "==", docId));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      let searchingClient
+
+      querySnapshot.forEach((client) => {
+        if (client.data().number === docId) {
+          // result = client.data()
+          searchingClient = doc(db, collectionName, client.id);
+
+        }
+      });
+
+
+      await updateDoc(searchingClient, { [`${propName}`]: newProp });
+
+      const resultClientsFetch = query(collection(db, collectionName), where("number", "==", docId));
+      const resultDocs = await getDocs(resultClientsFetch);
+
+
+      resultDocs.forEach((doc) => {
+        if (doc.data().number === docId) {
+          result = doc.data()
+        }
+      });
+      return result
+    } catch (error) {
+      console.log(error)
+      return result
+
+    }
+  },
+
+
+
+
 
   updateFrontend: async (isProd) => {
     try {

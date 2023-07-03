@@ -145,102 +145,7 @@ const ClientContainer = (props) => {
 
     }, [props.client, props.params.clientId])
 
-    //     useEffect(() => {
-    //         console.log(currentClient)
-    //         console.log(props.client)
-    //         console.log(props.params.clientId)
-
-    // 
-    //     }, [props.params.clientId])
-
-    // useEffect(() => {
-    //     
-
-    //     if (props.params.clientId) {
-    //         
-    //         // setClientId(Number(props.params.clientId))
-    //         props.getClient(Number(props.params.clientId))
-
-
-    //     } else {  //если props params отсутствуют значит в url отсутствуют id текущего клиента значит url
-    //         
-    //         if (!props.client || props.client.number !== null) {
-    //             
-    //             props.setCreatingClient()
-    //             // if (clientId !== 'new') {
-    //             //     
-    //             //     setClientId('new')
-    //             // }
-    //         }
-
-
-
-
-
-    //     }
-    // }, [props.params.clientId])
-
-
-
-    // useEffect(() => {
-
-    //     /*
-    //     1. getClient из-за url
-    //     2. setCreated из-за url
-    //     3. setCurrent из-за создания клиента - нужен redirect
-    //     */
-    //     console.log('props.client')
-    //     console.log(props.client)
-    //     // if(props.client !== currentClient || props.client.number !== currentClient.number){
-    //     //     
-    //     //     setCurrentClient(props.client)
-    //     // }
-    //     
-    //     setCurrentClient(props.client)
-    //     if (!props.params.clientId) {  //создаваемый клиент
-    //         console.log(currentClient)
-    //         
-    //         if (props.client) {    //клиент есть
-    //             console.log(currentClient)
-    //             
-    //             if (props.client.number !== null) { //клиент существующий
-    //                 console.log(currentClient)
-    //                 setRedirect({
-    //                     status: true,
-    //                     link: `../../clients/${props.client.number}`
-    //                 })
-    //                 
-    //             } else if (props.client.number === null) {//клиент создаваемый
-    //                 
-    //                 //все ок clientId и client синхронизированы
-    //             }
-    //         } else { //если url на создаваемом клиенте, а пришло отсутствие клиента client = null
-    //             
-    //             console.log(currentClient)
-    //             // props.setCreatingClient() //засэтать в стэйт создаваемого клиента
-    //         }
-
-    //     } else if (props.params.clientId && props.client) { //если в url клиент id не равно new, но существует - значит url на действующем клиенте
-    //         
-    //         if (Number(props.params.clientId) !== props.client.number) {
-    //             console.log(currentClient)
-    //             
-    //             setRedirect({
-    //                 status: true,
-    //                 link: `../../clients/${props.client.number}`
-    //             })
-    //         }
-    //     }
-
-    // }, [])
-
-    // useEffect(() => {
-    //     if (redirect) {
-    //         setRedirect(false)
-    //     }
-
-
-    // }, [redirect])
+ 
 
 
 
@@ -263,7 +168,7 @@ const ClientContainer = (props) => {
 
             redirect={props.redirect}
             deleteRedirect={props.deleteRedirect}
-
+            
             {...props}
         />
     }
@@ -279,7 +184,8 @@ export default compose(
         getClient,
         deleteRedirect: clientActions.deleteRedirect,
         updateClientProducts:updateClientProducts,
-        getProducts
+        getProducts,
+        
     }),
     WithRouter
 

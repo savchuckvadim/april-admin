@@ -20,13 +20,23 @@ type ClientPropsType = {
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
+   
 
 }
 
 
 
 
-const Client: React.FC<ClientPropsType> = ({ client, redirect, deleteRedirect, sendNewClient, updateField, updateClientProducts, getProducts }) => {
+const Client: React.FC<ClientPropsType> = ({
+    client,
+    redirect,
+    deleteRedirect,
+    sendNewClient,
+    updateField,
+    updateClientProducts,
+    getProducts,
+    
+}) => {
 
     if (redirect) {
 
@@ -49,6 +59,7 @@ const Client: React.FC<ClientPropsType> = ({ client, redirect, deleteRedirect, s
                 sendNewClient={sendNewClient}
                 updateClientProducts={updateClientProducts}
                 getProducts={getProducts}
+              
             />
 
     )
