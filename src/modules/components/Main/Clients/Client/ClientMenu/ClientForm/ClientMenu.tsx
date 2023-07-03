@@ -7,6 +7,8 @@ import style from './ClientMenu.module.scss'
 import BaseTable from "../../../../../Elements/BaseTable/BaseTable"
 import Button from '../../../../../Elements/Button/Button';
 import ProductsTable from "../../../../Products/ProductsTable/ProductsTable"
+import RegionsSelectContainer from "../RegionsSelect/RegionsSelectContainer"
+import RegionsContainer from "../../../../Region/RegionsContainer"
 
 type ClientMenuPropsType = {
     section: ClientSectionEnum
@@ -64,6 +66,13 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
                                 name={'generate client products'} />
                         </div>
                     </div>}
+            </>
+
+        }
+          {section === ClientSectionEnum.Regions &&
+            <>
+              
+                <RegionsContainer isClient={true}/>
             </>
 
         }

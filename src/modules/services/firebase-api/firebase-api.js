@@ -6,6 +6,7 @@ import { query, orderBy } from "firebase/firestore";
 
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import { api } from "../api-laravel";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -263,7 +264,7 @@ export const clientAPI = {
     let client = null
     let id = null
     let products = []
-    
+
     try {
       const clientsQuery = query(collection(db, "clients"), where("number", "==", clientId));
       const clientsQueryuerySnapshot = await getDocs(clientsQuery);
@@ -280,7 +281,7 @@ export const clientAPI = {
       // const querySnapshot = await getDocs(collection(db, "fields"), orderBy("number"));
       const queryGet = query(collection(db, "ClientProducts"), where("clientId", "==", id));
       const querySnapshot = await getDocs(queryGet);
-      
+
       querySnapshot.forEach((doc) => {
         let data = doc.data()
 
@@ -764,6 +765,18 @@ export const generalAPI = {
       console.error(error)
     }
   },
+
+  updateFrontend: async (isProd) => {
+    try {
+      let response = api.get(`${isProd}`)
+      if (response) {
+        return response
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 }
 
 

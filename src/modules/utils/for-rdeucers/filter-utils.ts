@@ -1,5 +1,6 @@
-import { ComplectFilterEnum, ComplectType, FieldType, FieldsFilterEnum, SupplyFilterEnum, SupplyType } from "../../types/types";
+import { ComplectFilterEnum, ComplectType, FieldType, FieldsFilterEnum, RegionType, SupplyFilterEnum, SupplyType } from "../../types/types";
 
+type FilterType = ComplectFilterEnum | SupplyFilterEnum
 
 
 
@@ -34,7 +35,7 @@ export const getFiltredFields = (filter: FieldsFilterEnum, fields: Array<FieldTy
 
 }
 
-export const getFiltred = (filter: ComplectFilterEnum | SupplyFilterEnum, values: Array<ComplectType | SupplyType >, type: 'complect' | 'supply') => {
+export const getFiltred = (filter: ComplectFilterEnum | SupplyFilterEnum, values: Array<ComplectType | SupplyType>, type: 'complect' | 'supply') => {
     // filter = 'All', 'Global', 'Client' | 'All', 'Prof', 'Universal'
 
     let resultComplects = values.map(value => ({ ...value }))
@@ -45,7 +46,18 @@ export const getFiltred = (filter: ComplectFilterEnum | SupplyFilterEnum, values
         ))
     }
     return resultComplects;
-   
-    
 
+
+
+}
+
+export const getFiltredRegions = (filters: Array<number>, regions: Array<RegionType>) => {
+
+    if (filters.length > 0) {
+        let filtredRegions = regions.filter(region => filters.includes(region.number))
+        return  filtredRegions.map(region => ({ ...region }))
+
+    } else {
+        return regions.map(region => ({ ...region }))
+    }
 }

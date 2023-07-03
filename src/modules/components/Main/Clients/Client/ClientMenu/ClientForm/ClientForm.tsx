@@ -44,7 +44,8 @@ type ClientFormPropsType = {
 
 const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, updateField, updateClientProducts, getProducts }) => {
     const sections = [
-        ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts
+        ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts,
+        ClientSectionEnum.Prices,   ClientSectionEnum.Regions
     ] as Array<ClientSectionEnum>
     const [clientName, setClientName] = useState(client.name)
 
@@ -52,7 +53,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
     const [section, setSection] = useState(sections[sectionIndex] as ClientSectionEnum)
     const [isNew, setIsNew] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
-
+    
     const [initialValues, setInitialValues] = useState({
         name: null as string | null,
         email: null as string | null,
@@ -111,6 +112,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
 
     useEffect(() => {
+        debugger
         if (section !== sections[sectionIndex]) {
             setSection(sections[sectionIndex])
         }

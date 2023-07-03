@@ -6,7 +6,7 @@ import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
 import { inProgress } from '../preloader/preloader-reducer';
 
 
-type ClientStateType = typeof initialState
+export type ClientStateType = typeof initialState
 type ClientActionsTypes = InferActionsTypes<typeof clientActions>
 type GetStateType = () => AppStateType
 
@@ -15,8 +15,10 @@ const initialState = {
     current: null as ClientType | null,
     // created: null as number | null,
     redirect: null as number | null,
+    
 
 }
+
 
 
 //ACTION CREATORS

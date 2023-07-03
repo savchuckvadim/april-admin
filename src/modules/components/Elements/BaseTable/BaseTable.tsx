@@ -81,7 +81,7 @@ export type LegalTechValueType = {
 
 const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, withLinks }) => {
 
-debugger
+
     return (
         <TableContainer sx={{ borderRadius: 2, boxShadow: 'none' }} component={Paper} className={style.table}>
             <Table sx={{  }} aria-label="simple table">
@@ -105,7 +105,7 @@ debugger
 
                             //@ts-ignore
                             if (key === 'name' && type !== "regions") {
-                                debugger
+                                
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} component="th" scope="row">
                                     {withLinks
                                         ? <NavLink key={`base-table-link-${key}-${row[key]}-${i}`} to={`../${type}/${row.number}`}>
@@ -116,7 +116,7 @@ debugger
                                 </TableCell>)
                             }
                             else if (key === 'title' && type === "regions") {
-                                debugger
+                                
                                 generalCells.push(<TableCell key={`base-table-${key}-regions-${i}`} component="th" scope="row">
                                     {withLinks
                                         ? <NavLink key={`base-table-link-${key}-regions-${i}`} to={`../${type}/${row.number}`}>
@@ -131,13 +131,13 @@ debugger
                             
                             //@ts-ignore
                             else if (key !== 'name' && key !== 'type' && key !== 'number') {
-                                debugger
+                                
                                 //@ts-ignore
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} align="right">{row[key]}</TableCell>)
                             }
                             // @ts-ignore
                             else if (key === 'type') {
-                                debugger
+                                
                                 //@ts-ignore
                                 generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} align="right">{row[key]}</TableCell>)
                             }

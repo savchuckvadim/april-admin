@@ -18,6 +18,12 @@ let initialState = [
 
     },
     {
+        name: 'Settings',
+        link: 'settings',
+
+
+    },
+    {
         name: 'Clients',
         link: 'clients',
 

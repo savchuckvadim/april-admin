@@ -91,7 +91,7 @@ export type PaginatorLinksType = {
 
 export type NotificationType = {
     // isSound: boolean
-    message: MessageType 
+    message: MessageType
 
 }
 
@@ -125,9 +125,10 @@ export type ClientType = {
     email: string | null
     fields: Array<FieldType>
     number: number | null
-    key:string | null
-    hook:string | null
+    key: string | null
+    hook: string | null
     products: Array<ProductType> | null
+    regions?: Array<number>
     // isCreating:boolean
 
 

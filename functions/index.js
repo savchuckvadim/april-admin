@@ -192,6 +192,8 @@ exports.setNewClient = onRequest(
 
 
 // exports.addProductsForClient = onDocumentCreated("clients/{clientId}", async (event) => {
+
+
 //   // Get an object representing the document
 //   // e.g. {'name': 'Marie', 'age': 66}
 //   const db = getFirestore();
@@ -250,3 +252,94 @@ exports.setNewClient = onRequest(
 
 //   // perform more operations ...
 // });
+
+
+exports.konstructor = onRequest(
+  { cors: true },
+  async (req, res) => {
+    //req
+    //domain
+
+    const db = getFirestore();
+    // Grab the text parameter.
+    const clientData = req.body;
+    let data = clientData.data
+
+
+
+
+
+
+    // let products = []
+    // const productsRef = db.collection('products');
+    // const fetchedproducts = await productsRef.get();
+
+    // fetchedproducts.forEach((doc) => {
+    //   let product = doc.data()
+    //   logger.info(product);
+    //   products.push(product)
+
+
+    // })
+
+
+
+
+
+
+
+
+    let fields = []
+
+    const clientsRef = db.collection('clients');
+    const clientsFields = await clientsRef.get();
+
+    clientsFields.forEach((doc) => {
+      let client = doc.data()
+
+      fields = client.fields
+
+
+    })
+
+    let bitrix = {}
+    fields.forEach(field => {
+      bitrix[field.type] = { ...bitrix[field.type] }
+      bitrix[field.type][field.name] = field
+    })
+
+    let products = {}
+    const productsRef = db.collection('products');
+    const productsFetched = await productsRef.get();
+
+
+    productsFetched.forEach((doc) => {
+      let product = doc.data()
+      products[product.complectType] = { ...products[product.complectType] }
+      if( product.supplyType ){ //если есть тип поставки - то есть Lt либо консалтинг
+        products[product.complectType][product.supplyType] = { ...products[product.complectType][product.supplyType] }
+      
+        // products[product.complectType][product.supplyType][product.contractName] = [...products[product.complectType][product.supplyType][product.contractName]]
+        if(Array.isArray(products[product.complectType][product.supplyType][product.contractNumber])){
+          products[product.complectType][product.supplyType][product.contractNumber].push(product)
+        }else{
+          products[product.complectType][product.supplyType][product.contractNumber] = [product]
+        }
+      }else{
+        if(Array.isArray(products[product.complectType][product.contractName])){
+          products[product.complectType][product.contractNumber].push(product)
+        }else{
+          products[product.complectType][product.contractNumber] = [product]
+        }
+      }
+     
+   
+    })
+
+
+
+    res.json({ result: { resultCode: 0, data: { bitrix, products, prices:{} } } });
+
+
+  });
+

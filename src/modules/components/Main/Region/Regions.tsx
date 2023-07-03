@@ -13,24 +13,34 @@ import FilterButtons from '../../Elements/Filter/Filter-Buttons/Filter-Buttons';
 
 
 type ComplectsTablePropsType = {
-  regions: Array<RegionType> 
+  isClient: boolean
+  regions: Array<RegionType>
+  filters: Array<string>
+  filterCurrent: number
   updateRegions: (token: string) => void
- 
+  getFilter: (filterIndex: number) => void
+
 }
 
 
 
 
-const Regions: React.FC<ComplectsTablePropsType> = ({ regions,  updateRegions }) => {
+const Regions: React.FC<ComplectsTablePropsType> = ({
+  isClient,
+  regions,
+  filters,
+  filterCurrent,
+  updateRegions,
+  getFilter }) => {
 
-  
+
 
   return (
     <>
-      {/* <Filter name={'clients'} callback={() => { alert('Fields') }} >
-        <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
-      </Filter> */}
-      <UploadData upload={updateRegions} />
+      <Filter name={'regions'} callback={() => { console.log('regions') }} >
+        <FilterButtons actions={filters} filter={(index: number) => getFilter(index)} initialIndex={filterCurrent} />
+      </Filter>
+      {!isClient && <UploadData upload={updateRegions} />}
       <RegionsTable regions={regions} type={TableTypes.regions} />
     </>
 

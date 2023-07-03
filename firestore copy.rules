@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Правила чтения и записи документов
+    match /{document=**} {
+      allow read: if true;
+      allow write: if isLoggedIn() && hasValidRole();
+    }
+
+    // Функция для проверки, вошел ли пользователь в систему
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    // Функция для проверки роли пользователя
+    function hasValidRole() {
+      // Проверка наличия информации о пользователе и его email
+      // Дополнительно, вы можете добавить здесь проверки на основе ролей
+      
+      return request.auth.token.email == 'savchuckvadim@gmail.com' &&
+        // Дополнительные условия на основе ролей, если необходимо
+        // request.auth.token.role == 'admin'
+        true; // Если условия роли выполнены, вернуть true
+    }
+  }
+}
