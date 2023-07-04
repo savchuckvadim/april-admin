@@ -71,7 +71,7 @@ debugger
 
                             {/* <input  {...formik} {...props}  name="fieldsUpdate" type='text' placeholder="secret key" className={style.secret__input}></input> */}
                         </div>
-                        <FilterButtons actions={['Загрузить']} filter={() => console.log('upload data')} />
+                        <FilterButtons actions={['Загрузить']} filter={(index) => console.log('upload data')} />
                     </Filter>
                 </Form>
        

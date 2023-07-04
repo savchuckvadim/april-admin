@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 
 const FilterButtons = (props) => {
+
     //props:
     //actions - array: names of filter button
     //filter(int) - callback: function for filter
@@ -103,22 +104,21 @@ const FilterButtons = (props) => {
                             disabled={false}
                         />
                     </NavLink>
-                        
+
                 } else {
-        return <div key={action.name} className={style.action}>
-            {<Button
-                name={action.name}
-                color={action.color}
-                textColor={textColor}
-                border={7}
-                onClick={() => { onButtonClick(index) }}
-                disabled={false}
-            />}
-        </div>
+                    return <div key={action.name} className={style.action}>
+                        {<Button
+                            name={action.name}
+                            color={action.color}
+                            textColor={textColor}
+                            border={7}
+                            onClick={() => { onButtonClick(index) }}
+                            disabled={false}
+                        />}
+                    </div>
                 }
 
-            }
-            )}
+            })}
 
 
 

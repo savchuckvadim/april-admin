@@ -305,9 +305,6 @@ export const clientAPI = {
   }
 }
 
-
-
-
 export const fieldsAPI = {
 
   getFields: async () => {
@@ -398,9 +395,6 @@ export const fieldsAPI = {
 
 
 }
-
-
-
 
 export const complectsAPI = {
 
@@ -594,7 +588,6 @@ export const regionAPI = {
   },
 }
 
-
 export const consaltingAPI = {
 
   setConsalting: async (consalting) => {
@@ -749,6 +742,7 @@ export const generalAPI = {
   },
 
   setCollection: async (collectionName, objects) => {
+   
     try {
 
       const batch = writeBatch(db)
@@ -762,13 +756,15 @@ export const generalAPI = {
 
         console.log(newDoc)
       }
-
+      
       await batch.commit();
       let result = await generalAPI.getCollection(collectionName)
+      debugger
       return result
 
 
     } catch (error) {
+      debugger
       console.error(error)
     }
   },

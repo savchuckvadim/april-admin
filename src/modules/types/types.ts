@@ -239,7 +239,8 @@ export enum TableTypes {
     regions = 'regions',
     contracts = 'contracts',
     consalting = 'consalting',
-    lt = 'lt'
+    lt = 'lt',
+    price = 'price'
 }
 
 export type SupplyType = {
@@ -346,4 +347,24 @@ export enum ContractAprilNameEnum {
     AbonYear = 'Абонентский год',
     licenseHalf = 'Лицензионный полгода',
     licenseYear = ' Лицензионный год'
+}
+
+export type PriceType = {
+    // number: 
+          // region (0 - regions 1 - msk) + 
+          // complectType: 0   // 0 - internet 1 - proxima +
+          // complectNumber (1-8) +
+          // supplyNumber (1-9) - количество ОД
+          
+    number: number
+    region: 0 | 1 // region (0 - regions 1 - msk)
+    complectName: string
+    complectNumber: number
+    complectType:  0 | 1  // complectType ( 0 - internet 1 - proxima)
+    supplyName: string
+    supplyNumber: number
+    contractNumber: number
+    contractName: string
+    price: number
+
 }

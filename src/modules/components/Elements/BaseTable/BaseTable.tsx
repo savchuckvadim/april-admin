@@ -7,13 +7,13 @@ import { updateClientRegions } from "../../../redux/reducers/client/client-reduc
 
 
 type TableValueType = ClientValueType | SupplyValueType | ComplectValueType | ContractValueType |
-    RegionValueType | ConsaltingValueType | LegalTechValueType
+    RegionValueType | ConsaltingValueType | LegalTechValueType | PriceValueType
 
 
 type BaseTablePropsType = {
     categories: Array<string>
     values: Array<TableValueType>
-    type: 'complects' | 'products' | 'fields' | 'clients' | 'regions' | 'contracts' | 'consalting' | 'legalTech'
+    type: 'complects' | 'products' | 'fields' | 'clients' | 'regions' | 'contracts' | 'consalting' | 'legalTech' | 'price'
     withLinks: boolean
     clientRegions?: Array<number>
     isClient?: boolean
@@ -83,6 +83,14 @@ export type LegalTechValueType = {
     // weight: number,
 
 }
+export type PriceValueType = {
+    number: number
+    name: string
+    supply: string
+    contract: string
+    value: number
+
+}
 
 const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, withLinks, clientRegions, updateClientRegions }) => {
 
@@ -124,9 +132,9 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                             }
                             else if (key === 'title' && type === "regions") {
                                 const checked = clientRegions?.includes(row.number) || false
-                               debugger
-                               generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
-                                    <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked)}} />
+                                debugger
+                                generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
+                                    <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
                                 </TableCell>)
 
                                 generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">

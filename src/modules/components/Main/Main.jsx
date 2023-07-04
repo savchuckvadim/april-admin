@@ -11,6 +11,7 @@ import RegionsContainer from "./Region/RegionsContainer"
 import ContractsContainer from "./Contracts/ContractsContainer"
 import ConsaltingContainer from "./Consalting/ConsaltingContainer"
 import LegalTechContainer from "./LegalTech/LegalTechContainer"
+import PriceContainer from "./Price/PriceContainer"
 
 
 
@@ -44,6 +45,7 @@ const Main = () => {
                         <Route path="contracts/" element={<ContractsContainer />} />
                         <Route path="consalting/" element={<ConsaltingContainer />} />
                         <Route path="legaltech/" element={<LegalTechContainer />} />
+                        <Route path="prices/" element={<PriceContainer />} />
                     </Routes>
 
                 </div>
