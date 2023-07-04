@@ -9,14 +9,15 @@ const initialState = {
     coefficients: [1.25, 1.5, 2, 3, 4, 5, 6, 7],
     prices: {
         prof: [],
-        universal: {},
+        universal: [],
     },
 
     filtred: [],
     filter: {
         filters: ['All', 'Prof', 'Universal'],
         current: 'All',
-        index: 0
+        index: 0,
+        regions: ['msk', 'stv'],
     }
 
 }
@@ -37,22 +38,22 @@ const setPrices = (prices) => ({ type: SET_PRICES, prices })
 
 export const updatePrices = (token = null) => async (dispatch, getState) => {
 
-    debugger
+    
     dispatch(inProgress(true, 'component'))
     const fetchedPrices = await googleAPI.get(token)
 
     if (fetchedPrices && fetchedPrices.prices) {
-
+        
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
             dispatch(setPrices(fetchedPrices.prices))
             const state = getState()
             const pricesProf = state.price.prices.prof
             const pricesUniversal = state.price.prices.universal
-
+            
             const newProf = await generalAPI.setCollection('prof', pricesProf)
             const newUniversal = await generalAPI.setCollection('universal', pricesUniversal)
 
-            debugger
+            
         }
 
 
@@ -60,7 +61,7 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
         if (fetchedPrices.prices.regions && fetchedPrices.prices.regions.length > 0) {
             let regions = fetchedPrices.prices.regions
             let updatedregions = await generalAPI.setCollection('regions', regions)
-            debugger
+            
             dispatch(regionActions.setRegions(regions))
         }
 
@@ -79,13 +80,8 @@ export const getPrices = () => async (dispatch, getState) => {
 
     const fetchedProf = await generalAPI.getCollection('prof')
     const fetchedUniversal = await generalAPI.getCollection('universal')
-    // const fetchedRegions = await generalAPI.getCollection('regions')
 
 
-    console.log('fetchedUniversal')
-    console.log(fetchedUniversal)
-
-debugger
     if (fetchedProf && fetchedUniversal && fetchedProf.length > 0 && fetchedUniversal.length > 0) {
         let prices = {
             prof: fetchedProf,
@@ -122,10 +118,11 @@ const price = (state = initialState, action) => {
                     universal: action.prices.universal,
 
                 },
-                filtred: action.prices.universal['msk'],
+                filtred: action.prices.universal.filter(price => state.filter.regions.includes(price.region) ),
                 filter: {
                     filters: ['All', 'Prof', 'Universal'],
                     current: 'All',
+                    regions: ['msk', 'stv'],
                     index: 0
                 }
             }

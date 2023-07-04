@@ -7,6 +7,7 @@ import { query, orderBy } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { api } from "../api-laravel";
+import { makeChunks } from "../../utils/firebase/firebase-utils";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -742,29 +743,32 @@ export const generalAPI = {
   },
 
   setCollection: async (collectionName, objects) => {
-   
+
     try {
 
-      const batch = writeBatch(db)
+
       let docRef = null
 
-      for (let i = 0; i < objects.length; i++) {
 
-        const item = objects[i]
-        docRef = doc(db, collectionName, `${objects[i].number}`);
-        let newDoc = batch.set(docRef, item, `${objects[i].number}`)
 
-        console.log(newDoc)
+
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          docRef = docRef = doc(db, collectionName, `${element.number}`);
+          batch.set(docRef, element, `${element.number}`)
+        });
+        await batch.commit();
       }
-      
-      await batch.commit();
       let result = await generalAPI.getCollection(collectionName)
-      debugger
+
       return result
 
 
     } catch (error) {
-      debugger
+
       console.error(error)
     }
   },
