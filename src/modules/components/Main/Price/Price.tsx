@@ -4,6 +4,8 @@ import UploadData from '../../Elements/Actions/Upload/UploadData';
 import Filter from '../../Elements/Filter/Filter';
 import FilterButtons from '../../Elements/Filter/Filter-Buttons/Filter-Buttons';
 import PriceTable from './PriceTable/PriceTable';
+import ActionsFrame from '../../Elements/Actions/Navigation/ActionsFrame';
+import Navigation from '../../Elements/Actions/Navigation/Navigation/Navigation';
 
 
 
@@ -35,19 +37,19 @@ type PriceTablePropsType = {
 
 
 const Price: React.FC<PriceTablePropsType> = ({
-  isClient, 
-  prices, 
-  filters, 
-  filterCurrent, 
-  updatePrices, 
-  setFilter 
+  isClient,
+  prices,
+  filters,
+  filterCurrent,
+  updatePrices,
+  setFilter
 }) => {
 
   debugger
-let color = isClient ? 'rgb(219, 217, 231)' : 'white'
+  let color = isClient ? 'rgb(219, 217, 231)' : 'white'
   return (
     <>
-      <Filter 
+      {/* <Filter 
       //@ts-ignore
       align={'flex-end'} 
       color={color} 
@@ -55,9 +57,15 @@ let color = isClient ? 'rgb(219, 217, 231)' : 'white'
      
       >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
-      </Filter>
+      </Filter> */}
+      <ActionsFrame align={'left'} color={'rgb(247, 242, 247)'}>
+        <Navigation
+          initialIndex={0}
+          actions={filters}
+          navigate={(index: number) => setFilter(index)} />
+      </ActionsFrame>
       {!isClient && <UploadData upload={updatePrices} />}
-      <PriceTable prices={prices} type={TableTypes.price}  />
+      <PriceTable prices={prices} type={TableTypes.price} />
     </>
   );
 

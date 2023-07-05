@@ -11,6 +11,7 @@ const initialState = {
         prof: [],
         universal: [],
         lt: [],
+        consalting: []
     },
 
     filtred: [],
@@ -19,6 +20,8 @@ const initialState = {
         current: 'All',
         index: 0,
         regions: ['msk', 'stv'],
+        supply: [16],
+        complectType: [1],  //0 - internet 1 - proxima +
     }
 
 }
@@ -44,17 +47,11 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
     const fetchedPrices = await googleAPI.get(token)
 
     if (fetchedPrices && fetchedPrices.prices) {
-
+        
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
-            dispatch(setPrices(fetchedPrices.prices))
-            const state = getState()
-            const pricesProf = state.price.prices.prof
-            const pricesUniversal = state.price.prices.universal
-            const coefficients = state.price.prices.coefficients
-
-            const newProf = await generalAPI.setCollection('prof', pricesProf)
-            const newUniversal = await generalAPI.setCollection('universal', pricesUniversal)
-
+            await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
+            await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
+            await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
 
         }
 
@@ -62,23 +59,22 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
 
         if (fetchedPrices.regions && fetchedPrices.regions.length > 0) {
             let regions = fetchedPrices.regions
-            let updatedregions = await generalAPI.setCollection('regions', regions)
-            debugger
+            await generalAPI.setCollection('regions', regions)
+
             dispatch(regionActions.setRegions(regions))
         }
 
 
         if (fetchedPrices.prices.lt && fetchedPrices.prices.lt.length > 0) {
             let lt = fetchedPrices.prices.lt
-            let updatedLt = await ltAPI.updatePrices(lt)
-            debugger
-            //todo dispatch updated lt
+            await ltAPI.updatePrices(lt)
+
         }
 
 
     }
 
-
+    dispatch(getPrices())
     dispatch(inProgress(false, 'global'))
 }
 
@@ -91,38 +87,61 @@ export const getPrices = () => async (dispatch, getState) => {
     const fetchedProf = await generalAPI.getCollection('prof')
     const fetchedUniversal = await generalAPI.getCollection('universal')
     const fetchedLt = await generalAPI.getCollection('legalTech')
+    const fetchedConsalting = await generalAPI.getCollection('consalting')
 
     if (fetchedProf && fetchedUniversal && fetchedLt && fetchedProf.length > 0 && fetchedUniversal.length > 0 && fetchedLt.length > 0) {
         let ltPrices = []
+        let consaltingPrices = []
         fetchedLt.forEach(lt => {
             if (lt.type === 'package') {
                 const mskPrice = {
-                  number: Number(1 + '' + lt.number),
-                  complectName: lt.title,
-                  complectNumber: lt.number,
-                  supplyNumber: false,
-                  price: Number(lt.msk),
-                  region: 1,  //0 - regions / 1 - msk
-                  complectType: false   // 0 - internet 1 - proxima
+                    number: Number(1 + '' + lt.number),
+                    complectName: lt.name,
+                    complectNumber: lt.number,
+                    supplyNumber: false,
+                    price: Number(lt.msk),
+                    region: 1,  //0 - regions / 1 - msk
+                    complectType: false   // 0 - internet 1 - proxima
                 }
                 const rgnPrice = {
-                  number: Number(0 + '' + lt.number),
-                  complectName: lt.title,
-                  complectNumber: lt.number,
-                  supplyNumber: false,
-                  price: Number(lt.regions),
-                  region: 0,  //0 - regions / 1 - msk
-                  complectType: false   // 0 - internet 1 - proxima
+                    number: Number(0 + '' + lt.number),
+                    complectName: lt.name,
+                    complectNumber: lt.number,
+                    supplyNumber: false,
+                    price: Number(lt.regions),
+                    region: 0,  //0 - regions / 1 - msk
+                    complectType: false   // 0 - internet 1 - proxima
                 }
                 ltPrices.push(mskPrice, rgnPrice)
-          
-              }
+
+            }
         })
-        
+
+        let count = 0
+        for (const key in fetchedConsalting) {
+            let consalting = fetchedConsalting[key]
+            const price = {
+                number: consalting.number,
+                complectName: consalting.name,
+                complectNumber: consalting.number,
+                supplyNumber: false,
+                price: false,
+                region: 1,  //0 - regions / 1 - msk
+                complectType: false,  // 0 - internet 1 - proxima
+                isAbs: true,
+                abs: consalting.abs
+            }
+            consaltingPrices.push(price)
+            count++
+        }
+
+
+
         let prices = {
             prof: fetchedProf,
             universal: fetchedUniversal,
-            lt:ltPrices
+            lt: ltPrices,
+            consalting: consaltingPrices
         }
 
         dispatch(setPrices(prices))
@@ -144,9 +163,88 @@ const price = (state = initialState, action) => {
 
     switch (action.type) {
         case SET_PRICES:
+            let filtred = []
 
 
-            debugger
+            for (const key in action.prices) {
+                action.prices[key].forEach(price => {
+                    filtred.push(price)
+                })
+            }
+
+            return {
+                ...state,
+                prices: {
+                    ...state.prices,
+                    prof: action.prices.prof,
+                    universal: action.prices.universal,
+                    lt: action.prices.lt,
+                    consalting: action.prices.consalting
+
+                },
+                filtred,
+                filter: {
+                    ...state.filter,
+                    current: 'All',
+                    regions: ['msk', 'stv'],
+                    index: 0
+                }
+            }
+
+        case SET_FILTER:
+            let filtredPrices = []
+            switch (action.filterIndex) {
+                case 0: //All
+
+                    for (const key in state.prices) {
+                        state.prices[key].forEach(price => {
+                            filtredPrices.push(price)
+                        })
+                    }
+                    debugger
+                    return {
+                        ...state,
+                        filtred: filtredPrices
+                    }
+
+                case 1: //Prof
+
+                    debugger
+                    state.prices.prof.map(price => {
+                        if (state.filter.supply.includes(price.supplyNumber)) {
+                            filtredPrices.push(price)
+                        }
+                        // filtredPrices.push(price)
+                    })
+
+                    return {
+                        ...state,
+                        filtred: filtredPrices
+                    }
+
+                case 2: //Universal
+
+                    return {
+                        ...state,
+                        filtred: state.prices.universal.filter(price => state.filter.regions.includes(price.region)),
+                    }
+                case 3: //Legal Tech
+
+                    return {
+                        ...state,
+                        filtred: state.prices.lt
+                    }
+                case 4: //Consalting
+
+                    return {
+                        ...state,
+                        filtred: state.prices.consalting
+                    }
+
+                default:
+                    return state
+            }
+
             return {
                 ...state,
                 prices: {
@@ -164,7 +262,6 @@ const price = (state = initialState, action) => {
                     index: 0
                 }
             }
-
         default:
             return state
     }

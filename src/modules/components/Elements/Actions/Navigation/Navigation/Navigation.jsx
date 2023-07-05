@@ -50,9 +50,9 @@ const Navigation = (props) => {
 
         // };
     };
-    const onButtonClick = (index) => {
-        setCurrentFilter(index)
-    };
+    // const onButtonClick = (index) => {
+    //     setCurrentFilter(index)
+    // };
 
 
     return (
