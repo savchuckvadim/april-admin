@@ -9,6 +9,7 @@ import Button from '../../../../../Elements/Button/Button';
 import ProductsTable from "../../../../Products/ProductsTable/ProductsTable"
 import RegionsSelectContainer from "../RegionsSelect/RegionsSelectContainer"
 import RegionsContainer from "../../../../Region/RegionsContainer"
+import PriceContainer from "../../../../Price/PriceContainer"
 
 type ClientMenuPropsType = {
     section: ClientSectionEnum
@@ -22,7 +23,7 @@ type ClientMenuPropsType = {
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
-  
+
 }
 
 
@@ -69,10 +70,17 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
             </>
 
         }
-          {section === ClientSectionEnum.Regions &&
+        {section === ClientSectionEnum.Prices &&
             <>
-              
-                <RegionsContainer isClient={true}/>
+
+                <PriceContainer isClient={true} />
+            </>
+
+        }
+        {section === ClientSectionEnum.Regions &&
+            <>
+
+                <RegionsContainer isClient={true} />
             </>
 
         }

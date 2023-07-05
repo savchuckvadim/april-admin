@@ -47,7 +47,7 @@ const Fields = ({ fields, filters, filterCurrent, getFields, setFilter, updateFi
 
 
   return (initialFields.fields.contract || initialFields.fields.dealName ? <div className={style.filter__wrapper}>
-    <Filter name={'clients'} callback={() => { alert('Fields') }} >
+    <Filter name={'clients'}>
       <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
     </Filter>
     <UploadData upload={upload} />

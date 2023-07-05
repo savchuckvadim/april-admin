@@ -5,34 +5,36 @@ import { setFilter, updatePrices, getPrices } from "../../../redux/reducers/pric
 
 
 
-const mapStateToProps = (state) => {
-debugger
+const mapStateToProps = (state, ownProps) => {
+    debugger
     return {
         prices: state.price.filtred,
-        filters: state.price.filter.filters ,
-        filterCurrent: state.price.filter.index
+        filters: state.price.filter.filters,
+        filterCurrent: state.price.filter.index,
+        isClient: ownProps.isClient
     }
 }
 
 
 
-const PriceContainer = ({prices, filters, filterCurrent, getPrices, updatePrices, setFilter}) => {
- 
+const PriceContainer = ({isClient, prices, filters, filterCurrent, getPrices, updatePrices, setFilter }) => {
+
 
     useEffect(() => {
-        if(!prices.length > 0){
+        if (!prices.length > 0) {
             getPrices()
         }
-    }, [] )
+    }, [])
 
-    return <Price 
-    prices={prices} 
-    filters={filters}
-    filterCurrent={filterCurrent}
-    updatePrices={updatePrices}
-    setFilter={setFilter}
-     />
-     
+    return <Price
+        isClient={isClient}
+        prices={prices}
+        filters={filters}
+        filterCurrent={filterCurrent}
+        updatePrices={updatePrices}
+        setFilter={setFilter}
+    />
+
 }
 
 

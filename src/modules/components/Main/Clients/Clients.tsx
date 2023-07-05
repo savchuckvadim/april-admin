@@ -39,7 +39,7 @@ const Clients: React.FC<ClientsPropsType> = ({ clients }) => {
           return (
             <>
               <Form>
-                <Filter isLong={true} name={'clients'} callback={() => { alert('clientsfilter') }}>
+                <Filter isLong={true} name={'clients'}>
                   <div className={!formik.errors.clientSearch ? style.secret__wrapper : style.secret__wrapperError}>
                     <Field
                       name="fieldsUpdate"

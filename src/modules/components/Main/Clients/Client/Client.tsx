@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { LightLoadingPageContainer } from '../../../Elements/Loading/Light-Loading-Page-Container'
 // import ClientMenu from './ClientMenu/ClientMenu'
 import { ClientType } from '../../../../types/types'
@@ -20,8 +20,6 @@ type ClientPropsType = {
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
-   
-
 }
 
 

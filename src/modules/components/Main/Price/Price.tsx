@@ -7,22 +7,23 @@ import PriceTable from './PriceTable/PriceTable';
 
 
 
-type ComePricesType = {
-    //    coefficients: Array<number>
-       prof: {
-        msk: {
-            internet: Array<PriceType>
-            proxima: Array<PriceType>
-        },
-        regions: {
-            internet: Array<PriceType>
-            proxima: Array<PriceType>
-        }
-    },
-}
+// type ComePricesType = {
+//     //    coefficients: Array<number>
+//        prof: {
+//         msk: {
+//             internet: Array<PriceType>
+//             proxima: Array<PriceType>
+//         },
+//         regions: {
+//             internet: Array<PriceType>
+//             proxima: Array<PriceType>
+//         }
+//     },
+// }
 
 
 type PriceTablePropsType = {
+  isClient?: boolean
   prices: Array<PriceType>
   filters: Array<string>
   filterCurrent: number
@@ -33,17 +34,30 @@ type PriceTablePropsType = {
 
 
 
-const Price: React.FC<PriceTablePropsType> = ({ prices, filters, filterCurrent, updatePrices, setFilter }) => {
+const Price: React.FC<PriceTablePropsType> = ({
+  isClient, 
+  prices, 
+  filters, 
+  filterCurrent, 
+  updatePrices, 
+  setFilter 
+}) => {
 
-debugger
-
+  debugger
+let color = isClient ? 'rgb(219, 217, 231)' : 'white'
   return (
     <>
-      <Filter name={'prices'} callback={() => { alert('prices') }} >
+      <Filter 
+      //@ts-ignore
+      align={'flex-end'} 
+      color={color} 
+      name={'prices'} 
+     
+      >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      <UploadData upload={updatePrices} />
-      <PriceTable prices={prices} type={TableTypes.price} />
+      {!isClient && <UploadData upload={updatePrices} />}
+      <PriceTable prices={prices} type={TableTypes.price}  />
     </>
   );
 

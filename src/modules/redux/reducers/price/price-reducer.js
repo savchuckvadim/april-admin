@@ -15,7 +15,7 @@ const initialState = {
 
     filtred: [],
     filter: {
-        filters: ['All', 'Prof', 'Universal'],
+        filters: ['All', 'Prof', 'Universal', 'Legal Tech', 'Consalting'],
         current: 'All',
         index: 0,
         regions: ['msk', 'stv'],
@@ -158,7 +158,7 @@ const price = (state = initialState, action) => {
                 },
                 filtred: action.prices.universal.filter(price => state.filter.regions.includes(price.region)),
                 filter: {
-                    filters: ['All', 'Prof', 'Universal'],
+                    ...state.filter,
                     current: 'All',
                     regions: ['msk', 'stv'],
                     index: 0

@@ -29,7 +29,7 @@ const LegalTech: React.FC<LegalTechTablePropsType> = ({ legalTech, filters, filt
 
   return (
     <>
-      <Filter name={'clients'} callback={() => { alert('Fields') }} >
+      <Filter name={'clients'} >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
       <UploadData upload={updateLT} />

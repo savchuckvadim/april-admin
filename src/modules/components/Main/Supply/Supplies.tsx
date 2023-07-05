@@ -29,7 +29,7 @@ const Supplies: React.FC<SuppliesPropsType> = ({ supplies, filters, filterCurren
 
   return (
     <>
-      <Filter name={'supply'} callback={() => { alert('supply') }} >
+      <Filter align={false} name={'supply'} >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
       <UploadData upload={updateSupplies} />
