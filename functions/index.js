@@ -31,6 +31,7 @@ const { getFirestore } = require("firebase-admin/firestore");
 
 const { app } = require("firebase-admin");
 const axios = require('axios');
+const { where } = require("@firebase/firestore");
 
 initializeApp();
 const api = axios.create({
@@ -290,13 +291,14 @@ exports.konstructor = onRequest(
 
 
     let fields = []
-
+    let client = null
+    let clientRegionsIds = [0, 1]
     const clientsRef = db.collection('clients');
     const clientsFields = await clientsRef.get();
 
     clientsFields.forEach((doc) => {
-      let client = doc.data()
-
+      client = doc.data()
+      clientRegions = client.regions
       fields = client.fields
 
 
@@ -316,29 +318,63 @@ exports.konstructor = onRequest(
     productsFetched.forEach((doc) => {
       let product = doc.data()
       products[product.complectType] = { ...products[product.complectType] }
-      if( product.supplyType ){ //если есть тип поставки - то есть Lt либо консалтинг
+      if (product.supplyType) { //если есть тип поставки - то есть Lt либо консалтинг
         products[product.complectType][product.supplyType] = { ...products[product.complectType][product.supplyType] }
-      
+
         // products[product.complectType][product.supplyType][product.contractName] = [...products[product.complectType][product.supplyType][product.contractName]]
-        if(Array.isArray(products[product.complectType][product.supplyType][product.contractNumber])){
+        if (Array.isArray(products[product.complectType][product.supplyType][product.contractNumber])) {
           products[product.complectType][product.supplyType][product.contractNumber].push(product)
-        }else{
+        } else {
           products[product.complectType][product.supplyType][product.contractNumber] = [product]
         }
-      }else{
-        if(Array.isArray(products[product.complectType][product.contractName])){
+      } else {
+        if (Array.isArray(products[product.complectType][product.contractName])) {
           products[product.complectType][product.contractNumber].push(product)
-        }else{
+        } else {
           products[product.complectType][product.contractNumber] = [product]
         }
       }
-     
-   
+
+
     })
 
 
+    let clientRegions = []
+    let regionNames = []
+    // const regionsRef = db.collection('regions', where('number', 'in', clientRegionsIds));
+    // const regionsFetched = await regionsRef.get();
 
-    res.json({ result: { resultCode: 0, data: { bitrix, products, prices:{} } } });
+    // regionsFetched.forEach(region => {
+    //   clientRegions.push(region)
+    //   regionNames.push(region.name)
+    // });
+
+
+    // const profRef = db.collection('prof');
+    // const universalRef = db.collection('universal', where('region', 'in', regionNames));
+    // const coefficientsRef = db.collection('coefficients');
+
+    // const profFetched = await profRef.get();
+    // const universalFetched = await universalRef.get();
+    // const coefficientsFetched = await coefficientsRef.get();
+
+
+
+    res.json({
+      result: {
+        resultCode: 0, 
+        data: {
+          bitrix,
+          products,
+          // prices: {
+          //   prof: profFetched,
+          //   universal: universalFetched,
+          //   coefficients: coefficientsFetched
+          // },
+          regions: clientRegions
+        }
+      }
+    });
 
 
   });
