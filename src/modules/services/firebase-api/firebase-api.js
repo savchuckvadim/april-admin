@@ -716,6 +716,88 @@ export const contractAPI = {
 
 
 
+export const ltAPI = {
+
+  updatePrices: async (prices) => {
+    let lt = []
+    let result = undefined
+    try {
+      const queryGet = query(collection(db, "legalTech"));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+        lt.push(data)
+
+      });
+      lt = lt.map(lt => {
+        if (lt.type === 'package') {
+
+          prices.forEach(price => {
+            if (price.complectNumber === lt.number) {
+              if (price.region === 1) {//price=msk
+                lt.msk = price.price
+              } else if (price.region === 0) { //rgns
+                lt.regions = price.price
+              }
+            }
+          })
+
+        }
+        return lt
+      })
+      result = await generalAPI.setCollection('legalTech', lt)
+      return result
+    } catch (error) {
+      console.log(error)
+      return result
+    }
+  },
+
+  updateClient: async (clientId, fields) => {
+    const docRef = doc(db, "clients", clientId);
+    const docSnap = await getDoc(docRef);
+
+    let client = null
+    if (docSnap.exists()) {
+      client = docSnap.data()
+
+      console.log('client');
+      console.log(client);
+    } else {
+      console.log("No such document!");
+    }
+  },
+
+  getClients: async () => {
+    let result = []
+    try {
+      const queryGet = query(collection(db, "clients"), orderBy("name"));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+        result.push(data)
+
+      });
+      console.log('get clients')
+      console.log(result)
+
+      return result
+    } catch (error) {
+      console.log(error)
+      return result
+
+    }
+
+
+  },
+}
+
+
+
 export const generalAPI = {
 
 
@@ -830,13 +912,6 @@ export const generalAPI = {
 
   }
 }
-
-
-
-
-
-
-
 
 
 
