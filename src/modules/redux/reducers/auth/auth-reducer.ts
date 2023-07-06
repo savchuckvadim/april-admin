@@ -38,7 +38,7 @@ export const getAuthApp = (): AuthThunkType => async (dispatch) => {
     
    
 
-    if (authUser && authUser.email === 'savchuckvadim@gmail.com') {
+    if (authUser && (authUser.email === 'savchuckvadim@gmail.com' || authUser.email === 'laravelsamvel@gmail.com')) {
         
         dispatch(actions.setAuthUserData(authUser, true))
         // await socket.reconnect(authUser.id, dispatch)

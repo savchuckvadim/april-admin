@@ -4,7 +4,7 @@ import { doc, getDoc, getFirestore, setDoc, updateDoc, where, writeBatch } from 
 import { collection, getDocs } from "firebase/firestore";
 import { query, orderBy } from "firebase/firestore";
 
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { api } from "../api-laravel";
 import { makeChunks } from "../../utils/firebase/firebase-utils";
@@ -917,12 +917,12 @@ export const generalAPI = {
 
 export const authApi = {
   getAuth: async () => {
-
+debugger
     const provider = new GoogleAuthProvider();
-    const auth = getAuth();
+    const auth = getAuth(app);
 
     auth.languageCode = 'ru';
-
+    debugger
     await signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -982,5 +982,22 @@ export const authApi = {
     });
 
     return resultUser
-  }
+  },
+
+  async login(email, password) {
+    debugger
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user)
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log( error.message)
+      });
+
+},
 }
