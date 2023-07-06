@@ -366,11 +366,11 @@ exports.konstructor = onRequest(
         data: {
           bitrix,
           products,
-          // prices: {
-          //   prof: profFetched,
-          //   universal: universalFetched,
-          //   coefficients: coefficientsFetched
-          // },
+          prices: {
+            // prof: profFetched,
+            // universal: universalFetched,
+            // coefficients: coefficientsFetched
+          },
           regions: clientRegions
         }
       }
