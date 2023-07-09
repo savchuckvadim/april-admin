@@ -54,7 +54,7 @@ export const clientAPI = {
     console.log('name', 'email', 'domain')
     console.log(name, email, domain)
     try {
-      const addClient = httpsCallable(functions, 'setNewClient');
+      const addClient = httpsCallable(functions, 'client');
       let client = await addClient({ name, email, domain, fields: [], products: [], number: 0 })
       console.log(client.data)
       return client.data
@@ -917,12 +917,12 @@ export const generalAPI = {
 
 export const authApi = {
   getAuth: async () => {
-debugger
+
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app);
 
     auth.languageCode = 'ru';
-    debugger
+    
     await signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.

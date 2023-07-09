@@ -1,4 +1,6 @@
-import { FormikErrors, FormikTouched } from "formik"
+import { useRef, useState } from "react"
+import axios from "axios"
+import { Field, FormikErrors, FormikTouched, useField } from "formik"
 import { ClientType } from "../../../../../../types/types"
 import { ClientFields, ClientSectionEnum } from "./ClientForm"
 import ClientGeneral from "../General/ClientGeneral"
@@ -10,6 +12,10 @@ import ProductsTable from "../../../../Products/ProductsTable/ProductsTable"
 import RegionsSelectContainer from "../RegionsSelect/RegionsSelectContainer"
 import RegionsContainer from "../../../../Region/RegionsContainer"
 import PriceContainer from "../../../../Price/PriceContainer"
+import { Input } from '@mui/material';
+import { Navigate } from "react-router-dom"
+
+
 
 type ClientMenuPropsType = {
     section: ClientSectionEnum
@@ -26,8 +32,73 @@ type ClientMenuPropsType = {
 
 }
 
+//@ts-ignore
+const FileUpload = ({ fileRef, ...props }) => {
+    debugger
+    //@ts-ignore
+    const [updatedFile, setUpdatedFile] = useState(null)
+
+    const [error, setError] = useState(null as string | null);
+    //@ts-ignore
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const fileExtension = file.name.split('.').pop();
+        debugger
+        if (fileExtension !== 'doc' && fileExtension !== 'docx') {
+            setError('File must be a .doc file')
+            alert('File must be a .doc file');
+            return;
+        } else {
+            if (event.currentTarget.files.length) {
+                debugger
+                props.form.setFieldValue('name', event.currentTarget.files[0]);  // <-- Задаем файл как значение поля
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                axios.post('http://localhost:8000/api/file', formData)
+                    .then(async (response) => {
+                        if (response && response.data && response.data.resultCode === 0) {
+                            let link = response.data.file
+                            setUpdatedFile(link)
+                            window.open(link, "_blank")
+                            debugger
+                            // handle successful upload
+                        }
+
+                    })
+                    .catch((err) => {
+                        debugger
+                        // handle upload error
+                    });
+            }
+        }
+
+
+    };
+
+    return (
+        <div>
+            {/* {updatedFile && window.open(updatedFile, "_blank")} */}
+            <label htmlFor="file">Choose files</label>{" "}
+            
+            <input
+                id="file"
+                ref={fileRef}
+                type="file"
+                onChange={handleFileChange}
+
+            />
+            {error ? <div style={{ color: "red" }}>{error}</div> : null}
+        </div>
+
+    );
+};
 
 const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged, isNew, touched, errors, handleChange, setClientName, updateField, updateClientProducts, getProducts }) => {
+
+    const fileRef = useRef(null);
+
     return <div className={style.menu}>
         {/*GENERAL*/}
 
@@ -81,6 +152,19 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
             <>
 
                 <RegionsContainer isClient={true} />
+            </>
+
+        }
+
+        {section === ClientSectionEnum.Templates &&
+            <>
+                <Field
+                    name='file'
+                    component={FileUpload}
+                    fileRef={fileRef}
+
+                />
+
             </>
 
         }

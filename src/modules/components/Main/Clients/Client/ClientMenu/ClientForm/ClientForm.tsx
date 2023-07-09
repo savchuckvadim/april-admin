@@ -10,6 +10,7 @@ import ActionsFrame from '../../../../../Elements/Actions/Navigation/ActionsFram
 import Navigation from '../../../../../Elements/Actions/Navigation/Navigation/Navigation'
 
 
+
 export type ClientFields = {
     name: string | null
     email: string | null
@@ -27,7 +28,8 @@ export enum ClientSectionEnum {
     Products = 'Products',
     Contracts = 'Contracts',
     Prices = 'Prices',
-    Regions = 'Regions'
+    Regions = 'Regions',
+    Templates = 'Templates'
 
 }
 
@@ -46,7 +48,7 @@ type ClientFormPropsType = {
 const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, updateField, updateClientProducts, getProducts }) => {
     const sections = [
         ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts,
-        ClientSectionEnum.Prices,   ClientSectionEnum.Regions
+        ClientSectionEnum.Prices, ClientSectionEnum.Regions, ClientSectionEnum.Templates
     ] as Array<ClientSectionEnum>
     const [clientName, setClientName] = useState(client.name)
 
@@ -54,7 +56,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
     const [section, setSection] = useState(sections[sectionIndex] as ClientSectionEnum)
     const [isNew, setIsNew] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
-    
+
     const [initialValues, setInitialValues] = useState({
         name: null as string | null,
         email: null as string | null,
@@ -62,7 +64,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         key: null as string | null,
         hook: null as string | null,
         fields: {} as { string: FieldType } | {},
-        number: null as number | null
+        number: null as number | null,
+        file: null as string | null
     })
 
 
@@ -90,7 +93,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
             key: null as string | null,
             hook: null as string | null,
             fields: {} as { string: FieldType } | {},
-            number: null as number | null
+            number: null as number | null,
+            file: null as string | null
         }
         client.fields.forEach((clientField: FieldType) => {
             //@ts-ignore
@@ -102,6 +106,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         !isNew ? updatedInitialValues.key = client.email : updatedInitialValues.key = null
         !isNew ? updatedInitialValues.hook = client.domain : updatedInitialValues.hook = null
         !isNew ? updatedInitialValues.number = client.number : updatedInitialValues.number = null
+      
         updatedInitialValues.fields = formikValuesFields
         setInitialValues(updatedInitialValues)
 
@@ -134,7 +139,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                 {!isNew && <ActionsFrame align={'left'} color={'rgb(247, 242, 247)'}>
                     <Navigation
                         initialIndex={0}
-                        actions={[ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts, ClientSectionEnum.Prices, ClientSectionEnum.Regions]}
+                        actions={[ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts, ClientSectionEnum.Prices, ClientSectionEnum.Regions, ClientSectionEnum.Templates]}
                         navigate={setSectionIndex} />
                 </ActionsFrame>
                 }
@@ -146,7 +151,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                     }}
                     validationSchema={schemaClient}
                     onSubmit={(values, { setSubmitting }) => {
-
+                        debugger
                         console.log('values')
                         console.log(values)
                         const fields = []

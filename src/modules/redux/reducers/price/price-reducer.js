@@ -51,7 +51,8 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
             await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
             await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
-            await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
+           let coefficients =  await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
+            debugger
 
         }
 
