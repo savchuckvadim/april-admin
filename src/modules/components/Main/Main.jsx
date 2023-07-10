@@ -12,6 +12,7 @@ import ContractsContainer from "./Contracts/ContractsContainer"
 import ConsaltingContainer from "./Consalting/ConsaltingContainer"
 import LegalTechContainer from "./LegalTech/LegalTechContainer"
 import PriceContainer from "./Price/PriceContainer"
+import Error from "../Elements/Error/Error"
 
 
 
@@ -37,7 +38,9 @@ const Main = () => {
 
                         </Route>
                         <Route path="clients/add" element={<ClientContainer />} />
-                        <Route path="clients/:clientId" element={<ClientContainer />} />
+                        <Route path="clients/:clientId" element={<ClientContainer isNew={false} />} />
+                        <Route path="clients/:add" element={<ClientContainer isNew={true} />} />
+                        <Route path="clients/:error" element={<Error />} />
                         <Route path="products/" element={<ProductsContainer />} />
                         <Route path="supplies/" element={<SuppliesContainer />} />
                         <Route path="complects/" element={<ComplectsContainer />} />
@@ -51,7 +54,7 @@ const Main = () => {
                 </div>
             </div>
 
-           
+
 
         </main>
 

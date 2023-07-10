@@ -15,6 +15,7 @@ const initialState = {
     current: null as ClientType | null,
     // created: null as number | null,
     redirect: null as number | null,
+    error: null
 
 
 }
@@ -33,15 +34,16 @@ export const clientActions = {
     setClientField: (field: FieldType, clientId: number) => ({ type: 'clients/SET_FIELD', field, clientId } as const),
     setClientProducts: (products: Array<ProductType>, clientId: number) => ({ type: 'clients/SET_PRODUCTS', products, clientId } as const),
     setRegion: (regions: Array<number>) => ({ type: 'clients/SET_REGION', regions } as const),
+    setError: (errorMessage: string) => ({ type: 'clients/SET_ERROR', errorMessage } as const),
 }
 
 
 //THUNK
 
-export const sendNewClient = (name: string, email: string, domain: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+export const sendNewClient = (name: string, email: string, domain: string, placementKey: string, hookKey: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
     dispatch(inProgress(true, 'component'))
-    const clientData = await clientAPI.create(name, email, domain) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
-
+    const clientData = await clientAPI.create(name, email, domain, placementKey, hookKey) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
+    debugger
     if (clientData && clientData.resultCode === ResultCodesEnum.Success && clientData.client) {
         if (clientData.client && clientData.client.number) {
             dispatch(clientActions.setCurrentClient(clientData.client))
@@ -53,6 +55,7 @@ export const sendNewClient = (name: string, email: string, domain: string) => as
 
     } else {
         clientData.message && console.log(clientData.message)
+        clientData.message ? dispatch(clientActions.setError(clientData.message)) :  dispatch(clientActions.setError('something wrong with creating client'))
     }
 
     dispatch(inProgress(false, 'component'))
@@ -164,7 +167,7 @@ export const getProducts = (clientId: number) => async (dispatch: AppDispatchTyp
 }
 
 export const updateClientRegions = (regionId: number, checked: boolean) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-debugger
+    debugger
     const state = getState()
     const client = state.client as ClientStateType
     if (client.current) {
@@ -300,6 +303,15 @@ const client = (state: ClientStateType = initialState, action: ClientActionsType
                 ...state,
                 current: current
             }
+
+        case 'clients/SET_ERROR':
+
+            return {
+                ...state,
+                redirect: action.errorMessage,
+                error: action.errorMessage
+            }
+
 
         default:
             return state;

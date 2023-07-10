@@ -50,16 +50,26 @@ export const firestore = getFirestore(app);
 
 export const clientAPI = {
 
-  create: async (name, email, domain) => {
-    console.log('name', 'email', 'domain')
-    console.log(name, email, domain)
+  create: async (name, email, domain, placementKey, hookKey) => {
+    console.log('name', 'email', 'domain', 'placementKey', 'hookKey')
+    console.log(name, email, domain, placementKey, hookKey)
+    debugger
     try {
       const addClient = httpsCallable(functions, 'client');
-      let client = await addClient({ name, email, domain, fields: [], products: [], number: 0 })
+      let client = await addClient({ name, email, domain, placementKey, hookKey })
       console.log(client.data)
       return client.data
     } catch (error) {
       console.log(error)
+      let message = 'client was not created'
+      if (error.message) {
+        message = error.message
+      }
+      let response = {
+        resultCode: 1,
+        message
+      }
+      return response
     }
 
   },
@@ -922,7 +932,7 @@ export const authApi = {
     const auth = getAuth(app);
 
     auth.languageCode = 'ru';
-    
+
     await signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -996,8 +1006,8 @@ export const authApi = {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log( error.message)
+        console.log(error.message)
       });
 
-},
+  },
 }

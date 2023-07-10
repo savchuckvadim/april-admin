@@ -37,7 +37,7 @@ export enum ClientSectionEnum {
 type ClientFormPropsType = {
     client: ClientType
     // clientId: number | 'new' | false
-    sendNewClient: (name: string, email: string, domain: string) => void
+    sendNewClient: (name: string, email: string, domain: string, placementKey:string, hookKey:string) => void
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
@@ -161,8 +161,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                         }
 
 
-                        if (values.name && values.email && values.domain) {
-                            sendNewClient(values.name, values.email, values.domain)
+                        if (values.name && values.email && values.domain && values.key && values.hook) {
+                            sendNewClient(values.name, values.email, values.domain, values.key, values.hook)
 
                         }
 

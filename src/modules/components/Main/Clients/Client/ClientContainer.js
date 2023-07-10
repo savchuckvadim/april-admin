@@ -3,28 +3,31 @@ import { connect } from "react-redux"
 import Client from "./Client"
 import { clientActions, getClient, getProducts, sendNewClient, setCreatingClient, updateClientField } from "../../../../redux/reducers/client/client-reducer"
 import { updateClientProducts } from "../../../../redux/reducers/product/product-reducer"
-
-
 import { useEffect, useState } from "react"
 import { compose } from "redux"
 import WithRouter from "../../../HOC/WithRouter"
-import { updateField } from "../../../../redux/reducers/field/field-reducer"
-import { Navigate } from "react-router-dom"
 
 
 
-const mapStateToProps = (state) => {
-    
+
+const mapStateToProps = (state, ownProps) => {
+
     return {
         client: state.client.current,
         redirect: state.client.redirect,
-        preloader: state.preloader.component.inProgress
+        preloader: state.preloader.component.inProgress,
+        isNew: ownProps.isNew
     }
 }
 
 const ClientContainer = (props) => {
 
-
+    console.log('client container props')
+    console.log(props)
+        if(props.params['*'] === 'clients/add'){
+            console.log('*')
+            console.log(props.params['*'])
+        }
 
 
     const [currentClient, setCurrentClient] = useState(null)
@@ -32,7 +35,7 @@ const ClientContainer = (props) => {
     // const [redirect, setRedirect] = useState({ status: false, link: null })
 
     useEffect(() => {
-        
+
 
 
 
@@ -48,7 +51,7 @@ const ClientContainer = (props) => {
                     //был существующий - пришло создание
 
                 } else {
-                    
+
                 }
                 console.log('пришел новый url')
                 console.log(props.params.clientId)
@@ -63,18 +66,18 @@ const ClientContainer = (props) => {
                     props.getClient(Number(props.params.clientId))
                 } else {
                     debugger
-                    if(clientId !== 'new'){
+                    if (clientId !== 'new') {
                         debugger
                         setClientId('new')
                         props.setCreatingClient()
                     }
-                    
-                  
+
+
                 }
 
 
 
-                
+
 
             }
 
@@ -85,15 +88,15 @@ const ClientContainer = (props) => {
                 console.log(props.client)
                 console.log(currentClient)
                 setCurrentClient(props.client)
-                
+
                 if (props.client && props.client.number   //если пришел существующий клиент
 
                     && props.client.number !== Number(props.params.clientId)) { //и его номер не соответстует url
-                        debugger
-                        console.log('клиент существующий')
+                    debugger
+                    console.log('клиент существующий')
                     console.log('number пришедшего клиента не равен params')
                     console.log('делаем редирект')
-                    
+
                     // setRedirect({
                     //     status:true,
                     //     link: `../../clients/${props.client.number}`
@@ -104,7 +107,7 @@ const ClientContainer = (props) => {
                 else if (props.client && !props.client.number) {  //если пришел создаваемый клиент
                     debugger
                 }
-                
+
 
 
 
@@ -112,7 +115,7 @@ const ClientContainer = (props) => {
             }
 
 
-            
+
             // if (props.params.clientId) {
 
             //     // if (!props.client || props.client.number !== Number(props.params.clientId))
@@ -145,7 +148,7 @@ const ClientContainer = (props) => {
 
     }, [props.client, props.params.clientId])
 
- 
+
 
 
 
@@ -168,7 +171,7 @@ const ClientContainer = (props) => {
 
             redirect={props.redirect}
             deleteRedirect={props.deleteRedirect}
-            
+
             {...props}
         />
     }
@@ -180,12 +183,12 @@ export default compose(
     connect(mapStateToProps, {
         sendNewClient,
         setCreatingClient,
-        updateField:updateClientField,
+        updateField: updateClientField,
         getClient,
         deleteRedirect: clientActions.deleteRedirect,
-        updateClientProducts:updateClientProducts,
+        updateClientProducts: updateClientProducts,
         getProducts,
-        
+
     }),
     WithRouter
 

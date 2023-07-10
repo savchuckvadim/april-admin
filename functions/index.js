@@ -44,32 +44,38 @@ const api = axios.create({
 exports.client = onRequest(
   { cors: true },
   async (req, res) => {
+    //name, email, domain, placementKey, hookKey
     const db = getFirestore();
 
     const clientData = req.body;
     let data = clientData.data
-
+    logger.info('data')
+    logger.info(data)
 
     let fields = []
     const fieldsRef = db.collection('fields');
     const fetchedFields = await fieldsRef.get();
 
     fetchedFields.forEach((doc) => {
-      let field = doc.data()
-      if (field.isEditableBitrix == true || field.isEditableValue == true) {
-        fields.push(field)
+      let field = doc.data();
+
+      if (field.isEditableBitrix == true || field.isEditableValue == true) { // Используйте isEditableBitrix, а не isЕditableBitrix
+        fields.push(field);
       }
 
+
     })
+    logger.info('fields')
+    logger.info(fields)
 
 
-    // let products = []
+    let products = []
     // const productsRef = db.collection('products');
     // const fetchedproducts = await productsRef.get();
 
     // fetchedproducts.forEach((doc) => {
     //   let product = doc.data()
-    //   logger.info(product);
+    //   // logger.info(product);
     //   products.push(product)
 
 
@@ -81,7 +87,8 @@ exports.client = onRequest(
     let searchingCounter = 0
     const countersRef = db.collection('counters').doc('clients');
     const fetchedCounters = await countersRef.get();
-
+    logger.info('fetchedCounters.exists')
+    logger.info(fetchedCounters.exists)
     if (fetchedCounters.exists) {
       // fetchedCounters.forEach((doc) => {
       let counter = fetchedCounters.data()
@@ -115,12 +122,40 @@ exports.client = onRequest(
 
     })
 
+    let consalting = []
+    const consaltingRef = db.collection('consalting');
+    const consaltingFields = await consaltingRef.get();
 
+    consaltingFields.forEach((doc) => {
+      let c = doc.data()
+      consalting.push({
+        consaltingNumber: c.number,
+        bitrixId: null
+      })
+
+
+    })
+    let legalTech = []
+    const legalTechRef = db.collection('legalTech');
+    const legalTechFields = await legalTechRef.get();
+
+    legalTechFields.forEach((doc) => {
+      let lt = doc.data()
+      if (lt.type === 'package') {
+        legalTech.push({
+          legalTechNumber: lt.number,
+          bitrixId: null
+        })
+      }
+
+
+
+    })
     if (clientsCount === 0) {
 
       const writeResult = await db
         .collection("clients")
-        .add({ ...data, number: searchingCounter, fields, regions: [30] });
+        .add({ ...data, number: searchingCounter, fields, regions: [30], products, consalting, legalTech });
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
@@ -221,6 +256,17 @@ exports.getApril = onRequest(
     }
 
 
+    const fieldsRef = db.collection('fields');  //берем снимок коллекции клиентов
+    const fieldsFetched = await fieldsRef.get(); //берем
+
+    fieldsFetched.forEach((doc) => {  //перебираем
+      let field = doc.data()
+      if (field.isEditableBitrix == false && field.isEditableValue == false && field.type !== 'reserv') { // Используйте isEditableBitrix, а не isЕditableBitrix
+        fields.push(field);
+      }
+
+
+    })
 
 
 
