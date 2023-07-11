@@ -360,7 +360,7 @@ export type PriceType = {
     region: 0 | 1 // region (0 - regions 1 - msk)
     complectName: string
     complectNumber: number
-    complectType:  0 | 1  // complectType ( 0 - internet 1 - proxima)
+    complectType:  0 | 1  //complectType ( 0 - internet 1 - proxima) todo - убрать
     supplyName: string
     supplyNumber: number
     contractNumber: number

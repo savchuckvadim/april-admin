@@ -10,8 +10,15 @@ type PriceTablePropsType = {
 
 
 const PriceTable: React.FC<PriceTablePropsType> = ({ prices, type, }) => {
-debugger
-    let resultPrices = prices.map((c, i) => ({ number: i, name: c.complectName, supply: c.supplyName, contract: c.contractName, value: c.price } as PriceValueType))
+
+    let resultPrices = prices.map((c, i) => { 
+        let contract = c.complectType === 1 ? 'proxima' : 'internet'
+        let region = c.region === 1 ? 'msk' : 'rgns'
+         
+        //@ts-ignore
+        return { number: i, name: c.complectName, supply: c.supplyName, contract, region, value: c.price } as PriceValueType
+    })
+
     let categories = [] as Array<string>
     for (const key in resultPrices[0]) {
         if (key !== 'number') categories.push(key)

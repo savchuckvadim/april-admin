@@ -103,7 +103,8 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                     <TableRow >
                         {type === 'regions' && <TableCell align="right">{'check'}</TableCell>}
                         {categories.map(c => {
-                            if (c === 'email' || c === 'domain' || c === 'infoblock' || c === 'type') {
+                            if (c === 'email' || c === 'domain' || c === 'infoblock' || c === 'type' ||
+                                c === 'supply' || c === 'contract' || c === 'region' || c === 'value') {
                                 return <TableCell align="right">{c}</TableCell>
                             } else {
                                 return <TableCell align="left" >{c}</TableCell>
@@ -148,6 +149,13 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                                     }
                                 </TableCell>)
                             }
+
+                            else if (key === 'supply' || key === 'contract') {
+
+                                //@ts-ignore
+                                generalCells.push(<TableCell key={`base-table-${key}-${row[key]}-${i}`} align="right">{row[key]}</TableCell>)
+                            }
+
 
                             //@ts-ignore
                             else if (key !== 'name' && key !== 'type' && key !== 'number') {

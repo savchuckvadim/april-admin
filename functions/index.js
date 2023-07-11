@@ -183,6 +183,16 @@ exports.client = onRequest(
     // res.json({ result: { resultCode: 0, client: fields } });
   });
 
+// exports.modifyfield = onDocumentWritten("fields/{fieldsNumber}", (event) => {
+//   // Get an object with the current document values.
+//   // If the document does not exist, it was deleted
+//   const document = event.data.after.data();
+
+//   // Get an object with the previous document values
+//   const previousValues = event.data.before.data();
+
+//   // perform more operations ...
+// });
 
 
 exports.getApril = onRequest(
@@ -238,7 +248,11 @@ exports.getApril = onRequest(
         client = docClient
         clientRegionsIds = client.regions
         if (client.fields) {
-          fields = client.fields
+          // fields =
+           client.fields.forEach(f => {
+            logger.log(f.action)
+            f.action && fields.push(f)
+           })
         }
 
         clientId = client.id
@@ -422,18 +436,26 @@ exports.getApril = onRequest(
       consalting.push(consaltingdoc)
     })
 
+ /////////////////////////////////////////////////COMPLECTS
+ let complects = []
+ const complectsRef = db.collection('complects');
+ const complectsFetched = await complectsRef.get(); //берем
 
+ complectsFetched.forEach((doc) => {  //перебираем
+   let complect = doc.data()
+
+   complects.push(complect)
+ })
 
     res.json({
       result: {
         resultCode: 0,
         data: {
           contracts,
-          bitrix: bitrix,
-          supplies: supplies,
-          // products,
-          client: client,
-          regions: regions,
+          complects,
+          supplies,
+          bitrix,
+          regions,
           prices: {
             prof: profs,
             universal: universals,

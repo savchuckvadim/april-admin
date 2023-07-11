@@ -2,6 +2,7 @@ import { generalAPI, ltAPI } from "../../../services/firebase-api/firebase-api"
 import { googleAPI } from "../../../services/google-api/google-api"
 import { inProgress } from "../preloader/preloader-reducer"
 import { getRegions, regionActions } from "../region/region-reducer"
+import { getSupplies } from "../supply/supply-reducer"
 
 
 
@@ -20,8 +21,8 @@ const initialState = {
         current: 'All',
         index: 0,
         regions: ['msk', 'stv'],
-        supply: [16],
-        complectType: [1],  //0 - internet 1 - proxima +
+        supply: [8],
+        complectType: [0],  //0 - internet 1 - proxima +
     }
 
 }
@@ -45,14 +46,14 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
 
     dispatch(inProgress(true, 'global'))
     const fetchedPrices = await googleAPI.get(token)
-
+debugger
     if (fetchedPrices && fetchedPrices.prices) {
-        
+
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
             await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
             await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
-           let coefficients =  await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
-            debugger
+            let coefficients = await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
+            
 
         }
 
@@ -83,14 +84,31 @@ export const getPrices = () => async (dispatch, getState) => {
 
 
     dispatch(inProgress(true, 'component'))
+    await dispatch(getSupplies())
 
-
+    let supplies = getState().supply.supplies
     const fetchedProf = await generalAPI.getCollection('prof')
     const fetchedUniversal = await generalAPI.getCollection('universal')
     const fetchedLt = await generalAPI.getCollection('legalTech')
     const fetchedConsalting = await generalAPI.getCollection('consalting')
-
+    debugger
     if (fetchedProf && fetchedUniversal && fetchedLt && fetchedProf.length > 0 && fetchedUniversal.length > 0 && fetchedLt.length > 0) {
+        let prof = fetchedProf.map(profPrice => {
+            let s = supplies.find(sup => sup.number === profPrice.supplyNumber)
+            let supplyName = s && s.name
+            return {
+                ...profPrice,
+                supplyName
+            }
+        })
+        let universal = fetchedUniversal.map(un => {
+            let s = supplies.find(sup => sup.number === un.supplyNumber)
+            let supplyName = s && s.name
+            return {
+                ...un,
+                supplyName
+            }
+        })
         let ltPrices = []
         let consaltingPrices = []
         fetchedLt.forEach(lt => {
@@ -102,7 +120,8 @@ export const getPrices = () => async (dispatch, getState) => {
                     supplyNumber: false,
                     price: Number(lt.msk),
                     region: 1,  //0 - regions / 1 - msk
-                    complectType: false   // 0 - internet 1 - proxima
+                    complectType: false ,  // 0 - internet 1 - proxima,
+                    supplyName: false,
                 }
                 const rgnPrice = {
                     number: Number(0 + '' + lt.number),
@@ -111,7 +130,8 @@ export const getPrices = () => async (dispatch, getState) => {
                     supplyNumber: false,
                     price: Number(lt.regions),
                     region: 0,  //0 - regions / 1 - msk
-                    complectType: false   // 0 - internet 1 - proxima
+                    complectType: false,   // 0 - internet 1 - proxima
+                    supplyName: false,
                 }
                 ltPrices.push(mskPrice, rgnPrice)
 
@@ -130,7 +150,8 @@ export const getPrices = () => async (dispatch, getState) => {
                 region: 1,  //0 - regions / 1 - msk
                 complectType: false,  // 0 - internet 1 - proxima
                 isAbs: true,
-                abs: consalting.abs
+                abs: consalting.abs,
+                supplyName: false,
             }
             consaltingPrices.push(price)
             count++
@@ -139,12 +160,12 @@ export const getPrices = () => async (dispatch, getState) => {
 
 
         let prices = {
-            prof: fetchedProf,
-            universal: fetchedUniversal,
+            prof,
+            universal,
             lt: ltPrices,
             consalting: consaltingPrices
         }
-
+        debugger
         dispatch(setPrices(prices))
     }
 
@@ -166,7 +187,7 @@ const price = (state = initialState, action) => {
         case SET_PRICES:
             let filtred = []
 
-
+            debugger
             for (const key in action.prices) {
                 action.prices[key].forEach(price => {
                     filtred.push(price)
@@ -202,7 +223,7 @@ const price = (state = initialState, action) => {
                             filtredPrices.push(price)
                         })
                     }
-                    debugger
+                    
                     return {
                         ...state,
                         filtred: filtredPrices
