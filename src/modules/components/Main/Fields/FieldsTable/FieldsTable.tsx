@@ -77,8 +77,8 @@ const FieldsTable: React.FC<FieldsPropsType> = ({ fields, updateField, clientId}
 
                 </TableCell>
 
-                <InputCell clientId={clientId} updateField={updateField} field={row} isЕditable={row.isЕditableBitrix} value={row.bitrixId} type={'bitrixId'} />
-                <InputCell clientId={clientId} updateField={updateField} field={row} isЕditable={row.isЕditableValue} value={row.value} type={'value'} />
+                <InputCell clientId={clientId} updateField={updateField} field={row} isEditable={row.isEditableBitrix} value={row.bitrixId} type={'bitrixId'} />
+                <InputCell clientId={clientId} updateField={updateField} field={row} isEditable={row.isEditableValue} value={row.value} type={'value'} />
 
               </TableRow>
             })}

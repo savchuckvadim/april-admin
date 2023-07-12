@@ -16,14 +16,14 @@ export const getFiltredFields = (filter: FieldsFilterEnum, fields: Array<FieldTy
 
         case FieldsFilterEnum.Global:
             resultFields = fields.filter(field => (
-                !field.isЕditableBitrix && !field.isЕditableValue
+                !field.isEditableBitrix && !field.isEditableValue
             ))
             return resultFields;
 
         case FieldsFilterEnum.Client:
 
             resultFields = fields.filter(field => (
-                field.isЕditableBitrix || field.isЕditableValue
+                field.isEditableBitrix || field.isEditableValue
             ))
             return resultFields;
 

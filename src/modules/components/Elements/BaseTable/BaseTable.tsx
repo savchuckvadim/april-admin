@@ -133,7 +133,7 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                             }
                             else if (key === 'title' && type === "regions") {
                                 const checked = clientRegions?.includes(row.number) || false
-                                debugger
+                                
                                 generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
                                     <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
                                 </TableCell>)
@@ -150,6 +150,13 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                                 </TableCell>)
                             }
 
+                            else if (key === 'title' && type === "contracts") {
+                                const checked = clientRegions?.includes(row.number) || false
+                                debugger
+                                generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
+                                    <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
+                                </TableCell>)
+                            }
                             else if (key === 'supply' || key === 'contract') {
 
                                 //@ts-ignore

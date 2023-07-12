@@ -14,6 +14,8 @@ import RegionsContainer from "../../../../Region/RegionsContainer"
 import PriceContainer from "../../../../Price/PriceContainer"
 import { Input } from '@mui/material';
 import { Navigate } from "react-router-dom"
+import ContractsContainer from "../../../../Contracts/ContractsContainer"
+import ClientContractContainer from "../ClientContract/ClientContractContainer"
 
 
 
@@ -140,6 +142,14 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
                     </div>}
             </>
 
+        }
+        {
+            section === ClientSectionEnum.Contracts &&
+            <>
+
+                <ClientContractContainer />
+            </>
+            
         }
         {section === ClientSectionEnum.Prices &&
             <>

@@ -32,10 +32,10 @@ const FieldsTableInput = ({ field, submit, label, error, touched, form }) => {
 
 
 
-const InputCell = ({ field, isЕditable, value, type, updateField, clientId }) => {
+const InputCell = ({ field, isEditable, value, type, updateField, clientId }) => {
 
     const [stateValue, setStateValue] = useState(value);
-    const [editable, setEditable] = useState(isЕditable);
+    const [editable, setEditable] = useState(isEditable);
     const [isUpdating, setIsUpdating] = useState(false)
 
 

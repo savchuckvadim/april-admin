@@ -13,7 +13,8 @@ type ComplectsTablePropsType = {
 
 const ContractsTable: React.FC<ComplectsTablePropsType> = ({ isClient, checked, contracts, type, }) => {
     debugger
-    let resultcontracts = contracts.map(c => ({ number: c.number, name: c.aprilName, mesureName: c.mesureName, bitrixName: c.bitrixName, } as ContractValueType))
+
+    let resultcontracts = contracts.map(c => ({ title: c.bitrixId, number: c.number, name: c.aprilName, mesureName: c.mesureName, bitrixName: c.bitrixName, } as ContractValueType))
     let categories = [] as Array<string>
     for (const key in resultcontracts[0]) {
         if (key !== 'number') categories.push(key)

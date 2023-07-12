@@ -16,11 +16,12 @@ const ClientContractContainer = ({ client }) => {
     let contracts = []
     let checked = []
     if (client) {
-        if (client.contracts && client.contracts.current && client.contracts.items) {
-            contracts = client.contracts.items
-            checked = client.contracts.current
+        if (client && client.current && client.current.contracts && client.current.contracts.current && client.current.contracts.items) {
+            contracts = client.current.contracts.items
+            checked = client.current.contracts.current
         }
     }
+    debugger
     return (
         <Contracts
             isClient={true}

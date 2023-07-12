@@ -105,8 +105,8 @@ export type FieldType = {
     value: string
     type: string
     action: string
-    isЕditableBitrix: boolean
-    isЕditableValue: boolean
+    isEditableBitrix: boolean
+    isEditableValue: boolean
     isArray: boolean
     isInTemplate: boolean
 

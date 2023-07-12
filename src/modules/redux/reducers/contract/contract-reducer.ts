@@ -13,6 +13,7 @@ type GetStateType = () => AppStateType
 const initialState = {
    
     contracts: [] as Array<ContractType>,
+
    
 }
 
@@ -20,7 +21,7 @@ const initialState = {
 
 //AC
 export const contractActions = {
-    setContract: (contracts: Array<ContractType>) => ({ type: 'contract/SET_CONTRACTS', contracts } as const),
+    setContracts: (contracts: Array<ContractType>) => ({ type: 'contract/SET_CONTRACTS', contracts } as const),
    
 
 }
@@ -39,7 +40,7 @@ export const updateContracts = (token = null) => async (dispatch: AppDispatchTyp
         
         let savedContracts = await contractAPI.setContracts(contracts)
         
-        dispatch(contractActions.setContract(contracts))
+        dispatch(contractActions.setContracts(contracts))
     }
 
     dispatch(inProgress(false, 'component'))
@@ -54,7 +55,7 @@ export const getContracts = () => async (dispatch: AppDispatchType, getState: Ge
     let contracts = await contractAPI.getContracts()
 
     if (contracts) {
-        dispatch(contractActions.setContract(contracts))
+        dispatch(contractActions.setContracts(contracts))
     }
 
     dispatch(inProgress(false, 'component'))
