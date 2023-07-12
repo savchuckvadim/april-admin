@@ -1,4 +1,4 @@
-import { clientAPI, fieldsAPI } from "../../../services/firebase-api/firebase-api"
+import { clientAPI, fieldsAPI, generalAPI } from "../../../services/firebase-api/firebase-api"
 import { googleAPI } from "../../../services/google-api/google-api"
 import { getFiltredFields } from "../../../utils/for-rdeucers/filter-utils"
 import { inProgress } from "../preloader/preloader-reducer"
@@ -33,7 +33,7 @@ export const updateFields = (token = null) => async (dispatch, getState) => {
     dispatch(inProgress(true, 'component'))
     const fetchedFields = await googleAPI.get(token)
     let data
-
+debugger
     if (fetchedFields.bitrix) {
         data = fetchedFields.bitrix
     }
@@ -48,7 +48,7 @@ export const updateFields = (token = null) => async (dispatch, getState) => {
 
     if (fields) {
         dispatch(setFields(fields))
-        await fieldsAPI.setFields(fields)
+        await generalAPI.setCollection('fields', fields)
     }
 
     dispatch(inProgress(false, 'component'))

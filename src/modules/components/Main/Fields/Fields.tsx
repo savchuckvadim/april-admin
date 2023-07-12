@@ -46,83 +46,86 @@ const Fields = ({ fields, filters, filterCurrent, getFields, setFilter, updateFi
   }, [fields])
 
 
-  return (initialFields.fields.contract || initialFields.fields.dealName ? <div className={style.filter__wrapper}>
-    <Filter name={'clients'}>
-      <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
-    </Filter>
-    <UploadData upload={upload} />
-    {/* <FieldsUpdateContainer /> */}
-    {//@ts-ignore
-      <Formik
+  return (
+    // initialFields.fields.contract || initialFields.fields.dealName ? 
+    <div className={style.filter__wrapper}>
+      <Filter name={'clients'}>
+        <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
+      </Filter>
+      <UploadData upload={upload} />
+      {/* <FieldsUpdateContainer /> */}
+      {//@ts-ignore
+        <Formik
 
-        initialValues={{
-          ...initialFields
-        }}
-        validationSchema={schemaClient}
-        onSubmit={(values, { setSubmitting }) => {
+          initialValues={{
+            ...initialFields
+          }}
+          validationSchema={schemaClient}
+          onSubmit={(values, { setSubmitting }) => {
 
-          const fields = []
+            const fields = []
 
-          console.log(values)
+            console.log(values)
 
-          setSubmitting(true);
+            setSubmitting(true);
 
-        }}
-      >{({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        setValues,
-        initialValues
-        /* and other goodies */
-      }) => {
-        let touchedFlag = false
-        for (const key in touched) {
+          }}
+        >{({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setValues,
+          initialValues
+          /* and other goodies */
+        }) => {
+          let touchedFlag = false
+          for (const key in touched) {
 
-          //@ts-ignore
-          if (touched[key]) {
-            touchedFlag = true
-          }
-        }
-
-        if (!touchedFlag) {
-          if (initialValues.fields.contract && !values.fields.contract) {
-            setValues(initialValues)
-          } else {
-
-            if (values.fields.contract && initialValues.fields.contract.bitrixId !== values.fields.contract.bitrixId) {
-              setValues(initialValues)
+            //@ts-ignore
+            if (touched[key]) {
+              touchedFlag = true
             }
           }
 
+          if (!touchedFlag) {
+            if (initialValues.fields.contract && !values.fields.contract) {
+              setValues(initialValues)
+            } else {
+
+              if (values.fields.contract && initialValues.fields.contract.bitrixId !== values.fields.contract.bitrixId) {
+                setValues(initialValues)
+              }
+            }
 
 
 
-        }
-        console.log('values')
-        console.log(values)
 
-        return <Form>
-          <FieldsTable
-           
-            fields={stateFields}
-            updateField={updateField}
-            clientId={null} />
-          <Button type="submit"> Отправить</Button>
-        </Form>
+          }
+          // console.log('values')
+          // console.log(values)
+
+          return <Form>
+            <FieldsTable
+
+              fields={stateFields}
+              updateField={updateField}
+              clientId={null} />
+            <Button type="submit"> Отправить</Button>
+          </Form>
 
 
-      }}
+        }}
 
-      </Formik>
+        </Formik>
 
-    }
-  </div >
-    : <p>Loading...</p>)
+      }
+    </div >
+    // : <p>Loading...</p>
+    )
 }
 
 

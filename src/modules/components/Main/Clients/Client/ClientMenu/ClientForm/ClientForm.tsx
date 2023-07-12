@@ -80,10 +80,9 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                 setIsNew(true)
             }
         }
-
-
     }, [client])
 
+    
     useEffect(() => {
         let formikValuesFields = {}
         let updatedInitialValues = {
@@ -118,7 +117,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
 
     useEffect(() => {
-        debugger
+        
         if (section !== sections[sectionIndex]) {
             setSection(sections[sectionIndex])
         }

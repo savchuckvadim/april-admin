@@ -104,7 +104,7 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                         {type === 'regions' && <TableCell align="right">{'check'}</TableCell>}
                         {categories.map(c => {
                             if (c === 'email' || c === 'domain' || c === 'infoblock' || c === 'type' ||
-                                c === 'supply' || c === 'contract' || c === 'region' || c === 'value') {
+                                c === 'supply' || c === 'contract' || c === 'region' || c === 'value' || c === 'mesureName' || c === 'bitrixName') {
                                 return <TableCell align="right">{c}</TableCell>
                             } else {
                                 return <TableCell align="left" >{c}</TableCell>

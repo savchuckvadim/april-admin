@@ -147,15 +147,30 @@ exports.client = onRequest(
           bitrixId: null
         })
       }
+    })
 
 
+    let contracts = {
+      items: [],
+      current: [0, 1, 2, 3]
+    }
+    const contractsRef = db.collection('contracts');
+    const contractsFields = await contractsRef.get();
+
+    contractsFields.forEach((doc) => {
+      let contract = doc.data()
+
+      contracts.items.push({ ...contract, bitrixId: null })
 
     })
+
+
+
     if (clientsCount === 0) {
 
       const writeResult = await db
         .collection("clients")
-        .add({ ...data, number: searchingCounter, fields, regions: [30], products, consalting, legalTech });
+        .add({ ...data, number: searchingCounter, fields, regions: [30], products, consalting, legalTech, contracts, });
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
@@ -249,10 +264,10 @@ exports.getApril = onRequest(
         clientRegionsIds = client.regions
         if (client.fields) {
           // fields =
-           client.fields.forEach(f => {
+          client.fields.forEach(f => {
             logger.log(f.action)
             f.action && fields.push(f)
-           })
+          })
         }
 
         clientId = client.id
@@ -436,16 +451,16 @@ exports.getApril = onRequest(
       consalting.push(consaltingdoc)
     })
 
- /////////////////////////////////////////////////COMPLECTS
- let complects = []
- const complectsRef = db.collection('complects');
- const complectsFetched = await complectsRef.get(); //берем
+    /////////////////////////////////////////////////COMPLECTS
+    let complects = []
+    const complectsRef = db.collection('complects');
+    const complectsFetched = await complectsRef.get(); //берем
 
- complectsFetched.forEach((doc) => {  //перебираем
-   let complect = doc.data()
+    complectsFetched.forEach((doc) => {  //перебираем
+      let complect = doc.data()
 
-   complects.push(complect)
- })
+      complects.push(complect)
+    })
 
     res.json({
       result: {

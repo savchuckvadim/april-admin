@@ -11,7 +11,9 @@ import UploadData from '../../Elements/Actions/Upload/UploadData';
 
 type ComplectsTablePropsType = {
   contracts: Array<ContractType>
-  updateContracts: (token: string) => void
+  isClient?: boolean,
+  checked? : Array<number>
+  updateContracts?: (token: string) => void
 
 
 }
@@ -19,14 +21,18 @@ type ComplectsTablePropsType = {
 
 
 
-const Contracts: React.FC<ComplectsTablePropsType> = ({ contracts, updateContracts }) => {
-
+const Contracts: React.FC<ComplectsTablePropsType> = ({isClient = false, checked = [], contracts, updateContracts }) => {
 
 
   return (
     <>
-      <UploadData upload={updateContracts} />
-      <ContractsTable contracts={contracts} type={TableTypes.contracts} />
+      {updateContracts && <UploadData upload={updateContracts} />}
+      <ContractsTable 
+      isClient={isClient}
+      checked={checked}
+      contracts={contracts} 
+      type={TableTypes.contracts} 
+      />
     </>
 
   );
