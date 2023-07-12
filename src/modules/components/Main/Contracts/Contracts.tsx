@@ -21,7 +21,7 @@ type ContractsTablePropsType = {
 
 const Contracts: React.FC<ContractsTablePropsType> = ({ isClient = false, checked = [], contracts, updateContracts }) => {
 
-  debugger
+  
   return (
     <>
  

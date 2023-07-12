@@ -327,14 +327,14 @@ export enum LegalTechFilterEnum {
 export type ContractType = {
     number: number
     aprilName: ContractAprilNameEnum
-
+    bitrixId: string | null
     fieldsNumber: number
     bitrixName: string
-    ItemId: number
+    itemId: number
     measureId: number
     measureNumber: number
-    mesureFullName: string
-    mesureName: string
+    measureFullName: string
+    measureName: string
     prepayment: number
     discount: number
 
@@ -351,16 +351,16 @@ export enum ContractAprilNameEnum {
 
 export type PriceType = {
     // number: 
-          // region (0 - regions 1 - msk) + 
-          // complectType: 0   // 0 - internet 1 - proxima +
-          // complectNumber (1-8) +
-          // supplyNumber (1-9) - количество ОД
-          
+    // region (0 - regions 1 - msk) + 
+    // complectType: 0   // 0 - internet 1 - proxima +
+    // complectNumber (1-8) +
+    // supplyNumber (1-9) - количество ОД
+
     number: number
     region: 0 | 1 // region (0 - regions 1 - msk)
     complectName: string
     complectNumber: number
-    complectType:  0 | 1  //complectType ( 0 - internet 1 - proxima) todo - убрать
+    complectType: 0 | 1  //complectType ( 0 - internet 1 - proxima) todo - убрать
     supplyName: string
     supplyNumber: number
     contractNumber: number

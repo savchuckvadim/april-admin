@@ -152,7 +152,8 @@ exports.client = onRequest(
 
     let contracts = {
       items: [],
-      current: [0, 1, 2, 3]
+      current: [0, 1, 2, 3],
+      bitrixId: null
     }
     const contractsRef = db.collection('contracts');
     const contractsFields = await contractsRef.get();
@@ -160,7 +161,7 @@ exports.client = onRequest(
     contractsFields.forEach((doc) => {
       let contract = doc.data()
 
-      contracts.items.push({ ...contract, bitrixId: null })
+      contracts.items.push({ ...contract })
 
     })
 

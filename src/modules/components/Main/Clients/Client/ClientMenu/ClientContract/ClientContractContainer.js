@@ -33,4 +33,9 @@ const ClientContractContainer = ({ client }) => {
 
 export default connect(mapStateToProps, {
 
+    //todo
+    //update client-contracts
+    //update client-contracts-current
+    //update client-contract - prop
+    
 })(ClientContractContainer)

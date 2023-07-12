@@ -4,6 +4,7 @@ import style from './BaseTable.module.scss'
 import { NumberLiteralType } from "typescript/lib/tsserverlibrary"
 import { ComplectTypesEnum, ConsaltingType, SupplyTypesEnum } from "../../../types/types"
 import { updateClientRegions } from "../../../redux/reducers/client/client-reducer"
+import { string } from "yup"
 
 
 type TableValueType = ClientValueType | SupplyValueType | ComplectValueType | ContractValueType |
@@ -55,9 +56,13 @@ export type RegionValueType = {
 
 export type ContractValueType = {
     name: string
+    title?: string | null
+    itemId?: number | null
+    measureId: number | null
     number: number
-    mesureName: string
+    measureName: string
     bitrixName: string
+    bitrixId?: string | null
     // weight: number,
 
 }
@@ -133,7 +138,7 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ categories, values, type, wit
                             }
                             else if (key === 'title' && type === "regions") {
                                 const checked = clientRegions?.includes(row.number) || false
-                                
+
                                 generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
                                     <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
                                 </TableCell>)
