@@ -1,5 +1,6 @@
 import { connect } from "react-redux"
 import Contracts from "../../../../Contracts/Contracts"
+import { updateClientContracts } from "../../../../../../redux/reducers/client/client-reducer"
 
 
 
@@ -25,7 +26,7 @@ const ClientContractContainer = ({ client }) => {
             bitrixId = client.current.contracts.bitrixId
         }
     }
-    
+
     return (
         <Contracts
             isClient={true}
@@ -33,12 +34,13 @@ const ClientContractContainer = ({ client }) => {
             contracts={contracts}
             checked={checked}
             bitrixId={bitrixId}
+            updateClientContracts={updateClientContracts}
         />
     )
 }
 
 export default connect(mapStateToProps, {
-
+    updateClientContracts
     //todo
     //update client-contracts
     //update client-contracts-current

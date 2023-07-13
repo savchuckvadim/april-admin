@@ -2,10 +2,10 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { NavLink } from "react-router-dom"
 import style from './BaseTable.module.scss'
 import { NumberLiteralType } from "typescript/lib/tsserverlibrary"
-import { ComplectTypesEnum, ConsaltingType, SupplyTypesEnum } from "../../../types/types"
+import { ComplectTypesEnum, ConsaltingType, ContractType, SupplyTypesEnum } from "../../../types/types"
 import { updateClientRegions } from "../../../redux/reducers/client/client-reducer"
 import { string } from "yup"
-import InputCell from "../../Elements/BaseTable/Input/InputCell"
+import ActiveCell from "./Input/ActiveCell"
 
 
 type TableValueType = ClientValueType | ContractValueType | SupplyValueType | ComplectValueType |
@@ -22,12 +22,12 @@ type BaseTablePropsType = {
     isClient?: boolean
     checked?: Array<number>
     updateClientRegions?: (regionId: number, checked: boolean) => void
-
+    updateClientContracts?: (items: Array<ContractType>, current: Array<number>, bitrixId: null) => void
 }
 
 
 
-const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values, type, withLinks, clientRegions, checked, updateClientRegions }) => {
+const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values, type, withLinks, clientRegions, checked, updateClientRegions, updateClientContracts }) => {
 
 
     return (
@@ -103,19 +103,20 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values,
 
 
 
-
+                    
                                 generalCells.push(
-                                    <InputCell
+                                    <ActiveCell
                                         clientId={clientId}
                                         updateField={() => console.log(clientId)}
+                                        updateClientContracts={updateClientContracts}
                                         field={row}
                                         isEditable={false}
                                         //@ts-ignore
                                         value={row[key]}
                                         type={key}
                                         name={`contracts.items.${row.number}.${key}`}
-                                       
-                                        />
+
+                                    />
                                 )
                             }
 

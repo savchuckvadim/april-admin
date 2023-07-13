@@ -16,7 +16,7 @@ type ClientPropsType = {
     redirect: redirectType
     deleteRedirect: () => void
     sendNewClient: (name: string, email: string, domain: string) => void
-    // setCreatingClient: () => void
+    updateClient: (client: ClientType) => void
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
@@ -30,10 +30,11 @@ const Client: React.FC<ClientPropsType> = ({
     redirect,
     deleteRedirect,
     sendNewClient,
+    updateClient,
     updateField,
     updateClientProducts,
     getProducts,
-    
+
 }) => {
 
     if (redirect) {
@@ -53,11 +54,13 @@ const Client: React.FC<ClientPropsType> = ({
                 client={client}
 
                 // formikInitialValues={formikInitialValues}
-                updateField={updateField}
+                
                 sendNewClient={sendNewClient}
+                updateClient={updateClient}
+                updateField={updateField}
                 updateClientProducts={updateClientProducts}
                 getProducts={getProducts}
-              
+
             />
 
     )

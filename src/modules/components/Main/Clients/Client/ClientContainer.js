@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import Client from "./Client"
-import { clientActions, getClient, getProducts, sendNewClient, setCreatingClient, updateClientField } from "../../../../redux/reducers/client/client-reducer"
+import { clientActions, getClient, getProducts, sendNewClient, setCreatingClient, updateClient, updateClientField } from "../../../../redux/reducers/client/client-reducer"
 import { updateClientProducts } from "../../../../redux/reducers/product/product-reducer"
 import { useEffect, useState } from "react"
 import { compose } from "redux"
@@ -24,10 +24,10 @@ const ClientContainer = (props) => {
 
     console.log('client container props')
     console.log(props)
-        if(props.params['*'] === 'clients/add'){
-            console.log('*')
-            console.log(props.params['*'])
-        }
+    if (props.params['*'] === 'clients/add') {
+        console.log('*')
+        console.log(props.params['*'])
+    }
 
 
     const [currentClient, setCurrentClient] = useState(null)
@@ -182,6 +182,7 @@ const ClientContainer = (props) => {
 export default compose(
     connect(mapStateToProps, {
         sendNewClient,
+        updateClient,
         setCreatingClient,
         updateField: updateClientField,
         getClient,

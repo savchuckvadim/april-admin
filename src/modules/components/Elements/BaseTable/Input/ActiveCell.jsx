@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import style from './InputCell.module.scss';
+import style from './ActiveCell.module.scss';
 import TableCell from '@mui/material/TableCell';
 import { TextField } from '@mui/material';
-import { Field, Form, Formik, getFieldProps } from 'formik';
+import { Field} from 'formik';
 
 
-const FieldsTableInput = ({ field, submit, label, error, touched, form }) => {
-debugger
+const Input = ({ field, submit, label, error, touched, form }) => {
+    debugger
     return <TextField
-        type="text"
+        type="number"
         align={'right'}
         placeholder={label}
-        sx={{ height: 22, width:'85%' }}
+        sx={{ height: 22, width: '85%' }}
         size='small'
         label={label}
         {...field}
@@ -22,7 +22,7 @@ debugger
             // console.log('on blur -> submit')
             console.log(field.value)
             debugger
-            submit && submit(field.value)
+            submit && submit(field.value, form.values)
         }}
 
     />
@@ -31,19 +31,21 @@ debugger
 
 
 
-const InputCell = ({name, field, isEditable, value, type, updateField, clientId }) => {
+const ActiveCell = ({ name, field, isEditable, value, type, clientId, updateField, updateClientContracts }) => {
 
     const [stateValue, setStateValue] = useState(value);
     const [editable, setEditable] = useState(isEditable);
     const [isUpdating, setIsUpdating] = useState(false)
+    const [fieldValue, setfieldValue] = useState(null)
+    const [contracts, setContracts] = useState(null)
+
+    const submit = (value, formvalues) => {
+        setContracts(formvalues.contracts)
+        setfieldValue([field.number, value, type])
+        setIsUpdating(true)
+
 
 debugger
-
-    const submit = async (value) => {
-        debugger
-        setIsUpdating(true)
-        await updateField(field.number, value, type)
-        setIsUpdating(false)
     }
 
     useEffect(() => {
@@ -52,8 +54,28 @@ debugger
 
     }, [value])
 
+    useEffect(() => {
+        debugger
+        if (isUpdating) {
+            debugger
+            if (updateClientContracts) {
+                updateClientContracts({ ...contracts })
+            }
+
+            
+            if (updateField) {
+                updateField([...fieldValue])
+            }
+
+            debugger
+            setContracts(null)
+            setfieldValue(null)
+            setIsUpdating(false)
+        }
+    }, [isUpdating])
+
     return (isUpdating
-        ? <p className={style.loading}>loading</p>
+        ? <TableCell className={style.loading}>loading</TableCell>
         : <>
             <TableCell align="right" sx={{ maxHeight: '32px', paddingTop: 1, width: type === 'bitrixId' ? '420px' : '180px' }} >{
                 editable
@@ -62,11 +84,11 @@ debugger
                         <Field
                             name={name}
                             submit={submit}
-                            component={FieldsTableInput}
+                            component={Input}
                             clientId={clientId}
                             // component={'input'}
                             label={type}
-                            // onBlur={(e) => console.log(field)}
+                        // onBlur={(e) => console.log(field)}
 
 
                         />
@@ -89,4 +111,4 @@ debugger
 }
 
 
-export default InputCell
+export default ActiveCell

@@ -74,18 +74,49 @@ export const clientAPI = {
 
   },
 
-  updateClient: async (clientId, fields) => {
-    const docRef = doc(db, "clients", clientId);
-    const docSnap = await getDoc(docRef);
+  updateClient: async (client) => {
 
-    let client = null
-    if (docSnap.exists()) {
-      client = docSnap.data()
+    let result
+    let clientId = client && client.number
+    try {
 
-      console.log('client');
-      console.log(client);
-    } else {
-      console.log("No such document!");
+      const queryGet = query(collection(db, "clients"), where("number", "==", clientId));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      let searchingClient
+
+      querySnapshot.forEach((client) => {
+        if (client.data().number === clientId) {
+
+          searchingClient = doc(db, "clients", client.id);
+
+        }
+      });
+
+
+      await updateDoc(searchingClient, { ...client });
+
+      const resultClientsFetch = query(collection(db, "clients"), where("number", "==", clientId));
+      const resultClients = await getDocs(resultClientsFetch);
+
+
+      resultClients.forEach((doc) => {
+        if (doc.data().number === clientId) {
+          result = doc.data()
+        }
+      });
+
+      if (result && result.number) {
+        return { resultCode: 0, client: result }
+      } else {
+        return { resultCode: 1, message: 'client is no updated' }
+      }
+
+    } catch (error) {
+
+      return { resultCode: 1, message: error.message && 'client is no updated' }
+
     }
   },
 
@@ -315,6 +346,125 @@ export const clientAPI = {
 
   }
 }
+
+export const generalAPI = {
+
+
+  getCollection: async (collectionName) => {
+
+    let result = []
+    try {
+      // const querySnapshot = await getDocs(collection(db, "fields"), orderBy("number"));
+      const queryGet = query(collection(db, collectionName), orderBy("number"));
+      const querySnapshot = await getDocs(queryGet);
+
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+
+        result.push(data)
+      });
+
+      return result
+    } catch (error) {
+
+      console.log(error)
+    }
+
+    return result
+  },
+
+  setCollection: async (collectionName, objects) => {
+
+    try {
+
+
+      let docRef = null
+
+
+
+
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          docRef = docRef = doc(db, collectionName, `${element.number}`);
+          batch.set(docRef, element, `${element.number}`)
+        });
+        await batch.commit();
+      }
+      let result = await generalAPI.getCollection(collectionName)
+
+      return result
+
+
+    } catch (error) {
+
+      console.error(error)
+    }
+  },
+
+  updateProp: async (collectionName, docId, newProp, propName) => {
+
+
+
+    let result
+    try {
+
+      const queryGet = query(collection(db, collectionName), where("number", "==", docId));
+      const querySnapshot = await getDocs(queryGet);
+
+
+      let searchingClient
+
+      querySnapshot.forEach((client) => {
+        if (client.data().number === docId) {
+          // result = client.data()
+          searchingClient = doc(db, collectionName, client.id);
+
+        }
+      });
+
+
+      await updateDoc(searchingClient, { [`${propName}`]: newProp });
+
+      const resultClientsFetch = query(collection(db, collectionName), where("number", "==", docId));
+      const resultDocs = await getDocs(resultClientsFetch);
+
+
+      resultDocs.forEach((doc) => {
+        if (doc.data().number === docId) {
+          result = doc.data()
+        }
+      });
+      debugger
+      return result
+    } catch (error) {
+      debugger
+      console.log(error)
+      return result
+
+    }
+  },
+
+
+
+
+
+  updateFrontend: async (isProd) => {
+    try {
+      let response = api.get(`${isProd}`)
+      if (response) {
+        return response
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+}
+
+
 
 export const fieldsAPI = {
 
@@ -661,7 +811,6 @@ export const consaltingAPI = {
 }
 
 
-
 export const contractAPI = {
 
   setContracts: async (contracts) => {
@@ -807,121 +956,6 @@ export const ltAPI = {
 }
 
 
-
-export const generalAPI = {
-
-
-  getCollection: async (collectionName) => {
-
-    let result = []
-    try {
-      // const querySnapshot = await getDocs(collection(db, "fields"), orderBy("number"));
-      const queryGet = query(collection(db, collectionName), orderBy("number"));
-      const querySnapshot = await getDocs(queryGet);
-
-      querySnapshot.forEach((doc) => {
-        let data = doc.data()
-
-        result.push(data)
-      });
-
-      return result
-    } catch (error) {
-
-      console.log(error)
-    }
-
-    return result
-  },
-
-  setCollection: async (collectionName, objects) => {
-
-    try {
-
-
-      let docRef = null
-
-
-
-
-      const chunks = makeChunks(objects, 500);
-      for (let i = 0; i < chunks.length; i++) {
-
-        const batch = writeBatch(db)
-        chunks[i].forEach((element) => {
-          docRef = docRef = doc(db, collectionName, `${element.number}`);
-          batch.set(docRef, element, `${element.number}`)
-        });
-        await batch.commit();
-      }
-      let result = await generalAPI.getCollection(collectionName)
-
-      return result
-
-
-    } catch (error) {
-
-      console.error(error)
-    }
-  },
-
-  updateProp: async (collectionName, docId, newProp, propName) => {
-
-
-
-    let result
-    try {
-
-      const queryGet = query(collection(db, collectionName), where("number", "==", docId));
-      const querySnapshot = await getDocs(queryGet);
-
-
-      let searchingClient
-
-      querySnapshot.forEach((client) => {
-        if (client.data().number === docId) {
-          // result = client.data()
-          searchingClient = doc(db, collectionName, client.id);
-
-        }
-      });
-
-
-      await updateDoc(searchingClient, { [`${propName}`]: newProp });
-
-      const resultClientsFetch = query(collection(db, collectionName), where("number", "==", docId));
-      const resultDocs = await getDocs(resultClientsFetch);
-
-
-      resultDocs.forEach((doc) => {
-        if (doc.data().number === docId) {
-          result = doc.data()
-        }
-      });
-      return result
-    } catch (error) {
-      console.log(error)
-      return result
-
-    }
-  },
-
-
-
-
-
-  updateFrontend: async (isProd) => {
-    try {
-      let response = api.get(`${isProd}`)
-      if (response) {
-        return response
-      }
-    } catch (error) {
-      console.log(error)
-    }
-
-  }
-}
 
 
 

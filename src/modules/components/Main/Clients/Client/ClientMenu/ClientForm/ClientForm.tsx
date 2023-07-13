@@ -8,6 +8,7 @@ import { schemaClient } from '../../../../../../utils/Validators/validator-april
 import ClientMenu from './ClientMenu'
 import ActionsFrame from '../../../../../Elements/Actions/Navigation/ActionsFrame'
 import Navigation from '../../../../../Elements/Actions/Navigation/Navigation/Navigation'
+import { updateClient } from '../../../../../../redux/reducers/client/client-reducer';
 
 
 
@@ -38,6 +39,7 @@ type ClientFormPropsType = {
     client: ClientType
     // clientId: number | 'new' | false
     sendNewClient: (name: string, email: string, domain: string, placementKey: string, hookKey: string) => void
+    updateClient: (client: ClientType) => void
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
@@ -82,11 +84,11 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         }
     }, [client])
 
-let contracts = {
-    items: [] as Array<ContractType>,
-    current: [] as Array<number>,
-    bitrixId: null as string | null
-}
+    let contracts = {
+        items: [] as Array<ContractType>,
+        current: [] as Array<number>,
+        bitrixId: null as string | null
+    }
     useEffect(() => {
         let formikValuesFields = {}
         let updatedInitialValues = {
@@ -97,7 +99,6 @@ let contracts = {
             hook: null as string | null,
             fields: {} as { string: FieldType } | {},
             contracts,
-
             number: null as number | null,
             file: null as string | null
         }
@@ -166,9 +167,13 @@ let contracts = {
                             fields.push(values.fields[key])
                         }
 
-
+                        debugger
                         if (values.name && values.email && values.domain && values.key && values.hook) {
-                            sendNewClient(values.name, values.email, values.domain, values.key, values.hook)
+                            debugger
+                            isNew
+                                ? sendNewClient(values.name, values.email, values.domain, values.key, values.hook)
+                                //@ts-ignore
+                                : updateClient({ ...client, contracts: values.contracts })
 
                         }
 

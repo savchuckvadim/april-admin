@@ -128,17 +128,16 @@ export type ClientType = {
     hook: string | null
     products: Array<ProductType> | null
     regions?: Array<number>
-    contracts: {
-        items: Array<ContractType>,
-        current: Array<number>,
-        bitrixId: string | null
-    }
+    contracts:CLientsContractsType
     // isCreating:boolean
 
 
 }
-
-
+export type  CLientsContractsType =  {
+    items: Array<ContractType>,
+    current: Array<number>,
+    bitrixId: string | null
+}
 export type ProductType = {
     number: number
     name: string

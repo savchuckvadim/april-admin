@@ -1,5 +1,5 @@
 import { ResultCodesEnum } from './../../../services/api-laravel';
-import { ClientType, ContractType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
+import { CLientsContractsType, ClientType, ContractType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
 import { clientAPI, fieldsAPI, generalAPI } from "../../../services/firebase-api/firebase-api"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
@@ -62,6 +62,19 @@ export const sendNewClient = (name: string, email: string, domain: string, place
 
 }
 
+export const updateClient = (client: ClientType) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+    debugger
+    dispatch(inProgress(true, 'component'))
+    const data = await clientAPI.updateClient(client) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
+    debugger
+    if (data && data.client && data.client.number) {
+        dispatch(clientActions.setCurrentClient(data.client))
+    } else if (data && data.message) {
+        alert(data.message)
+    }
+    dispatch(inProgress(false, 'component'))
+
+}
 export const setCreatingClient = () => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
 
@@ -212,6 +225,34 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
 
 }
 
+
+export const updateClientContracts = (items: Array<ContractType>, current: Array<number>, bitrixId: string | null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+    debugger
+    dispatch(inProgress(true, 'component'))
+
+
+    const state = getState()
+
+    // const client = state.client as ClientStateType
+    // let currentClient = client.current ? { ...client.current } : null
+    // if (currentClient) {
+    //     let contracts = {
+    //         items,
+    //         current,
+    //         bitrixId
+    //     } as CLientsContractsType
+    //     currentClient.contracts = contracts
+
+    //     dispatch(clientActions.setCurrentClient(currentClient))
+    //     await generalAPI.updateProp('clients', currentClient.number, contracts, 'contracts')
+    //     debugger
+    dispatch(inProgress(false, 'component'))
+    // }
+
+
+
+
+}
 
 
 

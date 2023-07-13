@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { ContractType, TableTypes } from '../../../../types/types';
 import BaseTable, { ContractValueType } from '../../../Elements/BaseTable/BaseTable';
 
@@ -9,10 +8,12 @@ type ComplectsTablePropsType = {
     checked?: Array<number>
     contracts: Array<ContractType>
     type: TableTypes
+    updateClientContracts?: (items: Array<ContractType>, current: Array<number>, bitrixId: null) => void
+
 }
 
 
-const ContractsTable: React.FC<ComplectsTablePropsType> = ({ isClient,clientId, checked, contracts, type, }) => {
+const ContractsTable: React.FC<ComplectsTablePropsType> = ({ isClient, clientId, checked, contracts, type, updateClientContracts }) => {
 
 
 
@@ -20,7 +21,7 @@ const ContractsTable: React.FC<ComplectsTablePropsType> = ({ isClient,clientId, 
         ? contracts.map(c => {
             let ch = false
             if (checked && checked.length && checked.includes(c.number)) {
-                
+
                 ch = true
             }
             return {
@@ -40,8 +41,14 @@ const ContractsTable: React.FC<ComplectsTablePropsType> = ({ isClient,clientId, 
 
     }
 
-    
-    return resultcontracts.length > 0 ? <BaseTable clientId={clientId} categories={categories} values={resultcontracts} type={'contracts'} withLinks={false} />
+    return resultcontracts.length > 0 ? <BaseTable
+        clientId={clientId}
+        categories={categories}
+        values={resultcontracts}
+        type={'contracts'}
+        withLinks={false}
+        updateClientContracts={updateClientContracts}
+    />
         : <div>{`no ${type}`}</div>
 }
 
