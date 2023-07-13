@@ -9,8 +9,10 @@ import UploadData from '../../Elements/Actions/Upload/UploadData';
 
 type ContractsTablePropsType = {
   contracts: Array<ContractType>
-  isClient?: boolean,
+  isClient?: boolean
+  clientId?: number | null
   checked?: Array<number>
+  bitrixId: string | null
   updateContracts?: (token: string) => void
 
 
@@ -19,15 +21,16 @@ type ContractsTablePropsType = {
 
 
 
-const Contracts: React.FC<ContractsTablePropsType> = ({ isClient = false, checked = [], contracts, updateContracts }) => {
+const Contracts: React.FC<ContractsTablePropsType> = ({ isClient = false,clientId, checked = [], contracts, updateContracts }) => {
 
-  
+
   return (
     <>
- 
+
       {!isClient && <UploadData upload={updateContracts} />}
       <ContractsTable
         isClient={isClient}
+        clientId={clientId}
         checked={checked}
         contracts={contracts}
         type={TableTypes.contracts}

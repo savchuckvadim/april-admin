@@ -1,5 +1,5 @@
 import { ResultCodesEnum } from './../../../services/api-laravel';
-import { ClientType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
+import { ClientType, ContractType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
 import { clientAPI, fieldsAPI, generalAPI } from "../../../services/firebase-api/firebase-api"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
@@ -55,7 +55,7 @@ export const sendNewClient = (name: string, email: string, domain: string, place
 
     } else {
         clientData.message && console.log(clientData.message)
-        clientData.message ? dispatch(clientActions.setError(clientData.message)) :  dispatch(clientActions.setError('something wrong with creating client'))
+        clientData.message ? dispatch(clientActions.setError(clientData.message)) : dispatch(clientActions.setError('something wrong with creating client'))
     }
 
     dispatch(inProgress(false, 'component'))
@@ -77,7 +77,11 @@ export const setCreatingClient = () => async (dispatch: AppDispatchType, getStat
             number: null,
             key: null,
             hook: null,
-
+            contracts: {
+                items: [] as Array<ContractType>,
+                current: [] as Array<number>,
+                bitrixId: null as string | null
+            },
             fields,
             products: null
         }

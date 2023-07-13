@@ -3,7 +3,7 @@ import style from './ClientMenu.module.scss'
 import { Formik, Form } from 'formik'
 
 import React, { useEffect, useState } from 'react'
-import { ClientType, FieldType } from '../../../../../../types/types'
+import { ClientType, ContractType, FieldType } from '../../../../../../types/types'
 import { schemaClient } from '../../../../../../utils/Validators/validator-april';
 import ClientMenu from './ClientMenu'
 import ActionsFrame from '../../../../../Elements/Actions/Navigation/ActionsFrame'
@@ -37,7 +37,7 @@ export enum ClientSectionEnum {
 type ClientFormPropsType = {
     client: ClientType
     // clientId: number | 'new' | false
-    sendNewClient: (name: string, email: string, domain: string, placementKey:string, hookKey:string) => void
+    sendNewClient: (name: string, email: string, domain: string, placementKey: string, hookKey: string) => void
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
     getProducts: (clientId: number) => void
@@ -82,7 +82,11 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         }
     }, [client])
 
-    
+let contracts = {
+    items: [] as Array<ContractType>,
+    current: [] as Array<number>,
+    bitrixId: null as string | null
+}
     useEffect(() => {
         let formikValuesFields = {}
         let updatedInitialValues = {
@@ -92,6 +96,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
             key: null as string | null,
             hook: null as string | null,
             fields: {} as { string: FieldType } | {},
+            contracts,
+
             number: null as number | null,
             file: null as string | null
         }
@@ -105,7 +111,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         !isNew ? updatedInitialValues.key = client.email : updatedInitialValues.key = null
         !isNew ? updatedInitialValues.hook = client.domain : updatedInitialValues.hook = null
         !isNew ? updatedInitialValues.number = client.number : updatedInitialValues.number = null
-      
+        !isNew ? updatedInitialValues.contracts = client.contracts : updatedInitialValues.contracts = contracts
+
         updatedInitialValues.fields = formikValuesFields
         setInitialValues(updatedInitialValues)
 
@@ -117,7 +124,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
 
     useEffect(() => {
-        
+
         if (section !== sections[sectionIndex]) {
             setSection(sections[sectionIndex])
         }
@@ -192,8 +199,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                         setValues(initialValues)
 
                     }
-                    console.log('initialValues')
-                    console.log(initialValues)
+
 
 
                     return <Form className={style.form} onChange={() => { !isChanged && setIsChanged(true) }}>

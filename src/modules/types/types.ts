@@ -117,9 +117,8 @@ export enum FieldsFilterEnum {
     Global = 'Global',
     Client = 'Client'
 }
+
 export type ClientType = {
-
-
     name: string | null
     domain: string | null
     email: string | null
@@ -129,6 +128,11 @@ export type ClientType = {
     hook: string | null
     products: Array<ProductType> | null
     regions?: Array<number>
+    contracts: {
+        items: Array<ContractType>,
+        current: Array<number>,
+        bitrixId: string | null
+    }
     // isCreating:boolean
 
 

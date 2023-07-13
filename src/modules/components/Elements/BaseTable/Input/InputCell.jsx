@@ -3,8 +3,7 @@ import style from './InputCell.module.scss';
 import TableCell from '@mui/material/TableCell';
 import { TextField } from '@mui/material';
 import { Field, Form, Formik, getFieldProps } from 'formik';
-import { validate } from '../../../../../utils/Validators/validator-april';
-import LoadingPage from '../../../../Elements/Loading/Loading-Page';
+
 
 const FieldsTableInput = ({ field, submit, label, error, touched, form }) => {
 debugger
@@ -32,16 +31,16 @@ debugger
 
 
 
-const InputCell = ({ field, isEditable, value, type, updateField, clientId }) => {
+const InputCell = ({name, field, isEditable, value, type, updateField, clientId }) => {
 
     const [stateValue, setStateValue] = useState(value);
     const [editable, setEditable] = useState(isEditable);
     const [isUpdating, setIsUpdating] = useState(false)
 
-
+debugger
 
     const submit = async (value) => {
-        
+        debugger
         setIsUpdating(true)
         await updateField(field.number, value, type)
         setIsUpdating(false)
@@ -61,7 +60,7 @@ const InputCell = ({ field, isEditable, value, type, updateField, clientId }) =>
 
                     ? <div className={style.input__wrapper}>
                         <Field
-                            name={`fields.${field.name}.${type}`}
+                            name={name}
                             submit={submit}
                             component={FieldsTableInput}
                             clientId={clientId}
