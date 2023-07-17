@@ -24,6 +24,7 @@ import contract from "./reducers/contract/contract-reducer"
 import consalting from "./reducers/consalting/consalting-reducer"
 import legalTech from "./reducers/legal-tech/legal-tech-reducer"
 import price from "./reducers/price/price-reducer"
+import settings from "./reducers/settings/settings"
 
 
 // import { LoginRegistrationType } from "./reducers/login-registaration/login-registration-reducer"
@@ -63,6 +64,7 @@ let rootReducer = combineReducers({
   consalting,
   legalTech,
   price,
+  settings,
 
   form: formReducer
 })

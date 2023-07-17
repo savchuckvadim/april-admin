@@ -13,6 +13,7 @@ import ConsaltingContainer from "./Consalting/ConsaltingContainer"
 import LegalTechContainer from "./LegalTech/LegalTechContainer"
 import PriceContainer from "./Price/PriceContainer"
 import Error from "../Elements/Error/Error"
+import SettingsContainer from "./Settings/SettingsContainer"
 
 
 
@@ -31,12 +32,13 @@ const Main = () => {
                 <div id={style.main__area}>
                     <Routes>
 
-
+                        <Route path="settings" element={<SettingsContainer />} />
                         <Route path="fields" element={<FieldsContainer />} />
 
                         <Route path="clients" element={<ClientsContainer />} >
 
                         </Route>
+
                         <Route path="clients/add" element={<ClientContainer />} />
                         <Route path="clients/:clientId" element={<ClientContainer isNew={false} />} />
                         <Route path="clients/:add" element={<ClientContainer isNew={true} />} />

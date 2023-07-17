@@ -34,6 +34,22 @@ export const addPlacementApp = async (domain: string, key: string, hook: string)
 
 }
 
+export const updatePlacements = async (isProd: boolean) => {
+    try {
+        let res = await api.get(`/refresh/${isProd}`);
+        
+        if (res && res.data) {
+            return res.data
+        }
+
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+
+
+}
+
 
 export enum ResultCodesEnum {
     Error = 1,

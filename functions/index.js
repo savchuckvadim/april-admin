@@ -153,7 +153,7 @@ exports.client = onRequest(
     let contracts = {
       items: [],
       current: [0, 1, 2, 3],
-      bitrixId: null
+
     }
     const contractsRef = db.collection('contracts');
     const contractsFields = await contractsRef.get();
@@ -247,6 +247,7 @@ exports.getApril = onRequest(
 
 
     let fields = []
+    let contracts = {}
     let client = null
     let clientRegions = []
     let supplies = []
@@ -270,6 +271,9 @@ exports.getApril = onRequest(
             f.action && fields.push(f)
           })
         }
+        
+          contracts = client.contracts
+        
 
         clientId = client.id
 
@@ -413,14 +417,8 @@ exports.getApril = onRequest(
       }
     })
 
-    let contracts = []
-    const contractsRef = db.collection('contracts');
-    const contractsFetched = await contractsRef.get(); //берем
 
-    contractsFetched.forEach((doc) => {  //перебираем
-      let contract = doc.data()
-      contracts.push(contract)
-    })
+
 
     /////////////////////////////////////////////////LEGAL///TECH
     let lt = {
@@ -467,6 +465,7 @@ exports.getApril = onRequest(
       result: {
         resultCode: 0,
         data: {
+          client,
           contracts,
           complects,
           supplies,
