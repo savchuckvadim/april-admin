@@ -21,7 +21,7 @@ export const addPlacementApp = async (domain: string, key: string, hook: string)
         let res = await api.post("/client", {
             domain, key, hook
         });
-        
+
         if (res && res.data) {
             return res.data
         }
@@ -36,8 +36,10 @@ export const addPlacementApp = async (domain: string, key: string, hook: string)
 
 export const updatePlacements = async (isProd: boolean) => {
     try {
-        let res = await api.get(`/refresh/${isProd}`);
-        
+        let res = await api.post(`/refresh/`, {
+            isProd
+        });
+        debugger
         if (res && res.data) {
             return res.data
         }

@@ -165,7 +165,7 @@ exports.client = onRequest(
 
     })
 
-
+    let apiResponse = 'Clients is not found'
 
     if (clientsCount === 0) {
 
@@ -175,26 +175,29 @@ exports.client = onRequest(
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
-
+      apiResponse = 'Client is allready exist!'
       try {
-        const apiResponse = await api.post("/client", {
+        apiResponse = await api.post("/client", {
           domain: data.domain, key: data.key, hook: data.hook
         });
 
         logger.log('apiResponse.data');
         logger.log(apiResponse.data);
+        if (apiResponse.data) {
+          apiResponse = apiResponse.data
+        }
       } catch (error) {
         logger.error('Error making POST request:', error);
 
       }
 
-      res.json({ result: { resultCode: 0, client } });
+      res.json({ result: { resultCode: 0, client, server: apiResponse } });
 
 
 
     }
     else {
-      res.json({ result: { resultCode: 1, message: 'Client is allready exist!' } });
+      res.json({ result: { resultCode: 1, message: apiResponse } });
     }
     // res.json({ result: { resultCode: 0, client: fields } });
   });
@@ -271,9 +274,9 @@ exports.getApril = onRequest(
             f.action && fields.push(f)
           })
         }
-        
-          contracts = client.contracts
-        
+
+        contracts = client.contracts
+
 
         clientId = client.id
 
@@ -465,7 +468,7 @@ exports.getApril = onRequest(
       result: {
         resultCode: 0,
         data: {
-          client,
+       
           contracts,
           complects,
           supplies,

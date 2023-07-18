@@ -2,14 +2,15 @@ import { Button } from "@mui/material"
 
 
 
-const Settings = (settings, settingAction) => {
-
+const Settings = (props) => {
+debugger
     return (
         <div>
             {
-                settings.actions.map(s =>
+                props.settings.actions.map(s =>
                     <Button onClick={
-                        () => settingAction(s.name)
+                        
+                        () => props.settingAction(s.name)
                     }>{s.name}</Button>
                 )
             }

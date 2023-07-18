@@ -24,7 +24,8 @@ export const settingAction = (name) => async (dispatch, getState) => {
     let isProd = name === 'update all'
 
 
-    await updatePlacements(isProd)
+    let settingRes = await updatePlacements(isProd)
+    debugger
 
 }
 
