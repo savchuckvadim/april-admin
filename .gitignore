@@ -11,6 +11,8 @@
 
 #service
 /secret
+/services/secret
+secret.js
 
 
 # production
