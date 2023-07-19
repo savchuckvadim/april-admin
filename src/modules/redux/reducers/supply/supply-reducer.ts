@@ -1,4 +1,4 @@
-import {  supplyAPI } from "../../../services/firebase-api/firebase-api"
+import { supplyAPI } from "../../../services/firebase-api/firebase-api"
 import { googleAPI } from "../../../services/google-api/google-api"
 import { ComplectType, SupplyFilterEnum, SupplyType } from "../../../types/types"
 import { getFiltred } from "../../../utils/for-rdeucers/filter-utils"
@@ -12,7 +12,7 @@ type GetStateType = () => AppStateType
 
 
 const initialState = {
-   
+
     supplies: [] as Array<SupplyType>,
     filtredSupplies: [] as Array<ComplectType>,
     filter: {
@@ -35,16 +35,19 @@ export const supplyActions = {
 
 //THUNK
 export const updateSupplies = (token = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    
+
 
     dispatch(inProgress(true, 'component'))
     const fetchedData = await googleAPI.get(token)
 
     if (fetchedData && fetchedData.supplies) {
         let supplies: Array<SupplyType> = fetchedData.supplies
-        
+
         let savedSupplies = await supplyAPI.setSupplies(supplies)
-        
+
+        let coefficients = supplies.map(s => ({ number: s.number, value: s.coefficient }))
+        // await generalAPI.setCollection('coefficients', coefficients)
+      
         dispatch(supplyActions.setSupplies(supplies))
     }
 

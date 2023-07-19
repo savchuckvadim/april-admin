@@ -8,3 +8,6 @@ export const secretFirebase = {
     appId: "1:415478492885:web:201a14c5fc5b9d6c54bc5c",
     measurementId: "G-6P3VP33EVV"
   }
+
+
+  export const aiToken = 

@@ -506,10 +506,8 @@ exports.getVersion = onRequest(
       if (v.name === 'app') {
         version = v.value
       }
-
-
-
     })
+    
     res.json({
       result: {
         resultCode: 0,

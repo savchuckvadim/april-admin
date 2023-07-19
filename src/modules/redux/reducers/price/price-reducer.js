@@ -7,7 +7,7 @@ import { getSupplies } from "../supply/supply-reducer"
 
 
 const initialState = {
-    coefficients: [1.25, 1.5, 2, 3, 4, 5, 6, 7],
+    coefficients: [1, 1.1, 1.25, 1.5, 2, 3, 4, 5, 6, 7],
     prices: {
         prof: [],
         universal: [],
@@ -46,13 +46,13 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
 
     dispatch(inProgress(true, 'global'))
     const fetchedPrices = await googleAPI.get(token)
-debugger
+
     if (fetchedPrices && fetchedPrices.prices) {
 
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
             await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
             await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
-            let coefficients = await generalAPI.setCollection('coefficients', fetchedPrices.prices.coefficients)
+           
             
 
         }
