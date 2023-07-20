@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { RegionType, TableTypes } from '../../../types/types';
+import { ClientRegionType, RegionType, TableTypes } from '../../../types/types';
 import RegionsTable from './RegionsTable/RegionsTable';
 import UploadData from '../../Elements/Actions/Upload/UploadData';
 import Filter from '../../Elements/Filter/Filter';
@@ -14,7 +14,7 @@ import FilterButtons from '../../Elements/Filter/Filter-Buttons/Filter-Buttons';
 
 type ComplectsTablePropsType = {
   isClient: boolean,
-  clientRegions: Array<number>
+  clientRegions: Array<ClientRegionType>
   regions: Array<RegionType>
   filters: Array<string>
   filterCurrent: number

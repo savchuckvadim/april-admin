@@ -127,13 +127,13 @@ export type ClientType = {
     key: string | null
     hook: string | null
     products: Array<ProductType> | null
-    regions?: Array<number>
-    contracts:CLientsContractsType
+    regions?: Array<ClientRegionType>
+    contracts: CLientsContractsType
     // isCreating:boolean
 
 
 }
-export type  CLientsContractsType =  {
+export type CLientsContractsType = {
     items: Array<ContractType>,
     current: Array<number>,
     bitrixId: string | null
@@ -288,6 +288,13 @@ export type RegionType = {
     infoblock: string
 }
 
+export type ClientRegionType = {
+    number: number
+    regionNumber: number
+    isOwnAbs: boolean
+    abs: number
+    ownAbs: null | number
+}
 
 
 export type ConsaltingType = {

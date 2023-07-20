@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import style from './ActiveCell.module.scss';
 import TableCell from '@mui/material/TableCell';
 import { TextField } from '@mui/material';
-import { Field} from 'formik';
+import { Field } from 'formik';
 
 
 const Input = ({ field, submit, label, error, touched, form }) => {
@@ -31,7 +31,19 @@ const Input = ({ field, submit, label, error, touched, form }) => {
 
 
 
-const ActiveCell = ({ name, field, isEditable, value, type, clientId, updateField, updateClientContracts }) => {
+const ActiveCell = ({
+    name,
+    field,
+    isEditable,
+    value,
+    type,
+
+    clientId,
+    updateField,
+    updateClientContracts,
+    updateClientRegions,
+    onCellSubmit
+}) => {
 
     const [stateValue, setStateValue] = useState(value);
     const [editable, setEditable] = useState(isEditable);
@@ -44,8 +56,6 @@ const ActiveCell = ({ name, field, isEditable, value, type, clientId, updateFiel
         setfieldValue([field.number, value, type])
         setIsUpdating(true)
 
-
-debugger
     }
 
     useEffect(() => {
@@ -62,11 +72,11 @@ debugger
                 updateClientContracts({ ...contracts })
             }
 
-            
+
             if (updateField) {
                 updateField([...fieldValue])
             }
-
+            onCellSubmit()
             debugger
             setContracts(null)
             setfieldValue(null)

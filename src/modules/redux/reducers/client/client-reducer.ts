@@ -1,9 +1,10 @@
 import { ResultCodesEnum } from './../../../services/api-laravel';
-import { CLientsContractsType, ClientType, ContractType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
+import { CLientsContractsType, ClientRegionType, ClientType, ContractType, FieldType, FieldsFilterEnum, ProductType } from './../../../types/types';
 import { clientAPI, fieldsAPI, generalAPI } from "../../../services/firebase-api/firebase-api"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
 import { inProgress } from '../preloader/preloader-reducer';
+import { getClientRegionFromRegion } from '../../../utils/for-rdeucers/region-utils';
 
 
 export type ClientStateType = typeof initialState
@@ -33,7 +34,7 @@ export const clientActions = {
     setClients: (clients: Array<ClientType>) => ({ type: 'clients/SET_CLIENTS', clients } as const),
     setClientField: (field: FieldType, clientId: number) => ({ type: 'clients/SET_FIELD', field, clientId } as const),
     setClientProducts: (products: Array<ProductType>, clientId: number) => ({ type: 'clients/SET_PRODUCTS', products, clientId } as const),
-    setRegion: (regions: Array<number>) => ({ type: 'clients/SET_REGION', regions } as const),
+    setRegion: (regions: Array<ClientRegionType>) => ({ type: 'clients/SET_REGION', regions } as const),
     setError: (errorMessage: string) => ({ type: 'clients/SET_ERROR', errorMessage } as const),
 }
 
@@ -187,25 +188,35 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
     debugger
     const state = getState()
     const client = state.client as ClientStateType
+    const allRegions = await generalAPI.getCollection('regions')
+    const addingRegion = allRegions.find(region => region.number === regionId)
+    const newClientRegion = getClientRegionFromRegion(addingRegion) as ClientRegionType
+
     if (client.current) {
-        let newRegions = [] as Array<number>
+        let newRegions = [] as Array<ClientRegionType>
 
         dispatch(inProgress(true, 'component'))
         let currentRegions = client.current.regions
+        if (currentRegions && Array.isArray(currentRegions)) {
+            if (checked) { //если у пользователя есть регоины и это массив
+                //надо деактивировать
+                newRegions = currentRegions.filter(region => region.regionNumber != regionId)
 
-        if (currentRegions && Array.isArray(currentRegions)) { //если у пользователя есть регоины и это массив
-            if (checked) { //надо деактивировать
-                newRegions = currentRegions.filter(region => region != regionId)
+            } else {
 
-            } else { //надо активировать
-                newRegions = currentRegions.filter(region => region != regionId)
-                newRegions.push(regionId)
+                newRegions = currentRegions
+                newRegions.push(newClientRegion)
+
             }
+
+            dispatch(clientActions.setRegion(newRegions))
+
+            await generalAPI.updateProp('clients', client.current.number, newRegions, 'regions')
+
+            dispatch(inProgress(false, 'component'))
         } else {
-            if (!checked) { //надо активировать
-                newRegions = [regionId]
-
-            }
+            client.current && client.current.domain ? alert(`something wrong with client regions. Client: ${client.current.domain } `)
+            : alert(`something wrong with client-reducer 219`)
         }
 
 
@@ -213,11 +224,6 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
 
 
 
-        dispatch(clientActions.setRegion(newRegions))
-
-        await generalAPI.updateProp('clients', client.current.number, newRegions, 'regions')
-
-        dispatch(inProgress(false, 'component'))
     }
 
 

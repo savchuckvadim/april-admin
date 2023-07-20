@@ -2,7 +2,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { NavLink } from "react-router-dom"
 import style from './BaseTable.module.scss'
 import { NumberLiteralType } from "typescript/lib/tsserverlibrary"
-import { ComplectTypesEnum, ConsaltingType, ContractType, SupplyTypesEnum } from "../../../types/types"
+import { ClientRegionType, ComplectTypesEnum, ConsaltingType, ContractType, SupplyTypesEnum } from "../../../types/types"
 import { updateClientRegions } from "../../../redux/reducers/client/client-reducer"
 import { string } from "yup"
 import ActiveCell from "./Input/ActiveCell"
@@ -18,16 +18,16 @@ type BaseTablePropsType = {
     values: Array<TableValueType>
     type: 'complects' | 'products' | 'fields' | 'clients' | 'regions' | 'contracts' | 'consalting' | 'legalTech' | 'price'
     withLinks: boolean
-    clientRegions?: Array<number>
+    clientRegions?: Array<ClientRegionType>
     isClient?: boolean
-    checked?: Array<number>
+
     updateClientRegions?: (regionId: number, checked: boolean) => void
     updateClientContracts?: (items: Array<ContractType>, current: Array<number>, bitrixId: null) => void
 }
 
 
 
-const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values, type, withLinks, clientRegions, checked, updateClientRegions, updateClientContracts }) => {
+const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values, type, withLinks, clientRegions, updateClientRegions, updateClientContracts }) => {
 
 
     return (
@@ -66,9 +66,9 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values,
                                 </TableCell>)
                             }
                             else if (key === 'title' && type === "regions") {
-                                const checked = clientRegions?.includes(row.number) || false
-
-                                generalCells.push(<TableCell key={`base-table-${row.number}-${key}-regions-${i}`} component="th" scope="row">
+                                const checked = clientRegions?.find(cr => cr.regionNumber == row.number) ? true : false
+                                debugger
+                                generalCells.push(<TableCell key={`base-table-checkbox-${key}-regions-${i}`} component="th" scope="row">
                                     <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
                                 </TableCell>)
 
@@ -82,6 +82,27 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values,
                                         : row.title
                                     }
                                 </TableCell>)
+                            }
+
+                            else if (key === 'abs' && type === "regions") {
+
+
+                                generalCells.push(<ActiveCell
+                                    clientId={clientId}
+                                    updateField={() => console.log(clientId)}
+                                    updateClientContracts={updateClientContracts}
+                                    updateClientRegions={updateClientRegions}
+                                    onCellSubmit={console.log('region')}
+                                    field={row}
+                                    isEditable={false}
+                                    //@ts-ignore
+                                    value={row[key]}
+                                    type={key}
+                                    name={`contracts.items.${row.number}.${key}`}
+
+                                />)
+
+
                             }
 
                             else if (key === 'checked' && type === "contracts") {
@@ -103,12 +124,14 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values,
 
 
 
-                    
+
                                 generalCells.push(
                                     <ActiveCell
                                         clientId={clientId}
                                         updateField={() => console.log(clientId)}
                                         updateClientContracts={updateClientContracts}
+                                        updateClientRegions={() => console.log('updateClientRegions')}
+                                        onCellSubmit={console.log('contract')}
                                         field={row}
                                         isEditable={false}
                                         //@ts-ignore

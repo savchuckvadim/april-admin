@@ -1,6 +1,6 @@
 import { regionAPI } from "../../../services/firebase-api/firebase-api"
 import { googleAPI } from "../../../services/google-api/google-api"
-import { ComplectFilterEnum, ComplectType, RegionType } from "../../../types/types"
+import { ClientRegionType, ComplectFilterEnum, ComplectType, RegionType } from "../../../types/types"
 import { getFiltredRegions } from "../../../utils/for-rdeucers/filter-utils"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { ClientStateType } from "../client/client-reducer"
@@ -32,7 +32,7 @@ const initialState = {
 //AC
 export const regionActions = {
     setRegions: (regions: Array<RegionType>) => ({ type: 'region/SET_REGIONS', regions } as const),
-    setFilter: (filters: Array<number>, filterIndex: number) => ({ type: 'region/SET_FILTER', filters, filterIndex } as const),
+    setFilter: (filters: Array<ClientRegionType>, filterIndex: number) => ({ type: 'region/SET_FILTER', filters, filterIndex } as const),
 
 }
 
@@ -119,9 +119,9 @@ const region = (state: RegionStateType = initialState, action: RegionActionsType
             }
 
         case 'region/SET_FILTER':
-
-            const filtredRegions = getFiltredRegions(action.filters, state.regions)
-            if(action.filterIndex === state.filter.index){
+            const filtredIndexes = action.filters.map(f => f.number)
+            const filtredRegions = getFiltredRegions(filtredIndexes, state.regions)
+            if (action.filterIndex === state.filter.index) {
                 return state
             }
             return {

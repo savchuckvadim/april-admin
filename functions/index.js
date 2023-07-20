@@ -14,6 +14,7 @@ const axios = require('axios');
 
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
+const { where } = require("@firebase/firestore");
 
 
 // Create and deploy your first functions
@@ -152,7 +153,7 @@ exports.client = onRequest(
 
     let contracts = {
       items: [],
-      current: [0, 1, 2, 3],
+      current: [0, 1, 2, 3, 4, 5, 6, 7],
 
     }
     const contractsRef = db.collection('contracts');
@@ -166,6 +167,28 @@ exports.client = onRequest(
     })
 
     let apiResponse = 'Clients is not found'
+
+
+
+    let defaultRegion
+    const regionsRef = db.collection('regions', where('name', "==", 'msk'));
+    const regionsFields = await regionsRef.get();
+
+    regionsFields.forEach((doc) => {
+      let region = doc.data()
+
+      defaultRegion = {
+        number: region.number,
+        regionNumber: region.number,
+        isOwnAbs: false,
+        abs: region.abs,
+        ownAbs: null
+
+      }
+
+    })
+
+
 
     if (clientsCount === 0) {
 
@@ -403,9 +426,13 @@ exports.getApril = onRequest(
 
     regionsFetched.forEach((doc) => {  //перебираем
       let region = doc.data()
-      if (clientRegionsIds.includes(region.number)) {
-        regions.push(region)
-        regionsNames.push(region.name)
+      if (clientRegionsIds.find(cr => cr.regionNumber === region.number)) {
+        let clientRegion = { ...region }
+        if (clientRegion.isOwnAbs && clientRegion.ownAbs){
+
+        }
+        regions.push(clientRegion)
+        regionsNames.push(clientRegion.name)
       }
 
     })
@@ -468,7 +495,7 @@ exports.getApril = onRequest(
       result: {
         resultCode: 0,
         data: {
-       
+          domain: client.domain,
           contracts,
           complects,
           supplies,
@@ -507,7 +534,7 @@ exports.getVersion = onRequest(
         version = v.value
       }
     })
-    
+
     res.json({
       result: {
         resultCode: 0,

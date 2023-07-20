@@ -41,7 +41,7 @@ const ClientContainer = (props) => {
 
 
         if (!props.redirect) {
-            debugger
+          
             if (clientId !== Number(props.params.clientId)) { //пришел новый url
 
                 if (clientId === 'new' && props.params.clientId) {
@@ -57,17 +57,17 @@ const ClientContainer = (props) => {
                 console.log(props.params.clientId)
                 console.log(clientId)
                 console.log('новый url не такой как старый')
-                debugger
+               
                 if (props.params.clientId) {
                     console.log('сэтаем новый url в локальное состояние')
                     console.log('и запрашиваем клиента по такому params clientId')
-                    debugger
+                  
                     setClientId(Number(props.params.clientId))
                     props.getClient(Number(props.params.clientId))
                 } else {
-                    debugger
+                   
                     if (clientId !== 'new') {
-                        debugger
+                     
                         setClientId('new')
                         props.setCreatingClient()
                     }
