@@ -1,4 +1,4 @@
-import {  contractAPI } from "../../../services/firebase-api/firebase-api"
+import {  clientAPI, contractAPI } from "../../../services/firebase-api/firebase-api"
 import { googleAPI } from "../../../services/google-api/google-api"
 import { ContractType } from "../../../types/types"
 import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
@@ -39,6 +39,8 @@ export const updateContracts = (token = null) => async (dispatch: AppDispatchTyp
         let contracts: Array<ContractType> = fetchedData.contracts
         
         let savedContracts = await contractAPI.setContracts(contracts)
+        
+        let clientsContracts = await clientAPI.updateClientsContracts(contracts)
         
         dispatch(contractActions.setContracts(contracts))
     }

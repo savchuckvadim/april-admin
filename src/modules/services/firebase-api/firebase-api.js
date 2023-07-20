@@ -344,11 +344,104 @@ export const clientAPI = {
 
     }
 
-  }
+  },
+
+  updateClientsContracts: async (newContracts) => {
+    let result = null
+    // Получаем все документы из коллекции "clients"
+    const queryGet = query(collection(db, "clients"), orderBy("name"));
+    const clientsSnapshot = await getDocs(queryGet);
+
+    // Перебираем каждый документ (клиента) в коллекции
+
+
+
+     clientsSnapshot.docs.forEach(async (clientDoc) => {
+
+      // Получаем ссылку на коллекцию продуктов текущего клиента
+      let clientData = clientDoc.data();
+      let clientContracts = clientData.contracts.items;
+
+      // Обновляем контракты если пришли такие же как уже есть: 
+      // Перебираем каждый контракт клиента и обновляем его данные
+      let updatedContracts = clientContracts.map((clientContract) => {
+        let newContract = newContracts.find(c => c.number === clientContract.number);
+        if (newContract) {
+          return {
+            ...newContract,
+            itemId: clientContract.itemId,
+            measureId: clientContract.measureId,
+            measureCode: clientContract.measureCode,
+          }
+        }
+        // Если нет нового контракта, возвращаем старый без изменений
+        return clientContract;
+      });
+      //перебираем новые контракты
+      newContracts.forEach(c => {
+        //если такого контракта у клиента нет
+        let isHaveContract = updatedContracts.find(uc =>  uc.number == c.number)
+        console.log('isHaveContract')
+        console.log(isHaveContract)
+
+        if (!isHaveContract) {
+          //пушим контракт к клиенту 
+          updatedContracts.push(c)
+        }
+      })
+      // Обновляем поле contracts.items у клиента
+      await updateDoc(doc(db, 'clients', clientDoc.id), { 'contracts.items': updatedContracts });
+
+
+    });
+
+debugger
+
+    const resultClientsQueryGet = query(collection(db, "clients"), orderBy("name"));
+    const resultClientsQuerySnapshot = await getDocs(resultClientsQueryGet);
+
+    result = []
+    resultClientsQuerySnapshot.forEach((doc) => {
+      let client = doc.data()
+
+      result.push({
+        clientDomain: client.domain,
+        newContracts: client.contracts,
+      })
+
+    });
+    debugger
+    console.log(result)
+    console.log('result')
+    return result
+
+  },
 }
 
 export const generalAPI = {
 
+  getDoc: async (collectionName, number) => {
+
+    let result = null
+    try {
+      // const querySnapshot = await getDocs(collection(db, "fields"), orderBy("number"));
+      const queryGet = query(collection(db, collectionName), where("number", "==", number));
+      const querySnapshot = await getDocs(queryGet);
+
+      querySnapshot.forEach((doc) => {
+        result = doc.data()
+      });
+
+      return result
+    } catch (error) {
+
+      console.log(error)
+      return result
+
+    }
+
+
+  },
 
   getCollection: async (collectionName) => {
 
@@ -444,6 +537,38 @@ export const generalAPI = {
       console.log(error)
       return result
 
+    }
+  },
+
+  updatetCollection: async (collectionName, objects) => {
+
+    try {
+
+
+      let docRef = null
+
+
+
+
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          docRef = docRef = doc(db, collectionName, `${element.number}`);
+          batch.set(docRef, element, `${element.number}`)
+        });
+        await batch.commit();
+      }
+
+      let result = await generalAPI.getCollection(collectionName)
+
+      return result
+
+
+    } catch (error) {
+
+      console.error(error)
     }
   },
 
@@ -981,7 +1106,7 @@ export const authApi = {
 
 
         console.log(user)
-        debugger
+
         return user
 
       }).catch((error) => {
