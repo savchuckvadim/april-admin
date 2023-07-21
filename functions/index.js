@@ -33,14 +33,14 @@ const api = axios.create({
 
 })
 
-exports.helloWorld = onRequest((request, response) => {
+exports.client  = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
 
 
 
-exports.client = onRequest(
+exports.helloWorld = onRequest(
   { cors: true },
   async (req, res) => {
     //name, email, domain, placementKey, hookKey
