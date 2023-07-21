@@ -51,17 +51,20 @@ export const firestore = getFirestore(app);
 export const clientAPI = {
 
   create: async (name, email, domain, placementKey, hookKey) => {
+    debugger
     console.log('name', 'email', 'domain', 'placementKey', 'hookKey')
     console.log(name, email, domain, placementKey, hookKey)
-    debugger
+    
     try {
       const addClient = httpsCallable(functions, 'client');
       let client = await addClient({ name, email, domain, placementKey, hookKey })
+      debugger
       console.log(client.data)
       return client.data
     } catch (error) {
       console.log(error)
       let message = 'client was not created'
+      alert(message)
       if (error.message) {
         message = error.message
       }

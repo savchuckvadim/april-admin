@@ -10,17 +10,16 @@
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const axios = require('axios');
-
-
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-const { where } = require("@firebase/firestore");
+
 
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
 initializeApp();
+
 const api = axios.create({
   withCredentials: true,
   baseURL: 'https://april-server.ru/api',
@@ -34,11 +33,10 @@ const api = axios.create({
 
 })
 
-
-// exports.helloWorld = onRequest((request, response) => {
-//     logger.info("Hello logs!", { structuredData: true });
-//     response.send("Hello from Firebase!");
-// });
+exports.helloWorld = onRequest((request, response) => {
+  logger.info("Hello logs!", { structuredData: true });
+  response.send("Hello from Firebase!");
+});
 
 
 
@@ -46,6 +44,7 @@ exports.client = onRequest(
   { cors: true },
   async (req, res) => {
     //name, email, domain, placementKey, hookKey
+    
     const db = getFirestore();
 
     const clientData = req.body;
@@ -68,20 +67,6 @@ exports.client = onRequest(
     })
     logger.info('fields')
     logger.info(fields)
-
-
-    let products = []
-    // const productsRef = db.collection('products');
-    // const fetchedproducts = await productsRef.get();
-
-    // fetchedproducts.forEach((doc) => {
-    //   let product = doc.data()
-    //   // logger.info(product);
-    //   products.push(product)
-
-
-    // })
-
 
 
 
@@ -133,9 +118,8 @@ exports.client = onRequest(
         consaltingNumber: c.number,
         bitrixId: null
       })
-
-
     })
+
     let legalTech = []
     const legalTechRef = db.collection('legalTech');
     const legalTechFields = await legalTechRef.get();
@@ -170,21 +154,23 @@ exports.client = onRequest(
 
 
 
-    let defaultRegion
-    const regionsRef = db.collection('regions', where('name', "==", 'msk'));
+    let defaultRegion = null
+    const regionsRef = db.collection('regions');
     const regionsFields = await regionsRef.get();
 
     regionsFields.forEach((doc) => {
       let region = doc.data()
-
-      defaultRegion = {
-        number: region.number,
-        regionNumber: region.number,
-        isOwnAbs: false,
-        abs: region.abs,
-        ownAbs: null
-
+      if (region.name == 'msk') {
+        defaultRegion = {
+          number: region.number,
+          regionNumber: region.number,
+          isOwnAbs: false,
+          abs: region.abs,
+          ownAbs: null
+  
+        }
       }
+      
 
     })
 
@@ -194,7 +180,7 @@ exports.client = onRequest(
 
       const writeResult = await db
         .collection("clients")
-        .add({ ...data, number: searchingCounter, fields, regions: [30], products, consalting, legalTech, contracts, });
+        .add({ ...data, number: searchingCounter, fields, regions: [30], consalting, legalTech, contracts });
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
@@ -225,16 +211,7 @@ exports.client = onRequest(
     // res.json({ result: { resultCode: 0, client: fields } });
   });
 
-// exports.modifyfield = onDocumentWritten("fields/{fieldsNumber}", (event) => {
-//   // Get an object with the current document values.
-//   // If the document does not exist, it was deleted
-//   const document = event.data.after.data();
 
-//   // Get an object with the previous document values
-//   const previousValues = event.data.before.data();
-
-//   // perform more operations ...
-// });
 
 
 exports.getApril = onRequest(
@@ -249,37 +226,19 @@ exports.getApril = onRequest(
     let data = clientData.data
 
 
-
-
-
-
-    // let products = []
-    // const productsRef = db.collection('products');
-    // const fetchedproducts = await productsRef.get();
-
-    // fetchedproducts.forEach((doc) => {
-    //   let product = doc.data()
-    //   logger.info(product);
-    //   products.push(product)
-
-
-    // })
-
-
-
-
-
-
-
-
     let fields = []
     let contracts = {}
     let client = null
     let clientRegions = []
     let supplies = []
-    let clientRegionsIds = [30]
+    // let clientRegions = [30]
     let regionsNames = []
     let clientId = undefined
+    let profs = []
+    let universals = []
+    let regions = []
+
+
     const clientsRef = db.collection('clients');  //берем снимок коллекции клиентов
     const clientsFetched = await clientsRef.get(); //берем
 
@@ -289,7 +248,7 @@ exports.getApril = onRequest(
 
       if (docClient.domain === data) {
         client = docClient
-        clientRegionsIds = client.regions
+        clientRegions = client.regions
         if (client.fields) {
           // fields =
           client.fields.forEach(f => {
@@ -307,13 +266,6 @@ exports.getApril = onRequest(
 
     })
 
-    if (!clientRegionsIds || (clientRegionsIds && clientRegionsIds.length < 1)) {
-      clientRegionsIds = [30]
-      // const writeResult = await db
-      //   .collection("clients", client)
-      //   .add({ regions: [30] });
-
-    }
 
 
     const fieldsRef = db.collection('fields');  //берем снимок коллекции клиентов
@@ -349,68 +301,7 @@ exports.getApril = onRequest(
 
 
 
-    // let products = {}
-    // const productsRef = db.collection('products');
-    // const productsFetched = await productsRef.get();
-
-
-
-    // productsFetched.forEach((doc) => {
-    //     let product = doc.data()
-    //     products[product.complectType] = { ...products[product.complectType] }
-    //     if (product.supplyType) { //если есть тип поставки - то есть Lt либо консалтинг
-    //         products[product.complectType][product.supplyType] = { ...products[product.complectType][product.supplyType] }
-
-    //         // products[product.complectType][product.supplyType][product.contractName] = [...products[product.complectType][product.supplyType][product.contractName]]
-    //         if (Array.isArray(products[product.complectType][product.supplyType][product.contractNumber])) {
-    //             products[product.complectType][product.supplyType][product.contractNumber].push(product)
-    //         } else {
-    //             products[product.complectType][product.supplyType][product.contractNumber] = [product]
-    //         }
-    //     } else {
-    //         if (Array.isArray(products[product.complectType][product.contractName])) {
-    //             products[product.complectType][product.contractNumber].push(product)
-    //         } else {
-    //             products[product.complectType][product.contractNumber] = [product]
-    //         }
-    //     }
-
-
-    // })
-
-
-
-
-    // let regionNames = []
-    // const regionsRef = db.collection('regions');
-    // const regionsFetched = await regionsRef.get();
-
-
-    // logger.info('regionsFetched.length')
-
-    // logger.info(regionsFetched.length)
-
-
-    // regionsFetched.forEach(region => {
-    //     if (region) {
-    //         clientRegions.push(region)
-    //         if (region.name) {
-    //             regionNames.push(region.name)
-    //         }
-    //     }
-
-
-    // });
-
-
-
-
-
-
-
-    let profs = []
-    let universals = []
-    let regions = []
+  
     const profRef = db.collection('prof');
     const profFetched = await profRef.get(); //берем
 
@@ -426,15 +317,22 @@ exports.getApril = onRequest(
 
     regionsFetched.forEach((doc) => {  //перебираем
       let region = doc.data()
-      if (clientRegionsIds.find(cr => cr.regionNumber === region.number)) {
-        let clientRegion = { ...region }
+      let clientRegion = clientRegions.find(cr => cr.regionNumber === region.number)
+      let resultRegion
+      if (clientRegion) {
+        //Если у клиента кастомный абс
         if (clientRegion.isOwnAbs && clientRegion.ownAbs){
-
+          //меняет значение абс на абс-собственный
+          resultRegion = {
+            ...region,
+            abs:clientRegion.ownAbs
+          }
+        }else{
+          resultRegion = region
         }
-        regions.push(clientRegion)
-        regionsNames.push(clientRegion.name)
+        regions.push(resultRegion)
+        regionsNames.push(resultRegion.name)
       }
-
     })
 
     const universalRef = db.collection('universal');
@@ -544,3 +442,15 @@ exports.getVersion = onRequest(
       }
     });
   });
+
+
+  // exports.modifyfield = onDocumentWritten("fields/{fieldsNumber}", (event) => {
+  //   // Get an object with the current document values.
+  //   // If the document does not exist, it was deleted
+  //   const document = event.data.after.data();
+  
+  //   // Get an object with the previous document values
+  //   const previousValues = event.data.before.data();
+  
+  //   // perform more operations ...
+  // });
