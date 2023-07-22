@@ -21,7 +21,7 @@ const initialState = {
         current: 'All',
         index: 0,
         regions: ['msk', 'stv'],
-        supply: [8],
+        supply: [0,1,2,3,4,5,6,7,8,9],
         complectType: [0],  //0 - internet 1 - proxima +
     }
 

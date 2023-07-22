@@ -9,7 +9,7 @@
 
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-const axios = require('axios');
+// const axios = require('axios');
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 
@@ -20,31 +20,34 @@ const { getFirestore } = require("firebase-admin/firestore");
 
 initializeApp();
 
-const api = axios.create({
-  withCredentials: true,
-  baseURL: 'https://april-server.ru/api',
+// const api = axios.create({
+//   withCredentials: true,
+//   baseURL: 'https://april-server.ru/api',
 
 
-  headers: {
-    'content-type': 'application/json',
-    'accept': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  },
+//   headers: {
+//     'content-type': 'application/json',
+//     'accept': 'application/json',
+//     'Access-Control-Allow-Origin': '*',
+//   },
 
-})
+// })
+// api.defaults.redirect = "follow";
 
-exports.client  = onRequest((request, response) => {
+
+
+exports.helloWorld  = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
 
 
 
-exports.helloWorld = onRequest(
+exports.setNewClient  = onRequest(
   { cors: true },
   async (req, res) => {
     //name, email, domain, placementKey, hookKey
-    
+    logger.info('client function')
     const db = getFirestore();
 
     const clientData = req.body;
@@ -180,32 +183,33 @@ exports.helloWorld = onRequest(
 
       const writeResult = await db
         .collection("clients")
-        .add({ ...data, number: searchingCounter, fields, regions: [30], consalting, legalTech, contracts });
+        .add({ ...data, number: searchingCounter, fields, regions: [defaultRegion], consalting, legalTech, contracts });
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
-      apiResponse = 'Client is allready exist!'
-      try {
-        apiResponse = await api.post("/client", {
-          domain: data.domain, key: data.key, hook: data.hook
-        });
+      
+      // try {
+      //   apiResponse = await api.post("/client", {
+      //     domain: data.domain, key: data.key, hook: data.hook
+      //   });
 
-        logger.log('apiResponse.data');
-        logger.log(apiResponse.data);
-        if (apiResponse.data) {
-          apiResponse = apiResponse.data
-        }
-      } catch (error) {
-        logger.error('Error making POST request:', error);
+      //   logger.log('apiResponse.data');
+      //   logger.log(apiResponse.data);
+      //   if (apiResponse.data) {
+      //     apiResponse = apiResponse.data
+      //   }
+      // } catch (error) {
+      //   logger.error('Error making POST request:', error);
 
-      }
+      // }
 
-      res.json({ result: { resultCode: 0, client, server: apiResponse } });
+      res.json({ result: { resultCode: 0, client, server: 'не используем' } });
 
 
 
     }
     else {
+      apiResponse = 'Client is allready exist!'
       res.json({ result: { resultCode: 1, message: apiResponse } });
     }
     // res.json({ result: { resultCode: 0, client: fields } });

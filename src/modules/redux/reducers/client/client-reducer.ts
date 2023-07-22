@@ -195,7 +195,7 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
     if (client.current) {
         let newRegions = [] as Array<ClientRegionType>
 
-        dispatch(inProgress(true, 'component'))
+        
         let currentRegions = client.current.regions
         if (currentRegions && Array.isArray(currentRegions)) {
             if (checked) { //если у пользователя есть регоины и это массив
@@ -213,7 +213,6 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
 
             await generalAPI.updateProp('clients', client.current.number, newRegions, 'regions')
 
-            dispatch(inProgress(false, 'component'))
         } else {
             client.current && client.current.domain ? alert(`something wrong with client regions. Client: ${client.current.domain } `)
             : alert(`something wrong with client-reducer 219`)

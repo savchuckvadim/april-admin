@@ -31,6 +31,7 @@ import { makeChunks } from "../../utils/firebase/firebase-utils";
 const firebaseConfig = {
   apiKey: secretFirebase.apiKey,
   authDomain: secretFirebase.authDomain,
+  databaseURL: secretFirebase.databaseURL,
   projectId: secretFirebase.projectId,
   storageBucket: secretFirebase.storageBucket,
   messagingSenderId: secretFirebase.messagingSenderId,
@@ -56,7 +57,7 @@ export const clientAPI = {
     console.log(name, email, domain, placementKey, hookKey)
     
     try {
-      const addClient = httpsCallable(functions, 'client');
+      const addClient = httpsCallable(functions, 'setNewClient');
       let client = await addClient({ name, email, domain, placementKey, hookKey })
       debugger
       console.log(client.data)
