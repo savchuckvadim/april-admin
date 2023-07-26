@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { secretFirebase } from "../secret/secret";
+import { firebaseConfig } from "../secret/secret";
 import { doc, getDoc, getFirestore, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { query, orderBy } from "firebase/firestore";
@@ -28,16 +28,7 @@ import { makeChunks } from "../../utils/firebase/firebase-utils";
 
 
 
-const firebaseConfig = {
-  apiKey: secretFirebase.apiKey,
-  authDomain: secretFirebase.authDomain,
-  databaseURL: secretFirebase.databaseURL,
-  projectId: secretFirebase.projectId,
-  storageBucket: secretFirebase.storageBucket,
-  messagingSenderId: secretFirebase.messagingSenderId,
-  appId: secretFirebase.appId,
-  measurementId: secretFirebase.measurementId
-};
+
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
@@ -289,7 +280,6 @@ export const clientAPI = {
     return result
 
   },
-
 
   getProducts: async (clientId) => {
     let client = null

@@ -1,4 +1,4 @@
-import axios from "axios"
+    import axios from "axios"
 
 //.then(res:AxiosResponse<any>) => ...
 export const api = axios.create({

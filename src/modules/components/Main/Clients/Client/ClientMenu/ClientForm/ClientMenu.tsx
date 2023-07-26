@@ -17,7 +17,18 @@ import { Navigate } from "react-router-dom"
 import ContractsContainer from "../../../../Contracts/ContractsContainer"
 import ClientContractContainer from "../ClientContract/ClientContractContainer"
 
+export const testapi = axios.create({
+    withCredentials: true,
+    baseURL: 'http://localhost:8000/api',
+    // baseURL: ' http://localhost:8000/api',
 
+    headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    },
+
+})
 
 type ClientMenuPropsType = {
     section: ClientSectionEnum
@@ -42,39 +53,63 @@ const FileUpload = ({ fileRef, ...props }) => {
 
     const [error, setError] = useState(null as string | null);
     //@ts-ignore
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const file = event.target.files[0];
-        const fileExtension = file.name.split('.').pop();
         debugger
-        if (fileExtension !== 'doc' && fileExtension !== 'docx') {
-            setError('File must be a .doc file')
-            alert('File must be a .doc file');
-            return;
-        } else {
-            if (event.currentTarget.files.length) {
-                debugger
-                props.form.setFieldValue('name', event.currentTarget.files[0]);  // <-- Задаем файл как значение поля
+        const fileExtension = file && file.name && file.name.split('.').pop();
+        debugger
+        // if (fileExtension !== 'doc' && fileExtension !== 'docx') {
+        //     setError('File must be a .doc file')
+        //     alert('File must be a .doc file');
+        //     return;
+        // } else {
+        if (event.currentTarget.files.length) {
+            debugger
+            props.form.setFieldValue('name', event.currentTarget.files[0]);  // <-- Задаем файл как значение поля
 
-                const formData = new FormData();
-                formData.append('file', file);
+            const formData = new FormData();
+            formData.append('file', file);
+            console.log(formData)
 
-                axios.post('http://localhost:8000/api/file', formData)
-                    .then(async (response) => {
-                        if (response && response.data && response.data.resultCode === 0) {
-                            let link = response.data.file
-                            setUpdatedFile(link)
-                            window.open(link, "_blank")
-                            debugger
-                            // handle successful upload
-                        }
+            const fetchedfileName = await testapi.post('file', formData)
+            const fileName = fetchedfileName && fetchedfileName.data && fetchedfileName.data.fileName
+            debugger
+            testapi.post('createAprilTemplate', {
+                fileName,
+                aprilfields: [{
+                    'bitrixId': 'bitrixId',
+                    'name': 'Гарант'
+                },
+                {
+                    'bitrixId': 'bitrixId2',
+                    'name': 'а'
+                },
+                {
+                    'bitrixId': 'bitrixId3',
+                    'name': 'б'
+                }]
 
-                    })
-                    .catch((err) => {
+            })
+                .then(async (response) => {
+                    debugger
+                    if (response && response.data && response.data.resultCode === 0) {
+                        let link = response.data.file
                         debugger
-                        // handle upload error
-                    });
-            }
+                        setUpdatedFile(link)
+                        window.open(link, "_blank")
+
+                        // handle successful upload
+                    }
+
+                })
+                .catch((err) => {
+                    console.log(err)
+                    err && err.message && console.log(err.message)
+                    debugger
+                    // handle upload error
+                });
         }
+        // }
 
 
     };
@@ -83,7 +118,7 @@ const FileUpload = ({ fileRef, ...props }) => {
         <div>
             {/* {updatedFile && window.open(updatedFile, "_blank")} */}
             <label htmlFor="file">Choose files</label>{" "}
-            
+
             <input
                 id="file"
                 ref={fileRef}
@@ -149,7 +184,7 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
 
                 <ClientContractContainer />
             </>
-            
+
         }
         {section === ClientSectionEnum.Prices &&
             <>

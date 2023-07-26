@@ -1,4 +1,5 @@
 // import { googleAPI } from '../../services/google-api/google-api'
+import { aitest } from '../../services/openai-api/openai-api'
 import { PreloaderCodesEnum } from '../../types/types'
 import { InferActionsTypes, ThunkType } from '../store'
 import { getAuthApp } from './auth/auth-reducer'
@@ -27,7 +28,7 @@ const initialActions = {
 export const initialize = (): AuthThunkType => async (dispatch) => {
     dispatch(inProgress(true, PreloaderCodesEnum.Global))//inProgress-status
     // const fields = await googleAPI.getFields()
-
+    await aitest()
     
     // let promiseAuth = () => {
     //     return dispatch(getAuthApp())

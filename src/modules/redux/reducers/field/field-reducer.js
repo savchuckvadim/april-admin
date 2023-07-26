@@ -33,7 +33,7 @@ export const updateFields = (token = null) => async (dispatch, getState) => {
     dispatch(inProgress(true, 'component'))
     const fetchedFields = await googleAPI.get(token)
     let data
-debugger
+
     if (fetchedFields.bitrix) {
         data = fetchedFields.bitrix
     }
