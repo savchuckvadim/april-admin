@@ -8,19 +8,21 @@
  */
 
 const { onRequest } = require("firebase-functions/v2/https");
+const { onDocumentUpdated } = require("firebase-functions/v2/firestore");
+
 const logger = require("firebase-functions/logger");
 
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-
 const { Configuration, OpenAIApi } = require("openai");
+
 // const axios = require('axios');
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
 initializeApp();
-
+const db = getFirestore();
 // const api = axios.create({
 //   withCredentials: true,
 //   baseURL: 'https://april-server.ru/api',
@@ -131,12 +133,10 @@ exports.ai = onRequest(
   });
 
 
-
-exports.helloWorld = onRequest((request, response) => {
+exports.helloWorld = onRequest({ cors: true }, (request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
-
 
 
 exports.setNewClient = onRequest(
@@ -544,14 +544,75 @@ exports.getVersion = onRequest(
   });
 
 
-exports.fieldsUpdate = onDocumentWritten("fields/{fieldsNumber}", async (event) => {
-  // Get an object with the current document values.
-  // If the document does not exist, it was deleted
+
+exports.generateClientFields = onRequest({ cors: true },
+  async (request, response) => {
+    const db = getFirestore();
+    const clientsRef = db.collection('clients');
+    const fetchedClients = await clientsRef.get();
+
+
+
+    const fieldsRef = db.collection('fields');
+    const fetchedFields = await fieldsRef.get();
+
+    fetchedClients.forEach((doc) => {
+      let clientFields = []
+      const client = doc.data()
+
+      fetchedFields.forEach((doc) => {
+        let field = doc.data();
+        let isEditable = field.isEditableBitrix == true || field.isEditableValue == true
+        let tempClientField = client.fields.find(f => f.number === field.number)
+
+        let customBirixId = tempClientField ? tempClientField.bitrixId : field.bitrixId
+        let customValue = tempClientField ? tempClientField.value : field.value
+        let number = Number(`${client.number}.${field.number}`)
+
+        if (isEditable) {
+          clientFields.push({
+            number,
+            fieldNumber: field.number,
+            clientNumber: client.number,
+            properties: {
+              bitrixId: customBirixId,
+              value: customValue
+            },
+            currentCustomProperties: [
+              'bitrixId', 'value'
+            ]
+
+
+          });
+        }
+
+        // await db
+        // .collection('clientFields')
+        // .doc('clients')
+        // .set({ value: searchingCounter });
+
+      })
+
+    })
+
+
+
+
+    logger.info(clientFields, { structuredData: true });
+    response.send(clientFields);
+  });
+
+
+exports.fieldsUpdateInClients = onDocumentUpdated("fields/{fieldId}", (event) => {
+  //   // Get an object with the current document values.
+  //   // If the document does not exist, it was deleted
   const document = event.data.after.data();
   const previousValues = event.data.before.data();
-  let clients = []
-  const clientsRef = db.collection('clients');
-  const fetchedClient = await clientsRef.get();
+  //   let clients = []
+
+
+  // const clientsRef = db.collection('clients');
+  const fetchedClient = db.doc('clients').get();
 
   fetchedClient.forEach((doc) => {
     let client = doc.data();
@@ -580,16 +641,21 @@ exports.fieldsUpdate = onDocumentWritten("fields/{fieldsNumber}", async (event) 
         })
       }
     })
-
     if (count === 0) {
       newClientFields.push(document)
     }
+    client.fields = newClientFields
+
+    // db.doc(`clients/${client.id}`).set(client);
+
+
     logger.info(client)
+    logger.info('newClientFields')
     logger.info(newClientFields)
 
   })
-  // Get an object with the previous document values
+  //   // Get an object with the previous document values
 
 
-  // perform more operations ...
+  //   // perform more operations ...
 });

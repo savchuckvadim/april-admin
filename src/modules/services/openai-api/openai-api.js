@@ -18,8 +18,7 @@ export const aitest = async () => {
             console.log(error)
             debugger
         }
-        
-        
+         
 
 
 }

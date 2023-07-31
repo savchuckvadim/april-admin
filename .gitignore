@@ -13,7 +13,7 @@
 /secret
 /services/secret
 secret.js
-
+/functions
 
 # production
 # /build

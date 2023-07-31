@@ -410,6 +410,25 @@ debugger
     return result
 
   },
+
+  clientFieldsGenerate : async () => {
+
+  
+    const testFunction = httpsCallable(functions, 'generateClientFields');
+    try {
+        debugger
+    const test = await testFunction()
+    debugger
+    console.log(test)
+    } catch (error) {
+        console.log(error)
+        debugger
+    }
+    
+    
+
+
+}
 }
 
 export const generalAPI = {

@@ -28,7 +28,7 @@ const initialActions = {
 export const initialize = (): AuthThunkType => async (dispatch) => {
     dispatch(inProgress(true, PreloaderCodesEnum.Global))//inProgress-status
     // const fields = await googleAPI.getFields()
-    await aitest()
+   
     
     // let promiseAuth = () => {
     //     return dispatch(getAuthApp())
@@ -41,7 +41,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     // dispatch(getDialogs())
     dispatch(inProgress(false, PreloaderCodesEnum.Global))//inProgress-status
 
-
+    
 }
 
 

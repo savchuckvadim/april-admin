@@ -5,6 +5,7 @@ import { AppDispatchType, AppStateType, InferActionsTypes } from "../../store"
 import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
 import { inProgress } from '../preloader/preloader-reducer';
 import { getClientRegionFromRegion } from '../../../utils/for-rdeucers/region-utils';
+import { aitest } from '../../../services/openai-api/openai-api';
 
 
 export type ClientStateType = typeof initialState
@@ -105,6 +106,8 @@ export const setCreatingClient = () => async (dispatch: AppDispatchType, getStat
 }
 
 export const getClients = () => async (dispatch: AppDispatchType, getState: GetStateType) => {
+   debugger
+    await clientAPI.clientFieldsGenerate()
     let clients = await clientAPI.getClients()
     dispatch(clientActions.setClients(clients))
 }
