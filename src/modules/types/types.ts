@@ -13,36 +13,7 @@ export type UserType = {
     isAuthUser: boolean
 }
 
-// export type ProfileType = {
-//     about_me: string | null
-//     avatar: string | null
-//     created_at: string
-//     email: string
-//     hero: string | null
-//     id: number | null
-//     name: string
-//     surname: string
-//     updated_at: string
-//     user_id: number | null
-// }
 
-// export type PostType = {
-//     author: UserType
-//     body: string
-//     id: number
-//     img: string | null
-//     isAuthLikes: boolean
-//     likesCount: number
-//     profile_id: number
-//     created: string
-
-// }
-
-// export type LikeType = {
-//     id: number
-//     post_id: number,
-//     author_id: number
-// }
 
 export enum PreloaderCodesEnum {
     Global = 'global',
@@ -51,12 +22,7 @@ export enum PreloaderCodesEnum {
 }
 
 
-// export type DialogType = {
-//     id: number
-//     participant: UserType
-//     messages: Array<MessageType> | []
-//     isSound: Boolean
-// }
+
 
 export type MessageType = {
     id: number
@@ -69,8 +35,6 @@ export type MessageType = {
     isAuthorIsAuth: boolean
     created: string
 }
-
-
 export type PaginatorMetaType = {
     current_page: number
     from: number
@@ -81,21 +45,17 @@ export type PaginatorMetaType = {
     to: number
     total: number
 }
-
 export type PaginatorLinksType = {
     first: string
     last: string
     next: number
     prev: number
 }
-
 export type NotificationType = {
     // isSound: boolean
     message: MessageType
 
 }
-
-
 export type FieldType = {
 
     number: number
@@ -111,13 +71,11 @@ export type FieldType = {
     isInTemplate: boolean
 
 }
-
 export enum FieldsFilterEnum {
     All = 'All',
     Global = 'Global',
     Client = 'Client'
 }
-
 export type ClientType = {
     name: string | null
     domain: string | null
@@ -225,9 +183,6 @@ export enum ComplectTypesEnum {
     prof = 'prof',
     universal = 'universal'
 }
-
-
-
 export enum ComplectFilterEnum {
     All = 'All',
     Prof = 'Prof',
@@ -245,7 +200,6 @@ export enum TableTypes {
     lt = 'lt',
     price = 'price'
 }
-
 export type SupplyType = {
     name: string
     number: number
@@ -267,7 +221,6 @@ export type SupplyType = {
     // shortName: string
 
 }
-
 export enum SupplyTypesEnum {
     proxima = 'proxima',
     internet = 'internet'
@@ -278,8 +231,6 @@ export enum SupplyFilterEnum {
     Internet = 'Internet'
 }
 
-
-
 export type RegionType = {
     number: number
     name: string
@@ -287,7 +238,6 @@ export type RegionType = {
     abs: number
     infoblock: string
 }
-
 export type ClientRegionType = {
     number: number
     regionNumber: number
@@ -295,7 +245,6 @@ export type ClientRegionType = {
     abs: number
     ownAbs: null | number
 }
-
 
 export type ConsaltingType = {
     number: number
@@ -378,3 +327,14 @@ export type PriceType = {
     price: number
 
 }
+
+
+// export type DealType = {
+
+
+//     id: number
+//     dealId: string
+//     domain: string
+//     state: { [key: string]: any }
+
+// }

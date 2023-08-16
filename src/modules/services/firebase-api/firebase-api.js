@@ -8,6 +8,7 @@ import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPass
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { api } from "../api-laravel";
 import { makeChunks } from "../../utils/firebase/firebase-utils";
+import { getDefaultSettings } from "http2";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -46,7 +47,7 @@ export const clientAPI = {
     debugger
     console.log('name', 'email', 'domain', 'placementKey', 'hookKey')
     console.log(name, email, domain, placementKey, hookKey)
-    
+
     try {
       const addClient = httpsCallable(functions, 'setNewClient');
       let client = await addClient({ name, email, domain, placementKey, hookKey })
@@ -350,7 +351,7 @@ export const clientAPI = {
 
 
 
-     clientsSnapshot.docs.forEach(async (clientDoc) => {
+    clientsSnapshot.docs.forEach(async (clientDoc) => {
 
       // Получаем ссылку на коллекцию продуктов текущего клиента
       let clientData = clientDoc.data();
@@ -374,7 +375,7 @@ export const clientAPI = {
       //перебираем новые контракты
       newContracts.forEach(c => {
         //если такого контракта у клиента нет
-        let isHaveContract = updatedContracts.find(uc =>  uc.number == c.number)
+        let isHaveContract = updatedContracts.find(uc => uc.number == c.number)
         console.log('isHaveContract')
         console.log(isHaveContract)
 
@@ -389,7 +390,7 @@ export const clientAPI = {
 
     });
 
-debugger
+    debugger
 
     const resultClientsQueryGet = query(collection(db, "clients"), orderBy("name"));
     const resultClientsQuerySnapshot = await getDocs(resultClientsQueryGet);
@@ -411,24 +412,22 @@ debugger
 
   },
 
-  clientFieldsGenerate : async () => {
+  clientFieldsGenerate: async () => {
 
-  
-    const testFunction = httpsCallable(functions, 'generateClientFields');
+
+    // const testFunction = httpsCallable(functions, 'clientFieldsGenerate');
     try {
-        debugger
-    const test = await testFunction()
-    debugger
-    console.log(test)
+      debugger
+      const test = await generalAPI.clientFieldGenerate()
+      debugger
+      console.log(test)
     } catch (error) {
-        console.log(error)
-        debugger
+      console.log(error)
+      debugger
     }
-    
-    
 
 
-}
+  }
 }
 
 export const generalAPI = {
@@ -494,8 +493,10 @@ export const generalAPI = {
 
         const batch = writeBatch(db)
         chunks[i].forEach((element) => {
+          let number = element.number ? `${element.number}` : null
           docRef = docRef = doc(db, collectionName, `${element.number}`);
           batch.set(docRef, element, `${element.number}`)
+
         });
         await batch.commit();
       }
@@ -506,6 +507,38 @@ export const generalAPI = {
 
     } catch (error) {
 
+      console.error(error)
+    }
+  },
+
+  setCollectionUniqueId: async (collectionName, objects) => {
+
+    try {
+
+
+      let docRef = null
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          // Получите ссылку на коллекцию
+          const collectionRef = collection(db, collectionName);
+          // Создайте новую ссылку на документ в этой коллекции без указания ID
+          const docRef = doc(collectionRef);
+          // Используйте эту ссылку в пакетной записи
+          batch.set(docRef, element);
+
+        });
+        await batch.commit();
+      }
+      let result = await generalAPI.getCollection(collectionName)
+      debugger
+      return result
+
+
+    } catch (error) {
+      debugger
       console.error(error)
     }
   },
@@ -585,10 +618,6 @@ export const generalAPI = {
     }
   },
 
-
-
-
-
   updateFrontend: async (isProd) => {
     try {
       let response = api.get(`${isProd}`)
@@ -599,8 +628,110 @@ export const generalAPI = {
       console.log(error)
     }
 
-  }
+  },
+
+  clientFieldGenerate: async () => {
+    let clients = await generalAPI.getCollection('clients')
+    let fields = await generalAPI.getCollection('fields')
+    let clientFields = []
+    debugger
+
+    clients.forEach((client) => {
+
+
+
+      fields.forEach((field) => {
+
+        let isEditable = field.isEditableBitrix == true || field.isEditableValue == true
+        let tempClientField = client.fields.find(f => f.number === field.number)
+
+        let customBirixId = tempClientField ? tempClientField.bitrixId : field.bitrixId
+        let customValue = tempClientField ? tempClientField.value : field.value
+        let number = `${client.number}.${field.number}`
+
+        if (isEditable) {
+          let clientField = {
+            number,
+            fieldNumber: field.number,
+            clientNumber: client.number,
+            properties: {
+              bitrixId: customBirixId,
+              value: customValue
+            },
+            currentCustomProperties: [
+              'bitrixId', 'value'
+            ]
+
+
+          }
+          clientFields.push(clientField);
+
+
+
+        }
+
+
+
+      })
+
+
+
+    })
+
+
+    let result = await generalAPI.setCollectionUniqueId('clientFields', clientFields)
+    debugger
+    return result
+
+  },
 }
+
+
+
+
+// export const dealAPI = {
+
+//   addDeal: async (dealId, domain, state) => {
+//     // За кулисами .add(...) и .doc().set(...) полностью эквивалентны, поэтому вы можете использовать то, что удобнее
+//     //with ID
+//     await setDoc(doc(db, "cities", "new-city-id"), data);
+
+
+//     //or
+
+//     //without ID
+//     // Add a new document with a generated id.
+
+
+//     const docRef = await addDoc(collection(db, "deals"), {
+//       dealId, domain, state
+//     });
+//     console.log("Document written with ID: ", docRef.id);
+
+
+//   },
+
+//   updateDeal: async () => {
+//     const washingtonRef = doc(db, "cities", "DC");
+
+//     // Set the "capital" field of the city 'DC'
+//     await updateDoc(washingtonRef, {
+//       capital: true
+//     });
+//   },
+
+//   // getDefaultSettings
+
+
+
+//   deleteDeal: async () => {
+//     await deleteDoc(doc(db, "cities", "DC"));
+//   },
+// }
+
+
+
+
 
 
 

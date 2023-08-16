@@ -107,7 +107,7 @@ export const setCreatingClient = () => async (dispatch: AppDispatchType, getStat
 
 export const getClients = () => async (dispatch: AppDispatchType, getState: GetStateType) => {
    debugger
-    await clientAPI.clientFieldsGenerate()
+    // await clientAPI.clientFieldsGenerate()
     let clients = await clientAPI.getClients()
     dispatch(clientActions.setClients(clients))
 }

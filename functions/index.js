@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const { onRequest } = require("firebase-functions/v2/https");
+const { onRequest, onCall } = require("firebase-functions/v2/https");
 const { onDocumentUpdated } = require("firebase-functions/v2/firestore");
 
 const logger = require("firebase-functions/logger");
@@ -133,9 +133,9 @@ exports.ai = onRequest(
   });
 
 
-exports.helloWorld = onRequest({ cors: true }, (request, response) => {
+exports.hello = onCall((request) => {
   logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
+  return "Hello from Firebase!";
 });
 
 
@@ -338,6 +338,7 @@ exports.getApril = onRequest(
     let universals = []
     let regions = []
 
+    let customFields = []
 
     const clientsRef = db.collection('clients');  //берем снимок коллекции клиентов
     const clientsFetched = await clientsRef.get(); //берем
@@ -349,13 +350,13 @@ exports.getApril = onRequest(
       if (docClient.domain === data) {
         client = docClient
         clientRegions = client.regions
-        if (client.fields) {
-          // fields =
-          client.fields.forEach(f => {
-            logger.log(f.action)
-            f.action && fields.push(f)
-          })
-        }
+        // if (client.fields) {
+        //   // fields =
+        //   client.fields.forEach(f => {
+
+        //     f.action && fields.push(f)
+        //   })
+        // }
 
         contracts = client.contracts
 
@@ -371,10 +372,49 @@ exports.getApril = onRequest(
     const fieldsRef = db.collection('fields');  //берем снимок коллекции клиентов
     const fieldsFetched = await fieldsRef.get(); //берем
 
+
+    const clientFieldsRef = db.collection('clientFields').where('clientNumber', '==', client.number);  //берем снимок коллекции клиентов
+    const clientFieldsFetched = await clientFieldsRef.get(); //берем
+    let filtredClientFields = []
+
+    clientFieldsFetched.forEach(cf => {
+      filtredClientFields.push(cf.data())
+    })
+
     fieldsFetched.forEach((doc) => {  //перебираем
       let field = doc.data()
-      if (field.isEditableBitrix == false && field.isEditableValue == false && field.type !== 'reserv') { // Используйте isEditableBitrix, а не isЕditableBitrix
-        fields.push(field);
+      // if (field.isEditableBitrix == false && field.isEditableValue == false && field.type !== 'reserv') { // Используйте isEditableBitrix, а не isЕditableBitrix
+      //   fields.push(field);
+      // }
+
+      if (field.type !== 'reserv') { // Используйте isEditableBitrix, а не isЕditableBitrix
+        let customField = filtredClientFields.find(cf => cf.fieldNumber === field.number)
+
+        if (!customField) {
+          fields.push(field);
+        } else {
+          let clientField = {
+            ...field
+          }
+
+          for (const key in customField.properties) {
+            if (customField.currentCustomProperties.includes(key)) {
+              // customField.currentCustomProperties.forEach(propsName => {
+              //   if(propsName === key){
+              clientField[key] = customField.properties[key]
+              customFields.push(customField)
+
+              //   }
+              // })
+
+
+            }
+          }
+
+          fields.push(clientField)
+
+        }
+
       }
 
 
@@ -493,6 +533,8 @@ exports.getApril = onRequest(
       result: {
         resultCode: 0,
         data: {
+          customFields,
+          filtredClientFields,
           domain: client.domain,
           contracts,
           complects,
@@ -544,66 +586,214 @@ exports.getVersion = onRequest(
   });
 
 
+exports.setDeal = onRequest(
+  { cors: true },
+  async (req, res) => {
+    //req
+    //dealId
+    //userId
+    //domain
+    //state
+    const reqData = req.body;
+    let data = reqData.data
+    logger.info('set deal')
+    logger.info('data')
+    logger.info(data)
 
-exports.generateClientFields = onRequest({ cors: true },
-  async (request, response) => {
-    const db = getFirestore();
-    const clientsRef = db.collection('clients');
-    const fetchedClients = await clientsRef.get();
+    if (data && data.dealId && data.userId && data.domain) {
+      const db = getFirestore();
 
+      let dealId = data.dealId
+      let userId = data.userId
+      let domain = data.domain
+      let app = data.app
+      let global = data.global
 
-
-    const fieldsRef = db.collection('fields');
-    const fetchedFields = await fieldsRef.get();
-
-    fetchedClients.forEach((doc) => {
-      let clientFields = []
-      const client = doc.data()
-
-      fetchedFields.forEach((doc) => {
-        let field = doc.data();
-        let isEditable = field.isEditableBitrix == true || field.isEditableValue == true
-        let tempClientField = client.fields.find(f => f.number === field.number)
-
-        let customBirixId = tempClientField ? tempClientField.bitrixId : field.bitrixId
-        let customValue = tempClientField ? tempClientField.value : field.value
-        let number = Number(`${client.number}.${field.number}`)
-
-        if (isEditable) {
-          clientFields.push({
-            number,
-            fieldNumber: field.number,
-            clientNumber: client.number,
-            properties: {
-              bitrixId: customBirixId,
-              value: customValue
-            },
-            currentCustomProperties: [
-              'bitrixId', 'value'
-            ]
+      let currentComplect = data.currentComplect
+      let od = data.od
+      // let legalTech = data.legalTech
+      // let consalting = data.consalting
+      let result = data.result
 
 
-          });
+      let contract = data.contract
+      let dealName = data.dealName
+      let product = data.product
+      let rows = data.rows
+
+      await db
+        .collection('deals')
+        .doc(`${domain}${dealId}`)
+        .set({
+          id: `${domain}${dealId}`, dealId, userId, domain, app, global,
+          currentComplect, od, result,
+          contract, dealName, product, rows
+        })
+
+      const resultRef = db.collection('deals').where('dealId', '==', dealId).where('domain', '==', domain);  //берем снимок коллекции клиентов
+      const resultFetched = await resultRef.get(); //берем
+      let resultDeal = null
+      resultFetched.forEach((doc) => {  //перебираем
+        let d = doc.data()
+        if (d.dealId == dealId && d.domain == domain) {
+          resultDeal = d
         }
 
-        // await db
-        // .collection('clientFields')
-        // .doc('clients')
-        // .set({ value: searchingCounter });
 
       })
 
-    })
+      res.json({
+        result: {
+          resultCode: 0,
+          data: {
+            deal: resultDeal
+          },
+        }
+      });
 
 
 
+    } else {
+      let message = 'invalid data !'
+      logger.info(message)
+      res.json({
+        result: {
+          resultCode: 1,
+          data: {
+            message
+          },
+        }
+      });
+    }
 
-    logger.info(clientFields, { structuredData: true });
-    response.send(clientFields);
   });
 
+exports.getDeal = onRequest(
+  { cors: true },
+  async (req, res) => {
+    //req
+    //dealId
+    //domain
+    const db = getFirestore();
+    const reqData = req.body;
+    let data = reqData.data
+    logger.info('set deal')
+    logger.info('data')
+    logger.info(data)
 
-exports.fieldsUpdateInClients = onDocumentUpdated("fields/{fieldId}", (event) => {
+    if (data && data.dealId && data.domain) {
+      
+
+      let dealId = Number(data.dealId)
+      let domain = data.domain
+
+
+      const resultRef = db.collection('deals').where('dealId', '==', dealId);  //берем снимок коллекции клиентов
+      const resultFetched = await resultRef.get(); //берем
+      let resultDeal = null
+      resultFetched.forEach((doc) => {  //перебираем
+        let d = doc.data()
+        if (d.domain == domain) {
+          resultDeal = d
+        }
+  
+      })
+
+      res.json({
+        result: {
+          resultCode: 0,
+          data: {
+            deal: resultDeal
+          },
+        }
+      });
+
+
+
+    } else {
+      let message = 'invalid data !'
+      logger.info(message)
+      res.json({
+        result: {
+          resultCode: 1,
+          data: {
+            message
+          },
+        }
+      });
+    }
+
+  });
+// exports.clientFieldsGenerate = onCall(
+//   async (request) => {
+//     const db = getFirestore();
+//     const clientsRef = db.collection('clients');
+//     const fetchedClients = await clientsRef.get();
+
+
+
+//     const fieldsRef = db.collection('fields');
+//     const fetchedFields = await fieldsRef.get();
+//     let clientFields = []
+//     fetchedClients.forEach((doc) => {
+
+//       const client = doc.data()
+
+//       fetchedFields.forEach((doc) => {
+//         let field = doc.data();
+//         let isEditable = field.isEditableBitrix == true || field.isEditableValue == true
+//         let tempClientField = client.fields.find(f => f.number === field.number)
+
+//         let customBirixId = tempClientField ? tempClientField.bitrixId : field.bitrixId
+//         let customValue = tempClientField ? tempClientField.value : field.value
+//         let number = Number(`${client.number}.${field.number}`)
+
+//         if (isEditable) {
+//           let clientField = {
+//             number,
+//             fieldNumber: field.number,
+//             clientNumber: client.number,
+//             properties: {
+//               bitrixId: customBirixId,
+//               value: customValue
+//             },
+//             currentCustomProperties: [
+//               'bitrixId', 'value'
+//             ]
+
+
+//           }
+//           clientFields.push();
+
+
+//           // await db
+//           // .collection('clientFields')
+//           // .doc(clientField)
+//           // .set(clientFields)
+//         }
+
+
+
+//       })
+
+
+
+//     })
+
+
+
+
+//     // const clientFieldsRef = db.collection('clientFields');
+//     // const fetchedClientFields = await clientFieldsRef.get();
+//     // let resultFetchedClientFields = []
+//     // fetchedClientFields.forEach(cf => resultFetchedClientFields.push(cf.data()))
+
+//     logger.info(resultFetchedClientFields, { structuredData: true });
+//     return { resultFetchedClientFields, resultCode: 0, name: 'clientFieldsGenerate' }
+//   });
+
+
+exports.fieldsUpdateInClients = onDocumentUpdated("fields/{fieldId}", async (event) => {
   //   // Get an object with the current document values.
   //   // If the document does not exist, it was deleted
   const document = event.data.after.data();
@@ -611,51 +801,20 @@ exports.fieldsUpdateInClients = onDocumentUpdated("fields/{fieldId}", (event) =>
   //   let clients = []
 
 
+
+  const db = getFirestore();
+  const clientsRef = db.collection('clients');
+  const fetchedClients = await clientsRef.get();
+
   // const clientsRef = db.collection('clients');
-  const fetchedClient = db.doc('clients').get();
-
-  fetchedClient.forEach((doc) => {
-    let client = doc.data();
-    let count = 0
-    client.fields.forEach(f => {
-      let newClientFields = []
-      let bitrixId = f.bitrixId
-      let value = f.value
-
-      if (f.number === document.number) {
-        count++
-        if (f.isEditableBitrix === false) {
-          bitrixId = document.bitrixId
-        }
-
-        if (f.isEditableValue === false) {
-          value = document.value
-        }
-
-        newClientFields.push({
-          ...document,
-          bitrixId,
-          value
+  // const fetchedClient = db.doc('clients').get();
 
 
-        })
-      }
-    })
-    if (count === 0) {
-      newClientFields.push(document)
-    }
-    client.fields = newClientFields
-
-    // db.doc(`clients/${client.id}`).set(client);
-
-
-    logger.info(client)
-    logger.info('newClientFields')
-    logger.info(newClientFields)
-
-  })
   //   // Get an object with the previous document values
-
+  logger.info('previousValues')
+  logger.info(previousValues)
+  logger.info('document')
+  logger.info(document)
 
   //   // perform more operations ...
 });
