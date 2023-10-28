@@ -17,7 +17,7 @@ const LoginFormCard: React.FC<LoginPropsType> = (props) => {
     let type = props.type
 
     const onSubmit: OnSubmitType = (values: FieldsValuesType) => {
-        debugger
+        
         props.login(values.email, values.password)
         return <Navigate replace to='../profile' />
     }

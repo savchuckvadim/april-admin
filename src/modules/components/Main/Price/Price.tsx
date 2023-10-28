@@ -45,7 +45,7 @@ const Price: React.FC<PriceTablePropsType> = ({
   setFilter
 }) => {
 
-  debugger
+
   let color = isClient ? 'rgb(219, 217, 231)' : 'white'
   return (
     <>
@@ -64,7 +64,7 @@ const Price: React.FC<PriceTablePropsType> = ({
           actions={filters}
           navigate={(index: number) => setFilter(index)} />
       </ActionsFrame>
-      {!isClient && <UploadData upload={updatePrices} />}
+      {!isClient && <UploadData upload={updatePrices} name={'supply'} />}
       <PriceTable prices={prices} type={TableTypes.price} />
     </>
   );

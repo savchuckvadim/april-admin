@@ -1,0 +1,23 @@
+.checkboxAsRadioButtons {
+    display: flex;
+  }
+  
+  .checkboxContainer {
+    margin: 5px;
+  }
+  
+  .hiddenCheckbox {
+    display: none;
+  }
+  
+  .checkboxLabel {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50%;  /* Делает метку круглой, как радиокнопку */
+    cursor: pointer;
+  }
+  
+  .checkboxLabel.selected {
+    background-color: #007bff;
+    color: white;
+  }

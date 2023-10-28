@@ -24,7 +24,7 @@ const Consalting: React.FC<ClientsTablePropsType> = ({ consalting, updateConsalt
   
   return (
     <>
-      <UploadData upload={updateConsalting} />
+      <UploadData upload={updateConsalting} name={'clients'} />
       {consalting.length > 0 && <ConsaltingTable consalting={consalting} type={TableTypes.consalting} />}
     </>
 

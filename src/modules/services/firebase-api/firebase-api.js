@@ -8,7 +8,8 @@ import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPass
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { api } from "../api-laravel";
 import { makeChunks } from "../../utils/firebase/firebase-utils";
-import { getDefaultSettings } from "http2";
+import { onlineAPI } from "../april-online-api/online-api";
+
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -42,17 +43,45 @@ export const firestore = getFirestore(app);
 // export const myFirebase = 
 
 export const clientAPI = {
-
-  create: async (name, email, domain, placementKey, hookKey) => {
-    debugger
+  // alfacentr.bitrix24.ru
+  create: async (name, email, domain, placementKey, hookKey, clientId, clientSecret) => {
+    
     console.log('name', 'email', 'domain', 'placementKey', 'hookKey')
-    console.log(name, email, domain, placementKey, hookKey)
+    console.log(name, email, domain, placementKey, hookKey, clientId, clientSecret)
 
     try {
       const addClient = httpsCallable(functions, 'setNewClient');
-      let client = await addClient({ name, email, domain, placementKey, hookKey })
-      debugger
+      let client = await addClient({ name, email, domain, placementKey, hookKey, clientId, clientSecret })
+      
+
+      let result
+      const resultClientsFetch = query(collection(db, "clients"), where("domain", "==", domain));
+      const resultClients = await getDocs(resultClientsFetch);
+
+
+      resultClients.forEach((doc) => {
+        if (doc.data().domain === domain) {
+          result = doc.data()
+        }
+      });
+
       console.log(client.data)
+      if(result){
+        let onlinePostPortal = await onlineAPI.setPortal(
+          result.domain,
+          result.key, //placement key 
+          result.clientId,
+          result.clientSecret,
+          result.hook //hook url
+        )
+  
+      }
+     
+
+
+      
+
+
       return client.data
     } catch (error) {
       console.log(error)
@@ -71,16 +100,17 @@ export const clientAPI = {
   },
 
   updateClient: async (client) => {
-
+    
     let result
     let clientId = client && client.number
     try {
+
 
       const queryGet = query(collection(db, "clients"), where("number", "==", clientId));
       const querySnapshot = await getDocs(queryGet);
 
 
-      let searchingClient
+      let searchingClient = null //as FirebaseClientType | null
 
       querySnapshot.forEach((client) => {
         if (client.data().number === clientId) {
@@ -91,8 +121,16 @@ export const clientAPI = {
       });
 
 
-      await updateDoc(searchingClient, { ...client });
 
+      await updateDoc(searchingClient, {
+        domain: client.domain,
+        email: client.email,
+        key: client.key, //placement key 
+        hook: client.hook,  //hook url
+        clientId: client.clientId,
+        clientSecret: client.clientSecret
+      });
+      
       const resultClientsFetch = query(collection(db, "clients"), where("number", "==", clientId));
       const resultClients = await getDocs(resultClientsFetch);
 
@@ -102,8 +140,30 @@ export const clientAPI = {
           result = doc.data()
         }
       });
-
+      
       if (result && result.number) {
+        
+        //APRIL ONLINE
+        console.log({
+          domain: result.domain,
+          key: result.key, //placement key 
+          clientId: result.clientId,
+          clientSecret: result.clientSecret,
+          hook: result.hook //hook url
+        })
+        let onlinePostPortal = await onlineAPI.setPortal(
+          result.domain,
+          result.key, //placement key 
+          result.clientId,
+          result.clientSecret,
+          result.hook //hook url
+        )
+
+        console.log(onlinePostPortal)
+        
+
+
+
         return { resultCode: 0, client: result }
       } else {
         return { resultCode: 1, message: 'client is no updated' }
@@ -203,7 +263,7 @@ export const clientAPI = {
   },
 
   updateFields: async (fields, clientId) => {
-    debugger
+    
 
 
     let result
@@ -309,10 +369,10 @@ export const clientAPI = {
 
         products.push(data)
       });
-      debugger
+      
       return products
     } catch (error) {
-      debugger
+      
       console.log(error)
     }
 
@@ -390,7 +450,7 @@ export const clientAPI = {
 
     });
 
-    debugger
+    
 
     const resultClientsQueryGet = query(collection(db, "clients"), orderBy("name"));
     const resultClientsQuerySnapshot = await getDocs(resultClientsQueryGet);
@@ -405,7 +465,7 @@ export const clientAPI = {
       })
 
     });
-    debugger
+    
     console.log(result)
     console.log('result')
     return result
@@ -417,13 +477,13 @@ export const clientAPI = {
 
     // const testFunction = httpsCallable(functions, 'clientFieldsGenerate');
     try {
-      debugger
+      
       const test = await generalAPI.clientFieldGenerate()
-      debugger
+      
       console.log(test)
     } catch (error) {
       console.log(error)
-      debugger
+      
     }
 
 
@@ -486,7 +546,7 @@ export const generalAPI = {
       let docRef = null
 
 
-
+      debugger
 
       const chunks = makeChunks(objects, 500);
       for (let i = 0; i < chunks.length; i++) {
@@ -498,6 +558,7 @@ export const generalAPI = {
           batch.set(docRef, element, `${element.number}`)
 
         });
+        debugger
         await batch.commit();
       }
       let result = await generalAPI.getCollection(collectionName)
@@ -533,12 +594,12 @@ export const generalAPI = {
         await batch.commit();
       }
       let result = await generalAPI.getCollection(collectionName)
-      debugger
+      
       return result
 
 
     } catch (error) {
-      debugger
+      
       console.error(error)
     }
   },
@@ -576,10 +637,10 @@ export const generalAPI = {
           result = doc.data()
         }
       });
-      debugger
+      
       return result
     } catch (error) {
-      debugger
+      
       console.log(error)
       return result
 
@@ -634,7 +695,7 @@ export const generalAPI = {
     let clients = await generalAPI.getCollection('clients')
     let fields = await generalAPI.getCollection('fields')
     let clientFields = []
-    debugger
+    
 
     clients.forEach((client) => {
 
@@ -800,7 +861,7 @@ export const fieldsAPI = {
   },
 
   updateField: async (fieldNumber, value, type) => {
-    debugger
+    
 
     let docRef = doc(db, "fields", `${fieldNumber}`)
 
@@ -1270,7 +1331,7 @@ export const authApi = {
 
 
     //todo login with google data?
-    debugger
+
     return user
 
   },
@@ -1297,7 +1358,7 @@ export const authApi = {
   },
 
   async login(email, password) {
-    debugger
+    
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

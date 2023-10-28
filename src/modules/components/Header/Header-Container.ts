@@ -1,4 +1,4 @@
-// import React from "react"
+import React from "react"
 import { connect } from "react-redux"
 import { AppStateType } from "../../redux/store"
 import { UserType } from "../../types/types"

@@ -8,9 +8,17 @@ import { schemaClient } from '../../../../../../utils/Validators/validator-april
 import ClientMenu from './ClientMenu'
 import ActionsFrame from '../../../../../Elements/Actions/Navigation/ActionsFrame'
 import Navigation from '../../../../../Elements/Actions/Navigation/Navigation/Navigation'
-import { updateClient } from '../../../../../../redux/reducers/client/client-reducer';
+// import { updateClient } from '../../../../../../redux/reducers/client/client-reducer';
 
-
+type SendingValuesType = {
+    name: string
+    email: string
+    domain: string
+    key: string
+    hook: string
+    clientId: string
+    clientSecret: string
+}
 
 export type ClientFields = {
     name: string | null
@@ -18,6 +26,8 @@ export type ClientFields = {
     domain: string | null
     key: string | null
     hook: string | null
+    clientId: string | null, // from other hook key
+    clientSecret: string | null, // from other hook key
     fields: { string: FieldType } | {}
     number: number | null
 }
@@ -38,7 +48,7 @@ export enum ClientSectionEnum {
 type ClientFormPropsType = {
     client: ClientType
     // clientId: number | 'new' | false
-    sendNewClient: (name: string, email: string, domain: string, placementKey: string, hookKey: string) => void
+    sendNewClient: (name: string, email: string, domain: string, placementKey: string, hookKey: string, clientId: string, clientSecret: string) => void
     updateClient: (client: ClientType) => void
     updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
     updateClientProducts: (clientId: number) => void
@@ -47,7 +57,7 @@ type ClientFormPropsType = {
 }
 
 
-const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, updateField, updateClientProducts, getProducts }) => {
+const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, updateField, updateClientProducts, getProducts, updateClient }) => {
     const sections = [
         ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts,
         ClientSectionEnum.Prices, ClientSectionEnum.Regions, ClientSectionEnum.Templates
@@ -59,17 +69,29 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
     const [isNew, setIsNew] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
 
+    const [isSending, setIsSending] = useState(false)
+
     const [initialValues, setInitialValues] = useState({
         name: null as string | null,
         email: null as string | null,
         domain: null as string | null,
         key: null as string | null,
         hook: null as string | null,
+        clientId: null as string | null, // from other hook key
+        clientSecret: null as string | null, // from other hook key
         fields: {} as { string: FieldType } | {},
         number: null as number | null,
         file: null as string | null
     })
 
+    const [currentValues, setSendingValues] = useState(null as SendingValuesType | null)
+    const [updatingClient, setUpdatingClient] = useState(null as ClientType | null)
+
+    let contracts = {
+        items: [] as Array<ContractType>,
+        current: [] as Array<number>,
+        bitrixId: null as string | null
+    }
 
 
 
@@ -81,14 +103,11 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
             } else {
                 setIsNew(true)
             }
+            
         }
     }, [client])
 
-    let contracts = {
-        items: [] as Array<ContractType>,
-        current: [] as Array<number>,
-        bitrixId: null as string | null
-    }
+
     useEffect(() => {
         let formikValuesFields = {}
         let updatedInitialValues = {
@@ -97,6 +116,8 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
             domain: null as string | null,
             key: null as string | null,
             hook: null as string | null,
+            clientId: null as string | null, // from other hook key
+            clientSecret: null as string | null, // from other hook key
             fields: {} as { string: FieldType } | {},
             contracts,
             number: null as number | null,
@@ -111,18 +132,16 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         !isNew ? updatedInitialValues.domain = client.domain : updatedInitialValues.domain = null
         !isNew ? updatedInitialValues.key = client.email : updatedInitialValues.key = null
         !isNew ? updatedInitialValues.hook = client.domain : updatedInitialValues.hook = null
+        !isNew ? updatedInitialValues.clientId = client.email : updatedInitialValues.clientId = null
+        !isNew ? updatedInitialValues.clientSecret = client.domain : updatedInitialValues.clientSecret = null
         !isNew ? updatedInitialValues.number = client.number : updatedInitialValues.number = null
         !isNew ? updatedInitialValues.contracts = client.contracts : updatedInitialValues.contracts = contracts
 
         updatedInitialValues.fields = formikValuesFields
         setInitialValues(updatedInitialValues)
 
-        debugger
+        
     }, [client, isNew])
-
-
-
-
 
     useEffect(() => {
 
@@ -133,6 +152,26 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
     }, [sectionIndex])
 
 
+
+    useEffect(() => {
+        
+        if (isSending) {
+            
+            if (currentValues) {
+                sendNewClient(currentValues.name, currentValues.email, currentValues.domain, currentValues.key, currentValues.hook, currentValues.clientId, currentValues.clientSecret)
+                setSendingValues(null)
+
+            } else if (updatingClient) {
+                
+                updateClient(updatingClient)
+                setUpdatingClient(null)
+            }
+
+            setIsSending(false)
+
+        }
+
+    }, [isSending])
 
     return (
         < div className={style.client}>
@@ -158,7 +197,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                     }}
                     validationSchema={schemaClient}
                     onSubmit={(values, { setSubmitting }) => {
-                        debugger
+                        
                         console.log('values')
                         console.log(values)
                         const fields = []
@@ -167,13 +206,41 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                             fields.push(values.fields[key])
                         }
 
-                        debugger
-                        if (values.name && values.email && values.domain && values.key && values.hook) {
-                            debugger
-                            isNew
-                                ? sendNewClient(values.name, values.email, values.domain, values.key, values.hook)
-                                //@ts-ignore
-                                : updateClient({ ...client, contracts: values.contracts })
+                        
+                        if (values.name && values.email && values.domain && values.key && values.hook && values.clientId && values.clientSecret) {
+                            
+                            if (isNew) {
+                                
+                                setSendingValues({
+
+                                    name: values.name,
+                                    email: values.email,
+                                    domain: values.domain,
+                                    key: values.key,
+                                    hook: values.hook,
+                                    clientId: values.clientId,
+                                    clientSecret: values.clientSecret
+                                })
+                                setIsSending(true)
+
+                            } else {
+                                // updateClient({ ...client, contracts: values.contracts })
+                                
+
+                                setUpdatingClient({
+                                    ...client,
+                                    name: values.name,
+                                    email: values.email,
+                                    domain: values.domain,
+                                    key: values.key,
+                                    hook: values.hook,
+                                    clientId: values.clientId,
+                                    clientSecret: values.clientSecret
+                                })
+                                setIsSending(true)
+                            }
+
+
 
                         }
 

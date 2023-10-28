@@ -27,7 +27,7 @@ const Contracts: React.FC<ContractsPropsType> = ({ isClient = false, clientId, c
   return (
     <>
 
-      {!isClient && <UploadData upload={updateContracts} />}
+      {!isClient && <UploadData upload={updateContracts} name={'contracts'} />}
       <ContractsTable
         isClient={isClient}
         clientId={clientId}

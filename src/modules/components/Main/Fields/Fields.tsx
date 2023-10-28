@@ -25,6 +25,9 @@ const Fields = ({ fields, filters, filterCurrent, getFields, setFilter, updateFi
     { fields: fields as InitialValuesType }
 
   )
+
+
+  
   useEffect(() => {
     let initialResult = {} as InitialValuesType
 
@@ -52,7 +55,7 @@ const Fields = ({ fields, filters, filterCurrent, getFields, setFilter, updateFi
       <Filter name={'clients'}>
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      <UploadData upload={upload} />
+      <UploadData upload={upload} name={'fields'} />
       {/* <FieldsUpdateContainer /> */}
       {//@ts-ignore
         <Formik

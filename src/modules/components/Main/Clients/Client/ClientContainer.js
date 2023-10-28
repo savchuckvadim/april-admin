@@ -92,7 +92,7 @@ const ClientContainer = (props) => {
                 if (props.client && props.client.number   //если пришел существующий клиент
 
                     && props.client.number !== Number(props.params.clientId)) { //и его номер не соответстует url
-                    debugger
+                    
                     console.log('клиент существующий')
                     console.log('number пришедшего клиента не равен params')
                     console.log('делаем редирект')
@@ -105,7 +105,7 @@ const ClientContainer = (props) => {
 
                 }
                 else if (props.client && !props.client.number) {  //если пришел создаваемый клиент
-                    debugger
+                    
                 }
 
 
@@ -153,7 +153,7 @@ const ClientContainer = (props) => {
 
 
 
-    debugger
+    
     if (props.preloader || !props.client) {
         return <div>Loading</div>
     }
@@ -165,7 +165,7 @@ const ClientContainer = (props) => {
 
     // }
     else {
-        debugger
+        
         return <Client
             client={props.client}
 

@@ -63,7 +63,7 @@ export const updateProducts = (token = null) => async (dispatch, getState) => {
 export const getProducts = () => async (dispatch, getState) => {
 
     let products = await generalAPI.getCollection('products')
-    debugger
+    
     if (products && products.length > 0) {
         dispatch(setProducts(products))
     }
@@ -79,7 +79,7 @@ export const generateProducts = () => async (dispatch, getState) => {
     let consalting = await generalAPI.getCollection('consalting')
     let legalTech = await generalAPI.getCollection('legalTech')
 
-    debugger
+    
     let products = {
         garant: {
 
@@ -362,7 +362,7 @@ export const generateProducts = () => async (dispatch, getState) => {
             }
 
             if (lt.type === 'package') {
-                debugger
+                
                 if (contract.aprilName === ContractAprilNameEnum.Internet) {
 
                     postDataLegalTech.push(product)
@@ -443,14 +443,14 @@ const product = (state = initialState, action) => {
             }
             action.products.forEach(product => {
                 if (product.complectType === 'prof' || product.complectType === 'prof') {
-                    debugger
+                    
                     garant[product.complectType][product.contractShortName].push(product)
                 } else if (product.complectType === 'legalTech') {
                     legalTech[product.contractShortName].push(product)
                 } else if (product.complectType === 'consalting') {
                     consalting[product.contractShortName].push(product)
                 }
-                debugger
+                
 
             })
 

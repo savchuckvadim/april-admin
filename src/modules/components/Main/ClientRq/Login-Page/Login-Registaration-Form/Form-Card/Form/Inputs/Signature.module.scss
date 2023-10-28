@@ -1,0 +1,222 @@
+@import '../../../../../../styles/variables';
+
+
+.container,
+.containerFocus,
+.signature__container,
+.signature__containerFocus,
+.signature__header {
+    flex-direction: row;
+    padding: 0 16px;
+    display: flex;
+    max-width: 406px;
+    border-radius: 12px;
+    margin: 10px 0;
+
+}
+
+
+
+.signature,
+.signatureDone {
+    height: 205px;
+    width: 100%;
+    background-color: #f8f8f8;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: start;
+    padding: 0 16px;
+    display: flex;
+    max-width: 406px;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.signature__header {
+    height: 20px;
+    // max-height: 10px;
+    width: 100%;
+    background-color: #f8f8f8;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: start;
+}
+
+.signature__title {
+    margin-top: 0px;
+}
+
+.signatureDone {
+
+    background-color: #f8f8f8;
+    outline: 2px solid $main-color;
+    outline-offset: -2px;
+
+
+
+}
+
+.signature {
+
+    background-color: #f8f8f8;
+}
+
+
+
+.container,
+.containerFocus,
+.signature__container,
+.signature__containerFocus {
+
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.signature__container,
+.signature__containerFocus {
+    background-color: #f7f1f1;
+    height: 200px;
+    width: 100%;
+
+}
+
+
+
+.signature__optionsDone {
+    height: 200px;
+}
+
+.signature__options {
+    height: 34px;
+
+
+}
+
+.signature__options,
+.signature__optionsDone {
+    width: 70px;
+    max-height: 22px;
+    margin-bottom: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.signature__buttons {
+    width: 50px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    max-height: 20px;
+
+}
+
+.signature__header {
+    color: $black-color;
+    height: 24px;
+    width: 100%;
+    border: none;
+    background: none;
+    max-width: 406px;
+}
+
+
+.canvas {
+    min-width: 100%;
+    height: 159px;
+    cursor: url('../../../../../../../assets/imgs/cursors/crsr_pero_light_32.png') 32 32, auto;
+
+}
+
+.signature__button {
+    height: 19px;
+    width: auto;
+}
+
+.signatureResult__wrapper {
+    width: 100%;
+    height: calc(100% - 27px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.signature__result {
+    display: inline-block;
+    width: auto;
+    min-height: 50%;
+    max-width: 190px;
+    // height: auto;
+}
+
+.containerFocus,
+.signature__containerFocus {
+
+    background-color: white;
+    outline: 2px solid $main-color;
+    outline-offset: -2px;
+
+
+}
+
+.options {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+
+@media screen and (max-width: 520px) {
+
+
+    .signature__result {
+
+        max-width: 190px;
+        height: auto;
+
+    }
+
+    .canvas {
+        max-width: 319px;
+        width: 100%;
+        // height: 94px;
+
+    }
+
+    .container,
+    .containerFocus,
+    .signature__container,
+    .signature__containerFocus,
+    .signature,
+    .signatureDone,
+    .signature__header,
+    .questions,
+    .checkboxes__wrapper,
+    .checkboxes__wrapperError,
+    .checkboxes__wrapperActive {
+        padding: 0 6px;
+        max-width: 90%;
+        margin: 5px 0;
+
+    }
+
+    .signature__container,
+    .signature__containerFocus,
+    .signature,
+    .signatureDone,
+    .signature__header {
+        max-width: 90%;
+        
+    }
+
+
+
+}

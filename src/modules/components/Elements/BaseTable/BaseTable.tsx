@@ -67,7 +67,7 @@ const BaseTable: React.FC<BaseTablePropsType> = ({ clientId, categories, values,
                             }
                             else if (key === 'title' && type === "regions") {
                                 const checked = clientRegions?.find(cr => cr.regionNumber == row.number) ? true : false
-                                debugger
+                                
                                 generalCells.push(<TableCell key={`base-table-checkbox-${key}-regions-${i}`} component="th" scope="row">
                                     <Checkbox checked={checked} onClick={() => { updateClientRegions && updateClientRegions(row.number, checked) }} />
                                 </TableCell>)

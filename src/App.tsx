@@ -5,6 +5,7 @@ import LoginRedirect from './modules/components/Login-Page/Login-Redirect'
 import { LightLoadingPageContainer } from './modules/components/Elements/Loading/Light-Loading-Page-Container'
 import { useContext, useEffect } from 'react'
 import { Context } from '.'
+import ClientTemplateContainer from './modules/components/Main/ClientTemplate/ClientTemplateContainer'
 
 
 type AppPropsType = {
@@ -16,10 +17,10 @@ type AppPropsType = {
 
 const App: React.FC<AppPropsType> = (props) => {
 
-const {auth} = useContext(Context)
-const login = () => {
-  
-}
+  const { auth } = useContext(Context)
+  const login = () => {
+
+  }
 
   return (
     <div className="App">
@@ -32,6 +33,7 @@ const login = () => {
 
         : <div className='preloader__wrapper'><LightLoadingPageContainer /></div>
       }
+      {/* <ClientTemplateContainer /> */}
     </div>
 
   )

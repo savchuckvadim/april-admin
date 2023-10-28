@@ -32,7 +32,7 @@ const Complects: React.FC<ComplectsTablePropsType> = ({ complects, filters, filt
       <Filter name={'clients'} >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      <UploadData upload={updateComplects} />
+      <UploadData upload={updateComplects} name={'clients'} />
       <ComplectsTable complects={complects} type={TableTypes.complects} />
     </>
 

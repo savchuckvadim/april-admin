@@ -1,0 +1,144 @@
+@import '../../../../../styles/_variables.scss';
+
+.line,
+.description,
+.link__container {
+    margin: 0 auto;
+    /* padding: 0; */
+    width: 406px;
+    display: block;
+    text-align: center;
+    align-self: center;
+}
+
+.registration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.form__container {
+    margin: 0 0 150px 0;
+    padding: 24px;
+    /* height: 70vh;
+    width: 90%;  */
+    background-color: white;
+    border-radius: 16px;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    width: 454px;
+    /* height: 336px; */
+}
+
+.inputs__container {
+    /* height:60vh; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    min-width: 100%;
+}
+
+.input__group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+
+}
+
+.inputs__wrapper {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+}
+
+.login {
+    margin: 0;
+    min-width: 112px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* padding: 0px 24px 24px 16px; */
+}
+
+.form__footer {
+    display: flex;
+    justify-content: space-around;
+    /* align-items: flex-end; */
+    flex-direction: column;
+}
+
+.link {
+    text-decoration: none;
+    color: $main-color;
+}
+
+.button__container {
+    margin: 24px 0 8px 0;
+    padding: 0 ;
+    height: 54px;
+    // min-width: 97%;
+    width: 100%;
+    max-width: calc(406px + 32px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.bottom__area {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    justify-content: space-between;
+
+}
+.checkboxes__wrapper{
+    width: 100%;
+    // max-width: 406px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+    
+}
+// .checkboxes__wrapper__inner{
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+
+// }
+@media screen and (max-width: 960px) {
+    .inputs__wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input__group {
+        width: 100%;
+        padding: 2px;
+
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .form__container {
+
+        padding: 25px;
+
+    }
+
+    .button__container {
+        width: 100%;
+        max-width: 93%;
+    }
+}

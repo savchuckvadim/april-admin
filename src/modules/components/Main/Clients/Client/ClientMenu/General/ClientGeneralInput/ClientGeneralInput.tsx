@@ -12,12 +12,12 @@ interface ClientGeneralInputProps extends FieldProps {
 
 
 const ClientGeneralInput: React.FC<ClientGeneralInputProps> = ({ field, error, touched, form, setClientName }) => {
-
+console.log(field)
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        let maxChars = 30; // Максимальное количество символов
+        let maxChars = 330; // Максимальное количество символов
         if (field.name == 'domain') {
-            maxChars = 63
+            maxChars = 363
         }
         if (value.length <= maxChars) {
             form.setFieldValue(name, value);

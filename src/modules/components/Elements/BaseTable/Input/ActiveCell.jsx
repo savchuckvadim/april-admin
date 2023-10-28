@@ -6,7 +6,7 @@ import { Field } from 'formik';
 
 
 const Input = ({ field, submit, label, error, touched, form }) => {
-    debugger
+    
     return <TextField
         type="number"
         align={'right'}
@@ -21,7 +21,7 @@ const Input = ({ field, submit, label, error, touched, form }) => {
             // console.log(e)
             // console.log('on blur -> submit')
             console.log(field.value)
-            debugger
+            
             submit && submit(field.value, form.values)
         }}
 
@@ -65,9 +65,9 @@ const ActiveCell = ({
     }, [value])
 
     useEffect(() => {
-        debugger
+        
         if (isUpdating) {
-            debugger
+            
             if (updateClientContracts) {
                 updateClientContracts({ ...contracts })
             }
@@ -77,7 +77,7 @@ const ActiveCell = ({
                 updateField([...fieldValue])
             }
             onCellSubmit()
-            debugger
+            
             setContracts(null)
             setfieldValue(null)
             setIsUpdating(false)

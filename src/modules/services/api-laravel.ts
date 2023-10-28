@@ -39,7 +39,7 @@ export const updatePlacements = async (isProd: boolean) => {
         let res = await api.post(`/refresh/`, {
             isProd
         });
-        debugger
+        
         if (res && res.data) {
             return res.data
         }

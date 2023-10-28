@@ -32,7 +32,7 @@ const LegalTech: React.FC<LegalTechTablePropsType> = ({ legalTech, filters, filt
       <Filter name={'clients'} >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      <UploadData upload={updateLT} />
+      <UploadData upload={updateLT} name={'legalTech'}  />
       {legalTech.length > 0 && <LegalTechTable
         legalTech={legalTech}
         type={TableTypes.lt}

@@ -1,0 +1,67 @@
+@import '../../../../../../styles/variables';
+// @import '../../../../../../../assets/imgs/cursors/crsr_pero_blck.png';
+
+.icon,
+.iconRed {
+    min-width: 24px;
+    min-height: 24px;
+    margin-right: 8px;
+}
+
+.icon,
+.photo {
+    opacity: 80%;
+}
+
+.iconRed path {
+    stroke: $main-color;
+
+}
+
+
+
+.photo {
+    min-width: 24px;
+    min-height: 24px;
+    margin-right: 8px;
+}
+
+
+.photo__span {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.custom-file-input {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+.custom-file-input label {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.custom-file-input .icon {
+    margin-right: 8px;
+}
+
+/* Стилизация при наведении */
+.custom-file-input label:hover {
+    background-color: #e0e0e0;
+}
+
+
+

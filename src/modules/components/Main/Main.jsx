@@ -14,6 +14,7 @@ import LegalTechContainer from "./LegalTech/LegalTechContainer"
 import PriceContainer from "./Price/PriceContainer"
 import Error from "../Elements/Error/Error"
 import SettingsContainer from "./Settings/SettingsContainer"
+import EntitiesContainer from "./Entity/EntitiesContainer"
 
 
 
@@ -51,6 +52,18 @@ const Main = () => {
                         <Route path="consalting/" element={<ConsaltingContainer />} />
                         <Route path="legaltech/" element={<LegalTechContainer />} />
                         <Route path="prices/" element={<PriceContainer />} />
+                        <Route path="infogroups" element={<EntitiesContainer name={'infogroups'} isItem={false}/>} />
+                        <Route path="infoblocks" element={<EntitiesContainer name={'infoblocks'} isItem={false} />} />
+                        <Route path="providers" element={<EntitiesContainer name={'providers'} isItem={false} />} />
+                        <Route path="rqs" element={<EntitiesContainer name={'rqs'} isItem={false} />} />
+                        <Route path="template" element={<EntitiesContainer name={'template'} isItem={true} />} />
+                        <Route path="templates" element={<EntitiesContainer name={'templates'} isItem={false} />} />
+                        <Route path="tfields" element={<EntitiesContainer name={'tfields'} isItem={false} />} />
+                        <Route path="PriceRowCells" element={<EntitiesContainer name={'pricerowcells'} isItem={false} />} />
+                        {/* <Route path="fitems" element={<EntitiesContainer name={'fitems'} isItem={false} />} /> */}
+                        <Route path="saletext" element={<EntitiesContainer name={'saletext'} isItem={true} />} />
+                        <Route path="images" element={<EntitiesContainer name={'images'} isItem={false} />} />
+                        {/* <Route path="templates" element={<EntitiesContainer name={'templates'} />} />  //сделать фильтр по клиенту */}
                     </Routes>
 
                 </div>

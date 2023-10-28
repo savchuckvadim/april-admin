@@ -19,12 +19,12 @@ export const validate = values => {
 export const schemaClient = Yup.object({
   name: Yup.string()
     .required('Required')
-    .max(29, 'Максимум 30 символов'),
+    .max(229, 'Максимум 30 символов'),
   email: Yup.string()
-    .max(29, 'Максимум 30 символов')
+    .max(229, 'Максимум 30 символов')
     .email('Invalid email address') // проверка на корректный email
     .required('Required'), // поле обязательно для заполнения
   domain: Yup.string()
-    .max(63, 'Максимум 60 символов')
+    .max(263, 'Максимум 60 символов')
     .required('Required'),
 });

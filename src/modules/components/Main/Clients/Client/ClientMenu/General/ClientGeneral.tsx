@@ -83,7 +83,7 @@ const ClientGeneral: React.FC<ClientGeneralPropsType> = ({ client, isChanged, is
                     <h3 className={style.general__name}>Key</h3>
                     <div className={style.input__wrapper}>
                         <Field
-                            name={'key'}
+                            name={'key'} //placement key
                             onChange={handleChange}
                             component={ClientGeneralInput}
                             error={errors.key}
@@ -96,11 +96,37 @@ const ClientGeneral: React.FC<ClientGeneralPropsType> = ({ client, isChanged, is
                     <h3 className={style.general__name}>Hook</h3>
                     <div className={style.input__wrapper}>
                         <Field
-                            name={'hook'}
+                            name={'hook'} //hook -url
                             onChange={handleChange}
                             component={ClientGeneralInput}
                             error={errors.hook}
                             touched={touched.hook}
+                        />
+                    </div>
+
+                </div>
+                <div className={style.general__row}>
+                    <h3 className={style.general__name}>clientId</h3>
+                    <div className={style.input__wrapper}>
+                        <Field
+                            name={'clientId'}  //REST_CLIENT_ID
+                            onChange={handleChange}
+                            component={ClientGeneralInput}
+                            error={errors.clientId}
+                            touched={touched.clientId}
+                        />
+                    </div>
+
+                </div>
+                <div className={style.general__row}>
+                    <h3 className={style.general__name}>clientSecret</h3>
+                    <div className={style.input__wrapper}>
+                        <Field
+                            name={'clientSecret'} //REST_CLIENT_SECRET
+                            onChange={handleChange}
+                            component={ClientGeneralInput}
+                            error={errors.clientSecret}
+                            touched={touched.clientSecret}
                         />
                     </div>
 

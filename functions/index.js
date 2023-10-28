@@ -279,7 +279,13 @@ exports.setNewClient = onRequest(
 
       const writeResult = await db
         .collection("clients")
-        .add({ ...data, number: searchingCounter, fields, regions: [defaultRegion], consalting, legalTech, contracts });
+        .add({ ...data, 
+          number: searchingCounter, 
+          fields, 
+          regions: [defaultRegion], 
+          consalting, 
+          legalTech, 
+          contracts });
 
       let clientSnapshot = await writeResult.get();
       let client = clientSnapshot.data();
@@ -518,6 +524,17 @@ exports.getApril = onRequest(
       consalting.push(consaltingdoc)
     })
 
+    /////////////////////////////////////////////////STAR
+    let star = []
+    const starRef = db.collection('star');
+    const starFetched = await starRef.get(); //берем
+
+    starFetched.forEach((doc) => {  //перебираем
+      let stardoc = doc.data()
+
+      star.push(stardoc)
+    })
+
     /////////////////////////////////////////////////COMPLECTS
     let complects = []
     const complectsRef = db.collection('complects');
@@ -546,7 +563,8 @@ exports.getApril = onRequest(
             universal: universals,
           },
           legalTech: lt,
-          consalting
+          consalting,
+          star
         }
       }
     });

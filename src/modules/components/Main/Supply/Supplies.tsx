@@ -32,7 +32,7 @@ const Supplies: React.FC<SuppliesPropsType> = ({ supplies, filters, filterCurren
       <Filter align={false} name={'supply'} >
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      <UploadData upload={updateSupplies} />
+      <UploadData upload={updateSupplies} name={'supply'}/>
       <SupplyTable supplies={supplies} type={TableTypes.supply} />
     </>
 

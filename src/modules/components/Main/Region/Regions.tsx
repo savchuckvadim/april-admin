@@ -44,7 +44,7 @@ const Regions: React.FC<ComplectsTablePropsType> = ({
       <Filter name={'regions'} >
         <FilterButtons actions={filters} filter={(index: number) => getFilter(index)} initialIndex={filterCurrent} />
       </Filter>
-      {!isClient && <UploadData upload={updateRegions} />}
+      {!isClient && <UploadData upload={updateRegions} name={'regions'} />}
       <RegionsTable
         regions={regions}
         type={TableTypes.regions}

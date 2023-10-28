@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 }
 
 const RegionsSelectContainer = ({regions, getRegions}) => {
-    debugger
+    
     useEffect(() => {
         regions.length < 1 && getRegions()
     }, [])

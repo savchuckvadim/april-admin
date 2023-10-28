@@ -3,7 +3,7 @@ import { Button } from "@mui/material"
 
 
 const Settings = (props) => {
-debugger
+
     return (
         <div>
             {

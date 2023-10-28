@@ -16,6 +16,7 @@ import { Input } from '@mui/material';
 import { Navigate } from "react-router-dom"
 import ContractsContainer from "../../../../Contracts/ContractsContainer"
 import ClientContractContainer from "../ClientContract/ClientContractContainer"
+import { onlineAPI } from "../../../../../../services/april-online-api/online-api"
 
 export const testapi = axios.create({
     withCredentials: true,
@@ -55,62 +56,46 @@ const FileUpload = ({ fileRef, ...props }) => {
     //@ts-ignore
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
-        debugger
+        
         const fileExtension = file && file.name && file.name.split('.').pop();
-        debugger
+        
         // if (fileExtension !== 'doc' && fileExtension !== 'docx') {
         //     setError('File must be a .doc file')
         //     alert('File must be a .doc file');
         //     return;
         // } else {
         if (event.currentTarget.files.length) {
-            debugger
+            
             props.form.setFieldValue('name', event.currentTarget.files[0]);  // <-- Задаем файл как значение поля
 
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('portal', props.portal);
+            formData.append('type', props.type);
+            formData.append('fileName', props.fileName);
             console.log(formData)
 
-            const fetchedfileName = await testapi.post('file', formData)
-            const fileName = fetchedfileName && fetchedfileName.data && fetchedfileName.data.fileName
-            debugger
-            testapi.post('createAprilTemplate', {
-                fileName,
-                aprilfields: [{
-                    'bitrixId': 'bitrixId',
-                    'name': 'Гарант'
-                },
-                {
-                    'bitrixId': 'bitrixId2',
-                    'name': 'а'
-                },
-                {
-                    'bitrixId': 'bitrixId3',
-                    'name': 'б'
-                }]
+            const fetchedfileName = await onlineAPI.uploadPortalTemplateFile(formData)
+            
 
-            })
-                .then(async (response) => {
-                    debugger
-                    if (response && response.data && response.data.resultCode === 0) {
-                        let link = response.data.file
-                        debugger
-                        setUpdatedFile(link)
-                        window.open(link, "_blank")
 
-                        // handle successful upload
-                    }
+            //TESTING UPLOAD REWRITED FILE FROM SERVER:
+            // const fileName = fetchedfileName && fetchedfileName.data && fetchedfileName.data.fileName
+            // const aprilfields = [{
+            //     'bitrixId': 'bitrixId',
+            //     'name': 'Гарант'
+            // },
+            // {
+            //     'bitrixId': 'bitrixId2',
+            //     'name': 'а'
+            // },
+            // {
+            //     'bitrixId': 'bitrixId3',
+            //     'name': 'б'
+            // }]
+            // await onlineAPI.processFile(fileName, aprilfields)
 
-                })
-                .catch((err) => {
-                    console.log(err)
-                    err && err.message && console.log(err.message)
-                    debugger
-                    // handle upload error
-                });
         }
-        // }
-
 
     };
 
@@ -207,6 +192,9 @@ const ClientMenu: React.FC<ClientMenuPropsType> = ({ section, client, isChanged,
                     name='file'
                     component={FileUpload}
                     fileRef={fileRef}
+                    portal={client.domain}
+                    type={'kp'}
+                    fileName={'test-name'}
 
                 />
 

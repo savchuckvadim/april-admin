@@ -37,7 +37,7 @@ const Products: React.FC<ClientsTablePropsType> = ({ products, updateProducts })
 
   return (
     <>
-      <UploadData upload={updateProducts} />
+      <UploadData upload={updateProducts} name={'products'} />
       <ProductsTable products={products} />
     </>
 

@@ -7,7 +7,7 @@ import { validate } from '../../../../../utils/Validators/validator-april';
 import LoadingPage from '../../../../Elements/Loading/Loading-Page';
 
 const FieldsTableInput = ({ field, submit, label, error, touched, form }) => {
-debugger
+
     return <TextField
         type="text"
         align={'right'}
@@ -22,7 +22,7 @@ debugger
             // console.log(e)
             // console.log('on blur -> submit')
             console.log(field.value)
-            debugger
+            
             submit && submit(field.value)
         }}
 

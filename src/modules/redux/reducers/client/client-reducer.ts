@@ -6,6 +6,8 @@ import { getFiltredFields } from '../../../utils/for-rdeucers/filter-utils';
 import { inProgress } from '../preloader/preloader-reducer';
 import { getClientRegionFromRegion } from '../../../utils/for-rdeucers/region-utils';
 import { aitest } from '../../../services/openai-api/openai-api';
+import { promises } from 'dns';
+import { onlineAPI } from '../../../services/april-online-api/online-api';
 
 
 export type ClientStateType = typeof initialState
@@ -17,7 +19,7 @@ const initialState = {
     current: null as ClientType | null,
     // created: null as number | null,
     redirect: null as number | null,
-    error: null
+    error: null,
 
 
 }
@@ -42,33 +44,57 @@ export const clientActions = {
 
 //THUNK
 
-export const sendNewClient = (name: string, email: string, domain: string, placementKey: string, hookKey: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    dispatch(inProgress(true, 'component'))
-    const clientData = await clientAPI.create(name, email, domain, placementKey, hookKey) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
-    debugger
-    if (clientData && clientData.resultCode === ResultCodesEnum.Success && clientData.client) {
-        if (clientData.client && clientData.client.number) {
-            dispatch(clientActions.setCurrentClient(clientData.client))
-            dispatch(clientActions.setRedirect(clientData.client.number))
+export const sendNewClient = (name: string,
+    email: string, domain: string,
+    placementKey: string, hookKey: string,
+    clientId: string, clientSecret: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+        dispatch(inProgress(true, 'component'))
+        
+
+        const clientData = await clientAPI.create(name, email, domain, placementKey, hookKey, clientId, clientSecret) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
+      
+        
+
+        if (clientData && clientData.resultCode === ResultCodesEnum.Success && clientData.client) {
+            if (clientData.client && clientData.client.number) {
+
+
+
+                  //@ts-ignore
+      
+
+
+
+
+
+
+
+
+                dispatch(clientActions.setCurrentClient(clientData.client))
+                dispatch(clientActions.setRedirect(clientData.client.number))
+            } else {
+                console.log('something wrong with new client')
+                console.log(clientData.client)
+            }
+
         } else {
-            console.log('something wrong with new client')
-            console.log(clientData.client)
+            clientData.message && console.log(clientData.message)
+            clientData.message ? dispatch(clientActions.setError(clientData.message)) : dispatch(clientActions.setError('something wrong with creating client'))
         }
 
-    } else {
-        clientData.message && console.log(clientData.message)
-        clientData.message ? dispatch(clientActions.setError(clientData.message)) : dispatch(clientActions.setError('something wrong with creating client'))
+        dispatch(inProgress(false, 'component'))
+
     }
 
-    dispatch(inProgress(false, 'component'))
-
-}
-
 export const updateClient = (client: ClientType) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    debugger
+    
     dispatch(inProgress(true, 'component'))
     const data = await clientAPI.updateClient(client) as { resultCode: ResultCodesEnum, message?: string, client?: ClientType }
-    debugger
+
+
+    //TODO update portal in aprilonline
+
+    
     if (data && data.client && data.client.number) {
         dispatch(clientActions.setCurrentClient(data.client))
     } else if (data && data.message) {
@@ -92,6 +118,8 @@ export const setCreatingClient = () => async (dispatch: AppDispatchType, getStat
             number: null,
             key: null,
             hook: null,
+            clientId: null as string | null,
+            clientSecret: null as string | null,
             contracts: {
                 items: [] as Array<ContractType>,
                 current: [] as Array<number>,
@@ -106,7 +134,7 @@ export const setCreatingClient = () => async (dispatch: AppDispatchType, getStat
 }
 
 export const getClients = () => async (dispatch: AppDispatchType, getState: GetStateType) => {
-   debugger
+    
     // await clientAPI.clientFieldsGenerate()
     let clients = await clientAPI.getClients()
     dispatch(clientActions.setClients(clients))
@@ -144,7 +172,7 @@ export const updateClientField = (fieldNumber: number, value: string, type: 'bit
             if (field.number === fieldNumber) {
                 console.log('{ ...field, [`${type}`]: value }')
                 console.log({ ...field, [`${type}`]: value })
-                debugger
+                
                 return { ...field, [`${type}`]: value }
             }
         }) as Array<FieldType>
@@ -173,7 +201,7 @@ export const updateClientField = (fieldNumber: number, value: string, type: 'bit
         console.log(' let updatedFields = await clientAPI.updateFields(fields,')
         console.log(fields)
         let updatedFields = await clientAPI.updateFields(fields, newCurrentClient.number)
-        debugger
+        
 
     }
 
@@ -188,7 +216,7 @@ export const getProducts = (clientId: number) => async (dispatch: AppDispatchTyp
 }
 
 export const updateClientRegions = (regionId: number, checked: boolean) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    debugger
+    
     const state = getState()
     const client = state.client as ClientStateType
     const allRegions = await generalAPI.getCollection('regions')
@@ -198,7 +226,7 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
     if (client.current) {
         let newRegions = [] as Array<ClientRegionType>
 
-        
+
         let currentRegions = client.current.regions
         if (currentRegions && Array.isArray(currentRegions)) {
             if (checked) { //если у пользователя есть регоины и это массив
@@ -217,8 +245,8 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
             await generalAPI.updateProp('clients', client.current.number, newRegions, 'regions')
 
         } else {
-            client.current && client.current.domain ? alert(`something wrong with client regions. Client: ${client.current.domain } `)
-            : alert(`something wrong with client-reducer 219`)
+            client.current && client.current.domain ? alert(`something wrong with client regions. Client: ${client.current.domain} `)
+                : alert(`something wrong with client-reducer 219`)
         }
 
 
@@ -233,9 +261,8 @@ export const updateClientRegions = (regionId: number, checked: boolean) => async
 
 }
 
-
 export const updateClientContracts = (items: Array<ContractType>, current: Array<number>, bitrixId: string | null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    debugger
+    
     dispatch(inProgress(true, 'component'))
 
 
@@ -253,7 +280,7 @@ export const updateClientContracts = (items: Array<ContractType>, current: Array
 
     //     dispatch(clientActions.setCurrentClient(currentClient))
     //     await generalAPI.updateProp('clients', currentClient.number, contracts, 'contracts')
-    //     debugger
+    //     
     dispatch(inProgress(false, 'component'))
     // }
 
@@ -261,6 +288,23 @@ export const updateClientContracts = (items: Array<ContractType>, current: Array
 
 
 }
+
+//@ts-ignore
+export const uploadClientTemplate = (formData) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+
+    // const formData = new FormData();
+    // formData.append('file', file);
+    // formData.append('fileName', props.fileName);
+    // formData.append('portal', props.portal);
+    // formData.append('type', props.type);
+    
+    let result = await onlineAPI.uploadPortalTemplateFile(formData)
+
+    debugger
+}
+
+
+
 
 
 
@@ -315,8 +359,8 @@ const client = (state: ClientStateType = initialState, action: ClientActionsType
             })
             let searchingUpdate = resultFields !== null && resultFields.find(field => field.number === action.field.number)
             console.log(searchingUpdate)
-            debugger
-            debugger
+            
+            
             return {
                 ...state,
                 clients: updatedClients,
@@ -337,7 +381,7 @@ const client = (state: ClientStateType = initialState, action: ClientActionsType
             })
 
             console.log(action.products)
-            debugger
+            
 
             return {
                 ...state,

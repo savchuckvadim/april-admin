@@ -18,10 +18,10 @@ const initialState = {
     filtred: [],
     filter: {
         filters: ['All', 'Prof', 'Universal', 'Legal Tech', 'Consalting'],
-        current: 'All',
+        current: 'Universal',
         index: 0,
-        regions: ['msk', 'stv'],
-        supply: [0,1,2,3,4,5,6,7,8,9],
+        regions: ['msk'],
+        supply: [0,1, 10, 11, 12, 13, ],
         complectType: [0],  //0 - internet 1 - proxima +
     }
 
@@ -42,14 +42,18 @@ const setPrices = (prices) => ({ type: SET_PRICES, prices })
 //THUNK
 
 export const updatePrices = (token = null) => async (dispatch, getState) => {
+//формируются цены гарант и сервисов
 
+//TODO взять пришедшие цены и ими обновить сервисы типа поля msk regions  у lt и star
+//пока я сделаю так что star вместо PriceType будет приходить StarServiceType и сразу пушиться в DB
 
     dispatch(inProgress(true, 'global'))
     const fetchedPrices = await googleAPI.get(token)
 
     if (fetchedPrices && fetchedPrices.prices) {
-
+debugger
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
+            debugger
             await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
             await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
            
@@ -57,8 +61,13 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
 
         }
 
+        if (fetchedPrices.prices.star && fetchedPrices.prices.star.length > 0) {
+            debugger
+            await generalAPI.setCollection('star', fetchedPrices.prices.star)
 
+        }
 
+        debugger
         if (fetchedPrices.regions && fetchedPrices.regions.length > 0) {
             let regions = fetchedPrices.regions
             await generalAPI.setCollection('regions', regions)
@@ -91,7 +100,7 @@ export const getPrices = () => async (dispatch, getState) => {
     const fetchedUniversal = await generalAPI.getCollection('universal')
     const fetchedLt = await generalAPI.getCollection('legalTech')
     const fetchedConsalting = await generalAPI.getCollection('consalting')
-    debugger
+    
     if (fetchedProf && fetchedUniversal && fetchedLt && fetchedProf.length > 0 && fetchedUniversal.length > 0 && fetchedLt.length > 0) {
         let prof = fetchedProf.map(profPrice => {
             let s = supplies.find(sup => sup.number === profPrice.supplyNumber)
@@ -165,7 +174,7 @@ export const getPrices = () => async (dispatch, getState) => {
             lt: ltPrices,
             consalting: consaltingPrices
         }
-        debugger
+        
         dispatch(setPrices(prices))
     }
 
@@ -187,7 +196,7 @@ const price = (state = initialState, action) => {
         case SET_PRICES:
             let filtred = []
 
-            debugger
+            
             for (const key in action.prices) {
                 action.prices[key].forEach(price => {
                     filtred.push(price)
@@ -231,7 +240,7 @@ const price = (state = initialState, action) => {
 
                 case 1: //Prof
 
-                    debugger
+                    
                     state.prices.prof.map(price => {
                         if (state.filter.supply.includes(price.supplyNumber)) {
                             filtredPrices.push(price)

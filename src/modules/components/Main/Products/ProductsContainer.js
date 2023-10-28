@@ -28,7 +28,7 @@ const ProductsContainer = (props) => {
 
     }, [])
 
-    debugger
+    
 
     return (!isFetched && !props.products ? <div>Loading...</div>
         : props.products

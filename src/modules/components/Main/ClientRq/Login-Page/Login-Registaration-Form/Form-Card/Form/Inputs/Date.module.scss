@@ -1,0 +1,31 @@
+.wrapper {
+    position: relative;
+  }
+  
+  .wrapper::before {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url('../../../../../../../assets/imgs/login-form/icn_date_png.png');
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+
+  .wrapper {
+    position: relative;
+    width: 100%;
+    opacity: 80%;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+  }
+  
+
+  
+  
+  

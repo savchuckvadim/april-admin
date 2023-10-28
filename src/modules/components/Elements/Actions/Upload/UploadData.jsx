@@ -30,14 +30,14 @@ const UploadDataInput = ({ label, ...props }) => {
 
 
 
-const UploadData = ({ upload }) => (
+const UploadData = ({ upload, name }) => (
 
     <Formik
         initialValues={{ key: '' }}
         validate={validate}
         onSubmit={(values, { setSubmitting }) => {
-debugger
-            upload(values.key)
+
+            upload(values.key, name)
             // setTimeout(() => {
             //     alert(JSON.stringify(values, null, 2));
             //     setSubmitting(false);

@@ -6,7 +6,7 @@ import { setFilter, updatePrices, getPrices } from "../../../redux/reducers/pric
 
 
 const mapStateToProps = (state, ownProps) => {
-    debugger
+    
     return {
         prices: state.price.filtred,
         filters: state.price.filter.filters,

@@ -1,6 +1,3 @@
-
-
-
 export type UserType = {
     id: number
     email: string
@@ -82,8 +79,10 @@ export type ClientType = {
     email: string | null
     fields: Array<FieldType>
     number: number | null
-    key: string | null
-    hook: string | null
+    key: string | null //placement hook key
+    hook: string | null // from other hook key
+    clientId: string | null // from other hook key
+    clientSecret: string | null // from other hook key
     products: Array<ProductType> | null
     regions?: Array<ClientRegionType>
     contracts: CLientsContractsType
@@ -91,6 +90,29 @@ export type ClientType = {
 
 
 }
+
+
+
+export type FirebaseClientType = {
+    consalting: Array<ConsaltingType> //(3) [{…}, {…}, {…}]
+    contracts: {
+        current: Array<number> //Array(8), 
+        items: Array<ContractType>
+    }
+    domain: string | null
+    email: string | null
+    fields: Array<FieldType>
+    hookKey: string | null //it is no key it is url
+    clientId: string | null // from other hook key
+    clientSecret: string | null // from other hook key
+    legalTech: Array<LegalTechType>
+    name: string | null
+    number: number
+    placementKey: string | null
+    regions: Array<RegionType>
+}
+
+
 export type CLientsContractsType = {
     items: Array<ContractType>,
     current: Array<number>,

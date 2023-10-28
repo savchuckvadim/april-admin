@@ -11,12 +11,12 @@ export const aitest = async () => {
   
         const testFunction = httpsCallable(functions, 'aitest');
         try {
-            debugger
+            
         const test = await testFunction()
         console.log(test)
         } catch (error) {
             console.log(error)
-            debugger
+            
         }
          
 

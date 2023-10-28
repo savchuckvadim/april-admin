@@ -59,7 +59,7 @@ export const updateFields = (token = null) => async (dispatch, getState) => {
 export const updateField = (fieldNumber, value, type) => async (dispatch, getState) => {
     dispatch(inProgress(true, 'page'))
     const fields = getState().field.fields
-    debugger
+    
     const resultFields = fields.map(field => {
         
         if(field.number === fieldNumber){
@@ -104,7 +104,7 @@ const field = (state = initialState, action) => {
         case SET_FILTER:
             
             let test = getFiltredFields(state.filter.filters[action.filterIndex], state.fields)
-            debugger
+            
             return {
                 ...state,
                 filter: {

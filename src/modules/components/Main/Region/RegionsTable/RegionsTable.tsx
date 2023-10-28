@@ -19,14 +19,14 @@ const RegionsTable: React.FC<RegionTablePropsType> = ({ isClient, regions, type,
         let abs = r.abs
         if (isClient && clientRegions) {
             let clientRegion = clientRegions.find(cr => cr.regionNumber === r.number)
-            debugger
+            
             if (clientRegion && clientRegion.isOwnAbs && clientRegion.ownAbs) {
                 abs = clientRegion.ownAbs
             }
         }
 
 
-debugger
+
 
         return {
             number: r.number,

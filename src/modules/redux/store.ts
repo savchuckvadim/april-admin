@@ -25,6 +25,7 @@ import consalting from "./reducers/consalting/consalting-reducer"
 import legalTech from "./reducers/legal-tech/legal-tech-reducer"
 import price from "./reducers/price/price-reducer"
 import settings from "./reducers/settings/settings"
+import entity from "./reducers/entity/entity-reducer"
 
 
 // import { LoginRegistrationType } from "./reducers/login-registaration/login-registration-reducer"
@@ -37,23 +38,14 @@ import settings from "./reducers/settings/settings"
 
 let rootReducer = combineReducers({
   app: appReducer,
-  // as () => AppStateType,
   auth: authReducer,
-  //  as () => AuthStateType,
-  loginRegistration: LoginRegistrationReducer,
-  //  as () => LoginRegistrationType,
-  
+  loginRegistration: LoginRegistrationReducer, 
   navMenu: navMenuReducer,
-  // as () => NavMenuStateType,
-  
   preloader: preloader,
-  //  as () => PreloaderStateType,
   paginator: paginatorReducer,
-  //  as () => PaginatorStateType,
-  
   notifications,
 
-
+  entity,
   field,
   client,
   complect,
