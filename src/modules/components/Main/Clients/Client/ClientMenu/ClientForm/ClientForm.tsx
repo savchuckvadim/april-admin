@@ -103,7 +103,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
             } else {
                 setIsNew(true)
             }
-            
+
         }
     }, [client])
 
@@ -140,7 +140,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
         updatedInitialValues.fields = formikValuesFields
         setInitialValues(updatedInitialValues)
 
-        
+
     }, [client, isNew])
 
     useEffect(() => {
@@ -154,15 +154,15 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
 
     useEffect(() => {
-        
+debugger
         if (isSending) {
-            
+
             if (currentValues) {
                 sendNewClient(currentValues.name, currentValues.email, currentValues.domain, currentValues.key, currentValues.hook, currentValues.clientId, currentValues.clientSecret)
                 setSendingValues(null)
 
             } else if (updatingClient) {
-                
+
                 updateClient(updatingClient)
                 setUpdatingClient(null)
             }
@@ -197,7 +197,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                     }}
                     validationSchema={schemaClient}
                     onSubmit={(values, { setSubmitting }) => {
-                        
+
                         console.log('values')
                         console.log(values)
                         const fields = []
@@ -206,11 +206,11 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                             fields.push(values.fields[key])
                         }
 
-                        
+
                         if (values.name && values.email && values.domain && values.key && values.hook && values.clientId && values.clientSecret) {
-                            
+
                             if (isNew) {
-                                
+
                                 setSendingValues({
 
                                     name: values.name,
@@ -225,7 +225,7 @@ const ClientForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
                             } else {
                                 // updateClient({ ...client, contracts: values.contracts })
-                                
+
 
                                 setUpdatingClient({
                                     ...client,

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
-import { getEntityItems, updateEntities } from "../../../redux/reducers/entity/entity-reducer"
+import { getEntities, initialAddEntity, updateEntities } from "../../../redux/reducers/entity/entity-reducer"
 import Entities from "./Entities"
 import Entity from "./Entity"
+import { compose } from "redux"
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -12,20 +13,22 @@ const mapStateToProps = (state, ownProps) => {
         current: state.entity.current,
         name: ownProps.name,
         isItem: ownProps.isItem,
-        
-        // filters: state.supply.filter.filters,
-        // filterCurrent: state.supply.filter.index
+        urlForGet: ownProps.urlForGet,
+        entityItemName: ownProps.entityItemName
+
+
     }
 }
 
 const EntitiesContainer = ({
-    items, name, isItem,
-    getEntityItems, updateEntities
+    items, name,  entityItemName, isItem, urlForGet, 
+    getEntityItems, updateEntities, getEntities
 
 }) => {
 
     useEffect(() => {
-        getEntityItems()
+        
+        urlForGet && name && getEntities(urlForGet, 'get', name)
     }, [])
 
 
@@ -33,8 +36,10 @@ const EntitiesContainer = ({
         ? <Entities
             items={items}
             name={name}
+            entityItemName={entityItemName}
             getEntityItems={getEntityItems}
             updateEntities={updateEntities}
+        
 
         />
 
@@ -48,9 +53,14 @@ const EntitiesContainer = ({
 }
 
 
-export default connect(mapStateToProps, {
-    getEntityItems,
-    updateEntities,
-    // setFilter: supplyActions.setFilter
+export default compose(
+    connect(
+        mapStateToProps, {
+        // getEntityItems,
+        updateEntities,
+        initialAddEntity,
+        getEntities
+        // setFilter: supplyActions.setFilter
 
-})(EntitiesContainer)
+    }))(EntitiesContainer)
+

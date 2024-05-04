@@ -48,7 +48,7 @@ type ClientMenuPropsType = {
 
 //@ts-ignore
 const FileUpload = ({ fileRef, ...props }) => {
-    debugger
+    
     //@ts-ignore
     const [updatedFile, setUpdatedFile] = useState(null)
 

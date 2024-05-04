@@ -7,6 +7,8 @@ import Navigation from '../../../../Elements/Actions/Navigation/Navigation/Navig
 import { schemaClient } from '../../../../../utils/Validators/validator-april'
 import EntityMenu from './EntityMenu'
 import { ClientType, ContractType } from '../../../../../types/types'
+import { Template, TemplateField } from '../../../../../types/template-types'
+import CreateField from '../../../Template/CreateField'
 
 
 type SendingValuesType = {
@@ -44,134 +46,22 @@ export enum ClientSectionEnum {
 }
 
 
-type ClientFormPropsType = {
-    client: ClientType
-    // clientId: number | 'new' | false
-    sendNewClient: (name: string, email: string, domain: string, placementKey: string, hookKey: string, clientId: string, clientSecret: string) => void
-    updateClient: (client: ClientType) => void
-    updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
-    updateClientProducts: (clientId: number) => void
-    getProducts: (clientId: number) => void
+type EntityFormPropsType = {
+    entity: Template | TemplateField
+    name: string
 
 }
 
 
-const EntityForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, updateField, updateClientProducts, getProducts, updateClient }) => {
+const EntityForm: React.FC<EntityFormPropsType> = ({ 
+    entity, 
+    name,
+  }) => {
     const sections = [
         ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts,
         ClientSectionEnum.Prices, ClientSectionEnum.Regions, ClientSectionEnum.Templates
     ] as Array<ClientSectionEnum>
-    const [clientName, setClientName] = useState(client.name)
-
-    const [sectionIndex, setSectionIndex] = useState(0)
-    const [section, setSection] = useState(sections[sectionIndex] as ClientSectionEnum)
-    const [isNew, setIsNew] = useState(false)
-    const [isChanged, setIsChanged] = useState(false)
-
-    const [isSending, setIsSending] = useState(false)
-
-    const [initialValues, setInitialValues] = useState({
-        name: null as string | null,
-        email: null as string | null,
-        domain: null as string | null,
-        key: null as string | null,
-        hook: null as string | null,
-        clientId: null as string | null, // from other hook key
-        clientSecret: null as string | null, // from other hook key
-        fields: {} as { string: FieldType } | {},
-        number: null as number | null,
-        file: null as string | null
-    })
-
-    const [currentValues, setSendingValues] = useState(null as SendingValuesType | null)
-    const [updatingClient, setUpdatingClient] = useState(null as ClientType | null)
-
-    let contracts = {
-        items: [] as Array<ContractType>,
-        current: [] as Array<number>,
-        bitrixId: null as string | null
-    }
-
-
-
-    useEffect(() => {
-
-        if (client) {
-            if (client.number) {
-                setIsNew(false)
-            } else {
-                setIsNew(true)
-            }
-            
-        }
-    }, [client])
-
-
-    useEffect(() => {
-        let formikValuesFields = {}
-        let updatedInitialValues = {
-            name: null as string | null,
-            email: null as string | null,
-            domain: null as string | null,
-            key: null as string | null,
-            hook: null as string | null,
-            clientId: null as string | null, // from other hook key
-            clientSecret: null as string | null, // from other hook key
-            fields: {} as { string: FieldType } | {},
-            contracts,
-            number: null as number | null,
-            file: null as string | null
-        }
-        //@ts-ignore
-        client.fields.forEach((clientField: FieldType) => {
-            //@ts-ignore
-            formikValuesFields[`${clientField.name}`] = clientField
-        });
-        !isNew ? updatedInitialValues.name = client.name : updatedInitialValues.name = null
-        !isNew ? updatedInitialValues.email = client.email : updatedInitialValues.email = null
-        !isNew ? updatedInitialValues.domain = client.domain : updatedInitialValues.domain = null
-        !isNew ? updatedInitialValues.key = client.email : updatedInitialValues.key = null
-        !isNew ? updatedInitialValues.hook = client.domain : updatedInitialValues.hook = null
-        !isNew ? updatedInitialValues.clientId = client.email : updatedInitialValues.clientId = null
-        !isNew ? updatedInitialValues.clientSecret = client.domain : updatedInitialValues.clientSecret = null
-        !isNew ? updatedInitialValues.number = client.number : updatedInitialValues.number = null
-        !isNew ? updatedInitialValues.contracts = client.contracts : updatedInitialValues.contracts = contracts
-
-        updatedInitialValues.fields = formikValuesFields
-        setInitialValues(updatedInitialValues)
-
-        
-    }, [client, isNew])
-
-    useEffect(() => {
-
-        if (section !== sections[sectionIndex]) {
-            setSection(sections[sectionIndex])
-        }
-
-    }, [sectionIndex])
-
-
-
-    useEffect(() => {
-        
-        if (isSending) {
-            
-            if (currentValues) {
-                sendNewClient(currentValues.name, currentValues.email, currentValues.domain, currentValues.key, currentValues.hook, currentValues.clientId, currentValues.clientSecret)
-                setSendingValues(null)
-
-            } else if (updatingClient) {
-                
-                updateClient(updatingClient)
-                setUpdatingClient(null)
-            }
-
-            setIsSending(false)
-
-        }
-
-    }, [isSending])
+  
 
     return (
         < div className={style.client}>
@@ -179,70 +69,19 @@ const EntityForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
 
             <div className={style.client__wrapper}>
                 <div className={style.card__header}>
-                    <h2 className={style.card__name}>{clientName || client.name}</h2>
+                    <h2 className={style.card__name}>{entity.name}</h2>
                 </div>
 
-                {!isNew && <ActionsFrame align={'left'} color={'rgb(247, 242, 247)'}>
-                    <Navigation
-                        initialIndex={0}
-                        actions={[ClientSectionEnum.General, ClientSectionEnum.Fields, ClientSectionEnum.Products, ClientSectionEnum.Contracts, ClientSectionEnum.Prices, ClientSectionEnum.Regions, ClientSectionEnum.Templates]}
-                        navigate={setSectionIndex} />
-                </ActionsFrame>
-                }
 
                 <Formik
 
                     initialValues={{
-                        ...initialValues
+                        ...entity
                     }}
                     validationSchema={schemaClient}
                     onSubmit={(values, { setSubmitting }) => {
                         
-                        console.log('values')
-                        console.log(values)
-                        const fields = []
-                        for (const key in values.fields) {
-                            //@ts-ignore
-                            fields.push(values.fields[key])
-                        }
-
-                        
-                        if (values.name && values.email && values.domain && values.key && values.hook && values.clientId && values.clientSecret) {
-                            
-                            if (isNew) {
-                                
-                                setSendingValues({
-
-                                    name: values.name,
-                                    email: values.email,
-                                    domain: values.domain,
-                                    key: values.key,
-                                    hook: values.hook,
-                                    clientId: values.clientId,
-                                    clientSecret: values.clientSecret
-                                })
-                                setIsSending(true)
-
-                            } else {
-                                // updateClient({ ...client, contracts: values.contracts })
-                                
-
-                                setUpdatingClient({
-                                    ...client,
-                                    name: values.name,
-                                    email: values.email,
-                                    domain: values.domain,
-                                    key: values.key,
-                                    hook: values.hook,
-                                    clientId: values.clientId,
-                                    clientSecret: values.clientSecret
-                                })
-                                setIsSending(true)
-                            }
-
-
-
-                        }
+                      
 
                         setSubmitting(true);
 
@@ -259,44 +98,23 @@ const EntityForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                     /* and other goodies */
                 }) => {
 
-                    let touchedFlag = false
-                    for (const key in touched) {
-
-                        //@ts-ignore
-                        if (touched[key]) {
-                            touchedFlag = true
-                        }
-                    }
-                    if (!touchedFlag && values.email !== initialValues.email) {
-                        setValues(initialValues)
-
-                    }
 
 
 
-                    return <Form className={style.form} onChange={() => { !isChanged && setIsChanged(true) }}>
+                    return <Form className={style.form} onChange={() => { 
+
+                    }}>
                         <div className={style.card} >
 
 
-                            <EntityMenu
-                                section={section}
-                                client={client}
-                                isChanged={isChanged}
-                                isNew={isNew}
-                                touched={touched}
-                                errors={errors}
-                                handleChange={handleChange}
-                                setClientName={setClientName}
-                                updateField={updateField}
-                                updateClientProducts={updateClientProducts}
-                                getProducts={getProducts}
-                            />
+                       
+                       
                             <div className={style.card__footer}>
                                 <div className={style.button}>
                                     {/* <Button disabled={isSubmitting} color={'blue'} border={3} name={'Cохранить'} {...props} /> */}
                                 </div>
 
-                                {isChanged && <button
+                                {<button
                                     style={{
                                         border: 'none',
                                         borderRadius: 3,
@@ -321,6 +139,7 @@ const EntityForm: React.FC<ClientFormPropsType> = ({ client, sendNewClient, upda
                 }}
                 </Formik>
             </div>
+            {name === 'template' && <CreateField templateId={entity.id} />}
         </div>
     )
 }

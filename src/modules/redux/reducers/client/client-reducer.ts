@@ -300,7 +300,7 @@ export const uploadClientTemplate = (formData) => async (dispatch: AppDispatchTy
     
     let result = await onlineAPI.uploadPortalTemplateFile(formData)
 
-    debugger
+    
 }
 
 

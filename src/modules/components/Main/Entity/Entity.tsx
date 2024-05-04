@@ -1,67 +1,83 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { LightLoadingPageContainer } from '../../Elements/Loading/Light-Loading-Page-Container'
+
+
+import { TemplateAddData, TemplateInitialAddData } from '../../../types/entity-types'
+import { SetUpdatingTemplate, Template, TemplateField } from '../../../types/template-types'
+import EntityAdd from './EntityAdd/EntityAdd'
 import EntityForm from './EntityMenu/EntityForm/EntityForm'
-import { ClientType } from '../../../types/types'
 
 
-type redirectType = {
-    status: boolean
-    link: string | null
+// type redirectType = {
+//     status: boolean
+//     link: string | null
+// }
+
+type EntityPropsType = {
+    name: string
+    entity: TemplateAddData | Template | TemplateField
+    isNew: boolean
+    entityId: number | 'add' | false
+    isInitializingAdd: boolean
+    initialAddEntity: (entityName: string, data: TemplateInitialAddData) => void
+    setInitializingAddProcess: () => void
+    setUpdatingEntity: (url: string, model: string, data: SetUpdatingTemplate) => void
+
 }
 
-type ClientPropsType = {
-    client: ClientType
-    // clientId: number | 'new' | false
-    redirect: redirectType
-    deleteRedirect: () => void
-    sendNewClient: (name: string, email: string, domain: string) => void
-    updateClient: (client: ClientType) => void
-    updateField: (fieldNumber: number, value: string, type: 'value' | 'bitrixId') => void
-    updateClientProducts: (clientId: number) => void
-    getProducts: (clientId: number) => void
-}
 
 
 
+const Entity: React.FC<EntityPropsType> = ({
+    name,
+    entity,
+    isNew,
+    // entityId,
+    isInitializingAdd,
+    initialAddEntity,
+    setInitializingAddProcess,
+    setUpdatingEntity
 
-const Entity: React.FC<ClientPropsType> = ({
-    client,
-    redirect,
-    deleteRedirect,
-    sendNewClient,
-    updateClient,
-    updateField,
-    updateClientProducts,
-    getProducts,
 
 }) => {
 
-    if (redirect) {
+    let targetEntity = entity
+    if (isNew && isInitializingAdd) {
+        if (name == 'template') {
+            targetEntity = entity as TemplateAddData
+        } else if (name == 'field') {
+            targetEntity = entity as TemplateField
+        }
 
-        deleteRedirect()
-
-        return <Navigate replace to={`../../clients/${redirect}`} />
-
+    } else {
+        targetEntity = entity as Template
     }
 
 
-
     return (
-        !client
+        !entity
             ? <LightLoadingPageContainer />
-            : <EntityForm
-                client={client}
+            : isNew && isInitializingAdd
+                ? <EntityAdd
+                    name={name}
+                    //@ts-ignore
+                    fields={targetEntity.fields}
+                    //@ts-ignore
+                    parameters={targetEntity.parameters}
 
-                // formikInitialValues={formikInitialValues}
-                
-                sendNewClient={sendNewClient}
-                updateClient={updateClient}
-                updateField={updateField}
-                updateClientProducts={updateClientProducts}
-                getProducts={getProducts}
+                    setUpdatingEntity={setUpdatingEntity}
+                />
 
-            />
+                : <EntityForm
+                    name={name}
+                    //@ts-ignore
+                    entity={targetEntity}
+
+
+                />
+
+
 
     )
 }

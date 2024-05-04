@@ -12,6 +12,8 @@ const mapStateToProps = (state) => {
     }
 }
 
+
+
 const ClientsContainer = (props) => {
 
 
@@ -25,6 +27,7 @@ const ClientsContainer = (props) => {
         setClients(props.clients)
     }, [props.clients])
 
+    
     useEffect(() => {
         props.getClients()
 

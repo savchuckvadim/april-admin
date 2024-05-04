@@ -23,7 +23,7 @@ const ClientTemplate = ({ uploadClientTemplate }) => {
     const dispatch = useDispatch();
     const onSubmit: ClientTemplateOnSubmitType = (values: ClientTemplateValuesType) => {
 
-        debugger
+        
         console.log('values')
         console.log(values)
         if (!values.documentFirst) {
@@ -39,7 +39,7 @@ const ClientTemplate = ({ uploadClientTemplate }) => {
 
 
             const file = values.documentFirst
-            debugger
+            
             const formData = new FormData();
             formData.append('file', file);
             formData.append('fileName', 'props.fileName');
@@ -60,7 +60,7 @@ const ClientTemplate = ({ uploadClientTemplate }) => {
     const onDocumentUpload: OnDocumentUploadType = (event: any) => {
         //@ts-ignore
         const file = event.target.files[0];
-        debugger
+        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('fileName', 'props.fileName');

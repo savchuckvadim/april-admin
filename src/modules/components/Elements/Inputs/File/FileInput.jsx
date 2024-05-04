@@ -1,12 +1,12 @@
 import { change } from 'redux-form'
-import photo from '../../../../../assets/imgs/icons/camera-photo.svg'
+// import photo from '../../../../../assets/imgs/icons/camera-photo.svg'
 import inputstyle from './Input.module.scss'
 import style from './File.module.scss'
 import { useDispatch } from 'react-redux'
 
 
 const FileInput = ({ formName, ...props }) => {
-    debugger
+    
     let index = 0
     // let containerClasses = [style.container, style.containerFocus]
     let error = null
@@ -22,7 +22,7 @@ const FileInput = ({ formName, ...props }) => {
     // let containerClass = containerClasses[index]
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        debugger
+        
         props.onDocumentUpload
             ? props.onDocumentUpload(event)
             : dispatch(change(formName, props.input.name, file));
@@ -44,7 +44,7 @@ const FileInput = ({ formName, ...props }) => {
             </input>
             <label htmlFor={`signup-${props.input.name}`}> {/* Добавьте связь с инпутом */}
                 <span className={style.photo__span}>
-                    <img className={style.photo} src={photo} alt="photo-camera" />
+                    {/* <img className={style.photo} src={photo} alt="photo-camera" /> */}
 
                 </span>
             </label>

@@ -9,7 +9,7 @@ import ActiveCell from "./Input/ActiveCell"
 
 
 type TableValueType = ClientValueType | ContractValueType | SupplyValueType | ComplectValueType |
-    RegionValueType | ConsaltingValueType | LegalTechValueType | PriceValueType
+    RegionValueType | ConsaltingValueType | LegalTechValueType | PriceValueType 
 
 
 type BaseTablePropsType = {

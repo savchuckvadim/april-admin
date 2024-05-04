@@ -1,18 +1,26 @@
 import axios from "axios"
+import { IS_APRIL_DEV } from "../../global-const/global-consts"
+import { ONLINE_API_KEY } from "../secret/online-secret"
 
 
 export const online = axios.create({
     withCredentials: true,
-    baseURL: 'https://april-online.ru/api',
-    // baseURL: 'http://localhost:8000/api',
+    // baseURL: 'https://april-online.ru/api',
+    baseURL:
+    IS_APRIL_DEV 
+    ? 'http://localhost:8000/api'
+    : 'https://april-online.ru/admin',
     headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Origin': '*',
+        // 'X-Requested-With': 'XMLHttpRequest',
+        'X-API-KEY': ONLINE_API_KEY
+
     },
 
 })
-
+online.defaults.redirect = "follow";
 
 export const onlineAPI = {
 
@@ -44,7 +52,7 @@ export const onlineAPI = {
         try {
             const data = await online.post('portal/template', formData)
             result = data.data
-            debugger
+
             return result
         } catch (error) {
             console.log(error)
@@ -96,6 +104,7 @@ export const onlineAPI = {
             const response = await online.post(`getportal`, {
                 domain
             })
+            
             if (response) {
                 console.log(response)
 
@@ -103,11 +112,13 @@ export const onlineAPI = {
 
         } catch (error) {
             console.log(error)
+            
             return result
         }
 
     },
     setPortal: async (
+        number,
         domain,
         key,   //placement key 
         clientId,  //from hook 
@@ -126,6 +137,7 @@ export const onlineAPI = {
         let result = null
         try {
             let data = {
+                number,
                 domain: domain,
                 key: key,
                 clientId: clientId,
@@ -134,7 +146,7 @@ export const onlineAPI = {
             }
             console.log(data)
             const response = await online.post(`portal`, data)
-           
+
             if (response) {
                 console.log(response)
 
@@ -155,8 +167,9 @@ export const onlineAPI = {
                 console.log(response)
 
             }
-
+            
         } catch (error) {
+            
             console.log(error)
             return result
         }
@@ -172,7 +185,7 @@ export const onlineAPI = {
                 value
             })
 
-            debugger
+
             if (response) {
                 console.log(response)
 
@@ -184,6 +197,46 @@ export const onlineAPI = {
         }
     },
 
+    getCollection: async (url, method, collectionName, data = null) => {
+        let result = null
+        
+        try {
+            const response = !data 
+            ? await online[method](url)
+            : await online[method](url, data)
+
+
+            if (response) {
+                console.log(response)
+                
+                if (response.data && response.data.resultCode === 0) {
+                    if (response.data[collectionName]) {
+                        
+                        if (response.data.isCollection) {
+                             
+                            result = response.data[collectionName].data
+                        } else {
+                            
+                            result = response.data[collectionName]
+                        }
+
+                    }
+
+                }
+
+                
+                return result
+
+            }
+
+        } catch (error) {
+            console.log(error)
+
+            
+            return result
+        }
+
+    },
     setCollection: async (name, items) => {
         let result = null
         try {
@@ -204,6 +257,27 @@ export const onlineAPI = {
             return result
         }
 
+    },
+    service: async (url, method, model, data) => {
+        let result = null
+        
+        try {
+
+            const response = await online[method](url, data)
+
+            if (response && response.data) {
+                if (response.data.resultCode === 0) {
+                    result = response.data[model]
+                } else {
+                    console.log(response.data.message)
+                }
+            }
+
+            return result
+        } catch (error) {
+            console.log('error')
+            return result
+        }
     }
 
 }

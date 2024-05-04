@@ -14,7 +14,7 @@
 /services/secret
 secret.js
 /functions
-
+/public
 # production
 # /build
 

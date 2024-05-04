@@ -51,9 +51,9 @@ export const updatePrices = (token = null) => async (dispatch, getState) => {
     const fetchedPrices = await googleAPI.get(token)
 
     if (fetchedPrices && fetchedPrices.prices) {
-debugger
+
         if (fetchedPrices.prices.prof && fetchedPrices.prices.prof.length > 0 && fetchedPrices.prices.universal) {
-            debugger
+            
             await generalAPI.setCollection('prof', fetchedPrices.prices.prof)
             await generalAPI.setCollection('universal', fetchedPrices.prices.universal)
            
@@ -62,12 +62,12 @@ debugger
         }
 
         if (fetchedPrices.prices.star && fetchedPrices.prices.star.length > 0) {
-            debugger
+            
             await generalAPI.setCollection('star', fetchedPrices.prices.star)
 
         }
 
-        debugger
+        
         if (fetchedPrices.regions && fetchedPrices.regions.length > 0) {
             let regions = fetchedPrices.regions
             await generalAPI.setCollection('regions', regions)

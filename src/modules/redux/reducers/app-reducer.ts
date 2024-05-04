@@ -38,22 +38,54 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     // }
     // await promiseAuth()
 
-  ///////////////TEST GET DEALS
-    const deals = await  onlineAPI.getDeals('domain', 'alfacentr.bitrix24.ru') 
-debugger
+    ///////////////TEST GET DEALS
+    // const deals = await onlineAPI.getDeals('domain', 'april-dev.bitrix24.ru')
+    
     /////////TEST PORTAL GET
 
-    
-    // let setportal = await onlineAPI.setPortal('april-dev.bitrix24.ru',
-    //     'local.5c8bb1b0891cf2.87252039',
-    //     'SakeVG5mbRdcQet45UUrt6q72AMTo7fkwXSO7Y5LYFYNCRsA6f',
-    //     '3tbw4laz9lz3ad0a')
-    let getportal = await onlineAPI.getPortal('april-dev.bitrix24.ru')
+
+
+    // let getportal = await onlineAPI.getPortal('april-dev.bitrix24.ru')
     let getportals = await onlineAPI.getPortals()
-    debugger
+    
+    // let templates = await onlineAPI.getCollection(`templates/all`, 'templates')
+    // let fields = await onlineAPI.getCollection(`fields/all`, 'fields')
+    
+   
+    // let fieldsGeneral = await onlineAPI.getCollection(`fields/general`, 'fields')
+
+    
+    // let initialTemplate = await onlineAPI.service('template/initial', 'post', 'template', {
+    //     domain: 'april-garant.bitrix24.ru',
+    //     type: 'offer',
+    //     name: 'Тестовое КП для Клиента'
+    // })
+    // let templateId = initialTemplate && initialTemplate.id
+    
+    //@ts-ignore
+    // let fieldsGeneralIds = fieldsGeneral?.map(f => f.id)
+    // let newTemplate = await onlineAPI.service('template/set', 'post', 'template', {
+    //     templateId,
+    //     fieldIds: fieldsGeneralIds
+    // })
+
+
+   
+    
+
+    // let deleteTemplate = await onlineAPI.service(`template/${templateId}`, 'delete', 'templates', {
+    //     templateId,
+    //     fieldIds: fieldsGeneralIds
+    // })
+    // let delete5Template = await onlineAPI.service(`template/${templateId}`, 'delete', 'templates', {
+    //     templateId: 5,
+    //     fieldIds: fieldsGeneralIds
+    // })
+
+    
     ////////////////////////////////
 
- 
+
 
 
     await dispatch(getAuthApp())
@@ -64,7 +96,7 @@ debugger
     // await  generalAPI.clientFieldGenerate()
 
 
-    debugger
+    
 
 }
 

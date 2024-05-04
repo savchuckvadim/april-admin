@@ -15,7 +15,7 @@ import UploadData from '../../Elements/Actions/Upload/UploadData';
 type EntitiesPropsType = {
   items: Array<SupplyType>        // | Array<ClientType>  ...
   name: string
-
+  entityItemName: string
   // filters: Array<SupplyFilterEnum>
   // filterCurrent: 0 | 1 | 2
 
@@ -27,10 +27,10 @@ type EntitiesPropsType = {
 
 
 
-const Entities: React.FC<EntitiesPropsType> = ({ items, name,
+const Entities: React.FC<EntitiesPropsType> = ({ items, name, entityItemName,
   getEntityItems, updateEntities }) => {
 
-debugger
+
 
   return (
     <>
@@ -38,7 +38,7 @@ debugger
         <FilterButtons actions={filters} filter={(index: number) => setFilter(index)} initialIndex={filterCurrent} />
       </Filter> */}
       <UploadData upload={updateEntities} name={name} />
-      <EntityTable items={items} type={TableTypes.supply} />
+      <EntityTable items={items} name={name} entityItemName={entityItemName} type={TableTypes.template} />
     </>
 
   );

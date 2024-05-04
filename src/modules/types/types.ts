@@ -220,7 +220,8 @@ export enum TableTypes {
     contracts = 'contracts',
     consalting = 'consalting',
     lt = 'lt',
-    price = 'price'
+    price = 'price',
+    template = 'template'
 }
 export type SupplyType = {
     name: string

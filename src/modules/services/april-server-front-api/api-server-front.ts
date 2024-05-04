@@ -36,7 +36,7 @@ export const addPlacementApp = async (domain: string, key: string, hook: string)
 
 }
 
-export const updatePlacements = async (type : 'client' | 'test' | 'dev') => {
+export const updatePlacements = async (type : 'client' | 'public' | 'test' | 'dev') => {
     debugger
     try {
         let res = await api.post(`/refresh`, {

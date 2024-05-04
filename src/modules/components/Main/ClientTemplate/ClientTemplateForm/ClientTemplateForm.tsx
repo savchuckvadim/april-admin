@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Field, FieldType, InjectedFormProps, reduxForm } from 'redux-form'
 import { SetErrorType } from "../../../../redux/reducers/login-registaration/login-registration-reducer"
 import style from '../ClientTemplate.module.scss'
-import FileInput from "../../../Elements/Inputs/File/File-Input"
+import FileInput from "../../../Elements/Inputs/File/FileInput"
 import { ClientTemplateOnSubmitType, ClientTemplateValuesType, OnDocumentUploadType } from "../ClientTemplate"
 
 
@@ -81,7 +81,7 @@ const CheckBoxesArea: React.FC<InjectedFormProps<ClientTemplateValuesType, Clien
 
     // }, [ isMouseEnter])
 
-    debugger
+    
 
     return (
         <div

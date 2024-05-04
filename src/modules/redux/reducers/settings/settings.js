@@ -5,10 +5,20 @@ import { updatePlacements } from "../../../services/api-laravel"
 const initialState = {
     actions: [
         {
-            name: 'update all'
+            name: 'update client',
+            type: 'client'
         },
         {
-            name: 'update test'
+            name: 'update public',
+            type: 'public'
+        },
+        {
+            name: 'update test',
+            type: 'test'
+        },
+        {
+            name: 'update dev',
+            type: 'dev'
         },
     ]
 
@@ -16,16 +26,12 @@ const initialState = {
 
 
 
-export const settingAction = (name) => async (dispatch, getState) => {
+export const settingAction = (type) => async (dispatch, getState) => {
 
-    const state = getState()
-    // const actions = state.settings.actions
+    // type as 'client' | 'test' | 'dev'
 
-    let isProd = name === 'update all'
+    let settingRes = await updatePlacements(type)
 
-
-    let settingRes = await updatePlacements(isProd)
-    
 
 }
 

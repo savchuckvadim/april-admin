@@ -42,7 +42,7 @@ const RegistrationFormCard: React.FC<RegistrationPropsType> = (props) => {
     const dispatch = useDispatch();
     const onSubmit: RegistrationOnSubmitType = (values: RegistarationFieldsValuesType) => {
 
-        debugger
+        
         console.log('values')
         console.log(values)
         if (values.password === values.repeatPassword) {

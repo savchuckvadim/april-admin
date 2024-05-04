@@ -3,7 +3,7 @@
 export const tfieldsSetToFirebase = (fields, items) => {
     let result =
         fields.map(field => {
-            debugger
+            
             let resultField = { ...field }
             if (field.type === 'array') {
 
@@ -14,7 +14,7 @@ export const tfieldsSetToFirebase = (fields, items) => {
             }
             return resultField
         })
-debugger
+
     return result
 
 }
